@@ -1,6 +1,7 @@
-import 'package:fedanoo/services/dialog_service.dart';
-import 'package:fedanoo/services/navigationService.dart';
+
 import 'package:get_it/get_it.dart';
+import 'package:jals/services/dialog_service.dart';
+import 'package:jals/services/navigationService.dart';
 
 final locator = GetIt.instance;
 

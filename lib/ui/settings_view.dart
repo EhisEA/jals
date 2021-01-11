@@ -1,6 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jals/utils/size_config.dart';
+import 'package:velocity_x/velocity_x.dart';
 
-class MyHomePage extends StatelessWidget {
+class SettingsView extends StatefulWidget {
+  @override
+  _SettingsViewState createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
