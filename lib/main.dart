@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jals/ui/article_view.dart';
 import 'package:jals/ui/settings_view.dart';
+import 'package:jals/utils/theme.dart';
 
 import 'locator.dart';
 import 'managers/dialog_manager.dart';
@@ -32,8 +34,9 @@ class MyApp extends StatelessWidget {
                 builder: (context) => DialogManager(child: child)),
           );
         },
+        theme: MyTheme().themeData,
         onGenerateRoute: AppRouter.generateRoute,
         navigatorKey: locator<NavigationService>().navigatorKey,
-        home: SettingsView());
+        home: ArticleView());
   }
 }
