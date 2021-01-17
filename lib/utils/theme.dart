@@ -23,6 +23,7 @@ class MyTheme {
     // iconTheme: IconThemeData(color: kTextColor),
     // brightness: Brightness.dark,
     primaryColor: kPrimaryColor,
+
     accentColor: kPrimaryColor,
     indicatorColor: kPrimaryColor,
     toggleableActiveColor: kPrimaryColor,
