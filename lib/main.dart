@@ -2,7 +2,11 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+
 import 'package:jals/ui/authentication/splashscreen_view.dart';
+
+import 'package:jals/ui/audio_player_view.dart';
+import 'package:jals/ui/video_player.dart';
 
 import 'package:jals/utils/theme.dart';
 
@@ -40,6 +44,10 @@ class MyApp extends StatelessWidget {
         theme: MyTheme().themeData,
         onGenerateRoute: AppRouter.generateRoute,
         navigatorKey: locator<NavigationService>().navigatorKey,
-        home: SplashScreenView());
+
+         home: SplashScreenView());
+
+        home: VideoPlayer());
+
   }
 }

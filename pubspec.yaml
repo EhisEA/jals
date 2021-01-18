@@ -68,6 +68,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
     - icons/jals_logo.svg
     - icons/
+    - assets/images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
