@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jals/ui/article_view.dart';
-import 'package:jals/ui/settings/settings_view.dart';
+import 'package:jals/ui/audio_player_view.dart';
+import 'package:jals/ui/video_player.dart';
 import 'package:jals/utils/theme.dart';
 
 import 'locator.dart';
@@ -37,6 +37,6 @@ class MyApp extends StatelessWidget {
         theme: MyTheme().themeData,
         onGenerateRoute: AppRouter.generateRoute,
         navigatorKey: locator<NavigationService>().navigatorKey,
-        home: ArticleView());
+        home: VideoPlayer());
   }
 }

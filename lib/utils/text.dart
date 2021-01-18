@@ -20,6 +20,71 @@ class TextCaption extends StatelessWidget {
   }
 }
 
+class TextCaption2 extends StatelessWidget {
+  final String text;
+
+  final bool center;
+
+  const TextCaption2({Key key, this.text, this.center = false})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Text(
+      "$text",
+      textAlign: center ? TextAlign.center : TextAlign.left,
+      style: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: Color(0xff999CAD),
+        fontSize: getProportionatefontSize(12),
+        letterSpacing: 0.1,
+      ),
+    );
+  }
+}
+
+class TextComment extends StatelessWidget {
+  final String text;
+
+  final bool center;
+
+  const TextComment({Key key, this.text, this.center = false})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Text(
+      "$text",
+      textAlign: center ? TextAlign.center : TextAlign.left,
+      style: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: Color(0xff999CAD),
+        fontSize: getProportionatefontSize(14),
+        letterSpacing: 0.1,
+      ),
+    );
+  }
+}
+
+class TextCaptionWhite extends StatelessWidget {
+  final String text;
+
+  const TextCaptionWhite({Key key, this.text}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Text(
+      "$text",
+      style: TextStyle(
+        fontWeight: FontWeight.w600,
+        color: Color(0xffffffff),
+        fontSize: getProportionatefontSize(12),
+        letterSpacing: 0.1,
+      ),
+    );
+  }
+}
+
 class TextHeader extends StatelessWidget {
   final String text;
 
@@ -33,6 +98,52 @@ class TextHeader extends StatelessWidget {
         fontWeight: FontWeight.w600,
         fontSize: getProportionatefontSize(20.2),
         letterSpacing: 0.1,
+      ),
+    );
+  }
+}
+
+class TextHeader2 extends StatelessWidget {
+  final String text;
+
+  final bool center;
+
+  const TextHeader2({Key key, this.text, this.center = false})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Text(
+      "$text",
+      textAlign: center ? TextAlign.center : TextAlign.left,
+      style: TextStyle(
+        fontWeight: FontWeight.w600,
+
+        fontSize: getProportionatefontSize(19.2),
+        // letterSpacing: 0.1,
+      ),
+    );
+  }
+}
+
+class TextHeader3 extends StatelessWidget {
+  final String text;
+
+  final bool center;
+
+  const TextHeader3({Key key, this.text, this.center = false})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Text(
+      "$text",
+      textAlign: center ? TextAlign.center : TextAlign.left,
+      style: TextStyle(
+        fontWeight: FontWeight.w600,
+
+        fontSize: getProportionatefontSize(18),
+        // letterSpacing: 0.1,
       ),
     );
   }
