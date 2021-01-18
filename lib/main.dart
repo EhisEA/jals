@@ -1,6 +1,13 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+
+import 'package:jals/ui/authentication/splashscreen_view.dart';
+
 import 'package:jals/ui/audio_player_view.dart';
 import 'package:jals/ui/video_player.dart';
+
 import 'package:jals/utils/theme.dart';
 
 import 'locator.dart';
@@ -12,10 +19,10 @@ import 'services/navigationService.dart';
 void main() {
   setupLocator(); //*====registaring get_it
   return runApp(
-      // DevicePreview(
+      //   DevicePreview(
       //   enabled: !kReleaseMode,
       //   builder: (context) => MyApp(),
-      // ),);
+      // )
       MyApp());
 }
 
@@ -27,7 +34,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         builder: (context, child) {
           var dialogService = locator<DialogService>();
-          // return DevicePreview.appBuilder(context,child);
+          // return DevicePreview.appBuilder(context, child);
           return Navigator(
             key: dialogService.dialogNavigationKey,
             onGenerateRoute: (settings) => MaterialPageRoute(
@@ -37,6 +44,10 @@ class MyApp extends StatelessWidget {
         theme: MyTheme().themeData,
         onGenerateRoute: AppRouter.generateRoute,
         navigatorKey: locator<NavigationService>().navigatorKey,
+
+         home: SplashScreenView());
+
         home: VideoPlayer());
+
   }
 }
