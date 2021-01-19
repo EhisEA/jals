@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/route_paths.dart';
-import 'package:jals/ui/authentication/widgets/auth_appBar.dart';
+import 'package:jals/ui/authentication/components/auth_appBar.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/custom_button.dart';

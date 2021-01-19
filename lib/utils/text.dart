@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 
 class TextCaption extends StatelessWidget {
@@ -68,18 +69,48 @@ class TextComment extends StatelessWidget {
 
 class TextCaptionWhite extends StatelessWidget {
   final String text;
+  final double fontSize;
+  final FontWeight fontWeight;
 
-  const TextCaptionWhite({Key key, this.text}) : super(key: key);
+  const TextCaptionWhite({Key key, this.text, this.fontSize, this.fontWeight})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Text(
       "$text",
       style: TextStyle(
-        fontWeight: FontWeight.w600,
+        fontWeight: fontWeight ?? FontWeight.w600,
         color: Color(0xffffffff),
-        fontSize: getProportionatefontSize(12),
+        fontSize: getProportionatefontSize(fontSize ?? 12),
         letterSpacing: 0.1,
+      ),
+    );
+  }
+}
+
+class TextDailyRead extends StatelessWidget {
+  final String text;
+  final double fontSize;
+  final int maxLine;
+  final Color color;
+
+  const TextDailyRead(
+      {Key key, this.text, this.fontSize, this.color, this.maxLine = 2})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Text(
+      "$text",
+      maxLines: maxLine,
+      style: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: color ?? Color(0xffffffff),
+        fontSize: getProportionatefontSize(fontSize ?? 14),
+        letterSpacing: 0.10,
+        height: 1.5,
+        wordSpacing: 0.2,
       ),
     );
   }
@@ -87,17 +118,20 @@ class TextCaptionWhite extends StatelessWidget {
 
 class TextHeader extends StatelessWidget {
   final String text;
+  final Color color;
 
-  const TextHeader({Key key, this.text}) : super(key: key);
+  const TextHeader({Key key, this.text, this.color}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Text(
       "$text",
       style: TextStyle(
+        color: color ?? kTextColor,
         fontWeight: FontWeight.w600,
         fontSize: getProportionatefontSize(20.2),
-        letterSpacing: 0.1,
+        letterSpacing: 1,
+        wordSpacing: 2,
       ),
     );
   }
@@ -151,16 +185,21 @@ class TextHeader3 extends StatelessWidget {
 
 class TextTitle extends StatelessWidget {
   final String text;
+  final int maxLines;
+  final Color color;
 
-  const TextTitle({Key key, this.text}) : super(key: key);
+  const TextTitle({Key key, this.text, this.maxLines, this.color})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Text(
       "$text",
-      maxLines: 3,
+      // textAlign: TextAlign.left,
+      maxLines: maxLines ?? 3,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
+        color: color ?? kTextColor,
         fontWeight: FontWeight.w600,
         fontSize: getProportionatefontSize(16),
         letterSpacing: 0.3,
@@ -171,8 +210,9 @@ class TextTitle extends StatelessWidget {
 
 class TextArticle extends StatelessWidget {
   final String text;
+  final Color color;
 
-  const TextArticle({Key key, this.text}) : super(key: key);
+  const TextArticle({Key key, this.text, this.color}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -180,7 +220,7 @@ class TextArticle extends StatelessWidget {
       "$text",
       style: TextStyle(
         fontWeight: FontWeight.w400,
-        color: Color(0xff1F2230),
+        color: color ?? Color(0xff1F2230),
         fontSize: getProportionatefontSize(16),
         height: 1.5,
       ),

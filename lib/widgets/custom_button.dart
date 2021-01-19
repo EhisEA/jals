@@ -12,8 +12,10 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    double height = MediaQuery.of(context).size.height;
+    print(height);
     return Container(
-      height: getProportionatefontSize(54),
+      height: getProportionatefontSize(height < 1000 ? 54 : 38),
       width: getProportionateScreenWidth(335),
       decoration: BoxDecoration(
         color: color,

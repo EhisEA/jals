@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jals/ui/authentication/widgets/custom_textfield.dart';
+import 'package:jals/ui/authentication/components/custom_textfield.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/custom_button.dart';
@@ -137,39 +137,38 @@ class _AccountInfoViewState extends State<AccountInfoView> {
   }
 
   Widget buildBox() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Stack(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                color: Color(0xff191A32),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(30),
-                ),
+    return Container(
+      height: 100,
+      width: 100,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Color(0xff191A32),
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
               ),
-              child: Image.asset("icons/Profile.png"),
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: buildCircle(),
-            )
-          ],
-        ),
-      ],
+            child: Image.asset("icons/Profile.png"),
+          ),
+          Positioned(
+            bottom: -5,
+            right: -5,
+            child: buildCircle(),
+          )
+        ],
+      ),
     );
   }
 
   Widget buildCircle() {
     return Container(
       alignment: Alignment.center,
-      height: getProportionateScreenHeight(34),
-      width: getProportionateScreenWidth(34),
+      padding: EdgeInsets.all(10),
+      // height: getProportionateScreenHeight(34),
+      // width: getProportionateScreenWidth(34),
       decoration: BoxDecoration(
         color: Color(0xff767780),
         shape: BoxShape.circle,
