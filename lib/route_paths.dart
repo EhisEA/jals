@@ -12,4 +12,5 @@ class RoutePaths {
   static const String createSignUpPasswordView = "createSignUpPasswordView";
   static const String verificationForgotPasswordView =
       "verificationForgotPasswordView";
+  static const String paymentPageWithTokenView = "paymentPageWithTokenView";
 }
