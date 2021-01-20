@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/custom_button.dart';
-import 'package:jals/ui/authentication/widgets/social_button.dart';
+import 'package:jals/ui/authentication/components/social_button.dart';
 
 import '../../utils/size_config.dart';
 

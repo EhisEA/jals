@@ -19,16 +19,16 @@ const kIndicatorGradient = LinearGradient(
 );
 
 Map<int, Color> color2 = {
-  50: Color(0xFFB32929).withOpacity(0.1),
-  100: Color(0xFFB32929).withOpacity(0.2),
-  200: Color(0xFFB32929).withOpacity(0.3),
-  300: Color(0xFFB32929).withOpacity(0.4),
-  400: Color(0xFFB32929).withOpacity(0.5),
-  500: Color(0xFFB32929).withOpacity(0.6),
-  600: Color(0xFFB32929).withOpacity(0.7),
-  700: Color(0xFFB32929).withOpacity(0.8),
-  800: Color(0xFFB32929).withOpacity(0.9),
-  900: Color(0xFFB32929),
+  50: Color(0xFF3C8AF0).withOpacity(0.1),
+  100: Color(0xFF3C8AF0).withOpacity(0.2),
+  200: Color(0xFF3C8AF0).withOpacity(0.3),
+  300: Color(0xFF3C8AF0).withOpacity(0.4),
+  400: Color(0xFF3C8AF0).withOpacity(0.5),
+  500: Color(0xFF3C8AF0).withOpacity(0.6),
+  600: Color(0xFF3C8AF0).withOpacity(0.7),
+  700: Color(0xFF3C8AF0).withOpacity(0.8),
+  800: Color(0xFF3C8AF0).withOpacity(0.9),
+  900: Color(0xFF3C8AF0),
 };
 // 0xff4eda23
-MaterialColor kPrimaryColor = MaterialColor(0xFFB32929, color2);
+MaterialColor kPrimaryColor = MaterialColor(0xFF3C8AF0, color2);

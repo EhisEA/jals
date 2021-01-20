@@ -69,6 +69,7 @@ flutter:
     - icons/jals_logo.svg
     - icons/
     - assets/images/
+    - assets/svgs/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

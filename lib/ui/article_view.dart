@@ -4,7 +4,6 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/image.dart';
-import 'package:jals/widgets/image_loader.dart';
 
 class ArticleView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
