@@ -45,3 +45,15 @@ double getProportionatefontSize(double fontSize) {
   }
   return getProportionateScreenHeightForFont(fontSize);
 }
+
+double getProportionateAdjustedfontSize(double fontSize) {
+  if (SizeConfig.orientation == Orientation.portrait &&
+      SizeConfig.screenWidth > 590) {
+    double tempSize = fontSize / 3;
+    fontSize = tempSize * 2;
+  }
+  if (SizeConfig.orientation == Orientation.portrait) {
+    return getProportionateScreenWidth(fontSize);
+  }
+  return getProportionateScreenHeightForFont(fontSize);
+}

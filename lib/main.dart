@@ -2,7 +2,6 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:jals/ui/authentication/splashscreen_view.dart';
 
 import 'package:jals/ui/article_view.dart';
@@ -12,7 +11,9 @@ import 'package:jals/ui/library/article_library_view.dart';
 import 'package:jals/ui/library/audio_library_view.dart';
 import 'package:jals/ui/library/video_library_view.dart';
 import 'package:jals/ui/playlist_view.dart';
-
+import 'package:jals/ui/shop/payment_page_with_token.dart';
+import 'package:jals/ui/shop/payment_view.dart';
+import 'package:jals/ui/shop/store_view.dart';
 
 import 'package:jals/utils/theme.dart';
 
@@ -36,22 +37,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        builder: (context, child) {
-          var dialogService = locator<DialogService>();
-          return DevicePreview.appBuilder(context, child);
-          // return Navigator(
-          //   key: dialogService.dialogNavigationKey,
-          //   onGenerateRoute: (settings) => MaterialPageRoute(
-          //       builder: (context) => DialogManager(child: child)),
-          // );
-        },
-        theme: MyTheme().themeData,
-        onGenerateRoute: AppRouter.generateRoute,
-        navigatorKey: locator<NavigationService>().navigatorKey,
-
-        home: SplashScreenView());
-
+      title: 'Flutter Demo',
+      builder: (context, child) {
+        var dialogService = locator<DialogService>();
+        return DevicePreview.appBuilder(context, child);
+        // return Navigator(
+        //   key: dialogService.dialogNavigationKey,
+        //   onGenerateRoute: (settings) => MaterialPageRoute(
+        //       builder: (context) => DialogManager(child: child)),
+        // );
+      },
+      theme: MyTheme().themeData,
+      onGenerateRoute: AppRouter.generateRoute,
+      navigatorKey: locator<NavigationService>().navigatorKey,
+      home: StoreView(),
+    );
 
     // home: VideoPlayer());
   }
