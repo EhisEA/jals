@@ -1,118 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:jals/route_paths.dart';
+import 'package:jals/constants/regex.dart';
+import 'package:jals/jals_icons_icons.dart';
 
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
-import 'package:jals/ui/authentication/components/custom_textfield.dart';
+import 'package:jals/ui/authentication/components/auth_textfield.dart';
 import 'package:jals/ui/authentication/components/social_button.dart';
+import 'package:jals/ui/authentication/view_models/sign_up_view_model.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
-import 'package:jals/widgets/custom_button.dart';
+import 'package:jals/widgets/button.dart';
+import 'package:stacked/stacked.dart';
 
-class SignUpView extends StatefulWidget {
-  @override
-  _SignUpViewState createState() => _SignUpViewState();
-}
-
-class _SignUpViewState extends State<SignUpView> {
-  final TextEditingController emailController = TextEditingController();
-  @override
-  void dispose() {
-    emailController.dispose();
-    super.dispose();
-  }
-
+class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          // height: MediaQuery.of(context).size.width,
-          // width: MediaQuery.of(context).size.width,
-          margin: UIHelper.kSidePadding,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AuthAppBar(
-                  subtitle: "Enter Email to register your account",
-                  title: "Sign up to JALS",
-                ),
-                CustomTextField(
-                  fieldColor: Colors.white,
-                  controller: emailController,
-                  hintText: "Johndoe@gmail.com",
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (String value) {},
-                  prefixIcon: Image.asset(
-                    "icons/email.png",
-                    color: Colors.black,
+    return ViewModelBuilder<SignUpViewModel>.nonReactive(
+        viewModelBuilder: () => SignUpViewModel(),
+        builder: (context, model, _) {
+          return SafeArea(
+            child: Scaffold(
+              body: Container(
+                margin: UIHelper.kSidePadding,
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: model.formKey,
+                    child: Column(
+                      children: [
+                        AuthAppBar(
+                          subtitle: "Enter Email to register your account",
+                          title: "Sign up to JALS",
+                        ),
+                        AuthTextField(
+                          fieldColor: Colors.white,
+                          controller: model.emailController,
+                          hintText: "Johndoe@gmail.com",
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: JalsIcons.envelope,
+                          title: "Email",
+                          validator: (String value) {
+                            if (!emmailRegExp.hasMatch(value)) {
+                              return "Invaild Email";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(30),
+                        ),
+                        DefaultButton(
+                          color: Color(0xff3C8AF0),
+                          onPressed: model.verifyEmail,
+                          title: "Continue",
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(20),
+                        ),
+                        Text(
+                          "or Sign up with",
+                          style: TextStyle(
+                            fontSize: getProportionatefontSize(12),
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            color: Color(0xff1F2230).withOpacity(0.66),
+                          ),
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(20),
+                        ),
+                        SocialButton(
+                          color: Color(0xff3F51B5),
+                          icon: JalsIcons.facebook,
+                          onPressed: model.facebookSignIn,
+                          title: "Log in with Facebook",
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(20),
+                        ),
+                        SocialButton(
+                          color: Color(0xff1F2230),
+                          icon: JalsIcons.google,
+                          onPressed: model.googleSignIn,
+                          title: "Log in with Google",
+                        ),
+                        SizedBox(height: getProportionateScreenHeight(40)),
+                        buildRichText(context, model),
+                        SizedBox(height: 50),
+                      ],
+                    ),
                   ),
-                  suffixIcon: Container(height: 10, width: 10),
-                  title: "Email",
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return "";
-                    } else {
-                      return null;
-                    }
-                  },
                 ),
-                SizedBox(
-                  height: getProportionateScreenHeight(30),
-                ),
-                CustomButton(
-                  color: Color(0xff3C8AF0),
-                  onPressed: () {
-                    Navigator.pushNamed(context, RoutePaths.verificationView);
-                  },
-                  title: "Continue",
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(20),
-                ),
-                Text(
-                  "or Sign up with",
-                  style: TextStyle(
-                    fontSize: getProportionatefontSize(12),
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                    color: Color(0xff1F2230).withOpacity(0.66),
-                  ),
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(20),
-                ),
-                SocialButton(
-                  color: Color(0xff3F51B5),
-                  icon: Image.asset("icons/facebook.png"),
-                  onPressed: () {},
-                  title: "Log in with Facebook",
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(20),
-                ),
-                SocialButton(
-                  color: Color(0xff1F2230),
-                  icon: Image.asset("icons/google.png"),
-                  onPressed: () {},
-                  title: "Log in with Google",
-                ),
-                SizedBox(height: getProportionateScreenHeight(40)),
-                buildRichText(context),
-                SizedBox(height: 50),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 
-  Widget buildRichText(context) {
+  Widget buildRichText(context, SignUpViewModel model) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, RoutePaths.loginView);
-      },
+      onTap: model.toLogin,
       child: Text.rich(
         TextSpan(
           text: "I have an account? ",

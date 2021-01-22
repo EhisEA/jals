@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
-import 'package:jals/widgets/custom_button.dart';
+import 'package:jals/widgets/button.dart';
 
 class PaymentPageWithTokenView extends StatelessWidget {
   @override
@@ -55,7 +55,7 @@ class PaymentPageWithTokenView extends StatelessWidget {
               ),
               Container(
                 margin: UIHelper.kSidePadding,
-                child: CustomButton(
+                child: DefaultButton(
                   color: Color(0xff3C8AF0),
                   onPressed: () {},
                   title: "Purchase JALS Token",
