@@ -3,7 +3,7 @@ import '../utils/colors_utils.dart';
 import '../models/dialog_models.dart';
 import '../services/dialog_service.dart';
 
-import '../locator.dart';
+import '../utils/locator.dart';
 
 class DialogManager extends StatefulWidget {
   final Widget child;
@@ -29,14 +29,15 @@ class _DialogManagerState extends State<DialogManager> {
   void _showDialog(DialogRequest request) {
     var isConfirmationDialog = request.cancelTitle != null;
     showDialog(
-      
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-           
-          backgroundColor: kScaffoldColor,
+              backgroundColor: kScaffoldColor,
               title: Text(request.title),
-              content: Text(request.description, style: TextStyle(color:kTextColor),),
+              content: Text(
+                request.description,
+                style: TextStyle(color: kTextColor),
+              ),
               actions: <Widget>[
                 if (isConfirmationDialog)
                   FlatButton(

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:jals/ui/audio/components/audio_download.dart';
+import 'package:jals/ui/audio/components/audio_playlist.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/article_tile.dart';
 
-class VideoLibrary extends StatefulWidget {
+import 'components/audio_all.dart';
+
+class AudioLibrary extends StatefulWidget {
   @override
-  _VideoLibraryState createState() => _VideoLibraryState();
+  _AudioLibraryState createState() => _AudioLibraryState();
 }
 
-class _VideoLibraryState extends State<VideoLibrary>
+class _AudioLibraryState extends State<AudioLibrary>
     with SingleTickerProviderStateMixin {
   TabController _controller;
 
@@ -35,7 +39,7 @@ class _VideoLibraryState extends State<VideoLibrary>
               color: Colors.black,
             ),
           ),
-          title: TextHeader(text: "Video Library"),
+          title: TextHeader(text: "Audio Library"),
           centerTitle: true,
           actions: [
             Padding(
@@ -65,7 +69,7 @@ class _VideoLibraryState extends State<VideoLibrary>
                   // indicatorPadding: ,
                   tabs: [
                     TextTitle(text: "All"),
-                    TextTitle(text: "Watch Later"),
+                    TextTitle(text: "Playlist"),
                     TextTitle(text: "Download"),
                   ],
                 ),
@@ -78,77 +82,14 @@ class _VideoLibraryState extends State<VideoLibrary>
                   child: TabBarView(
                     controller: _controller,
                     children: [
-                      VideoAll(),
-                      VideoWatchLater(),
-                      VideoDownload(),
+                      AudioAll(),
+                      AudioPlaylist(),
+                      AudioDownload(),
                     ],
                   ),
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class VideoAll extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: List.generate(
-        20,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: VideoTile(
-            image:
-                "https://cdn.mos.cms.futurecdn.net/yL3oYd7H2FHDDXRXwjmbMf.jpg",
-            title: "How to Pray and Communicate with God",
-            author: "Wade Warren",
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class VideoWatchLater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: List.generate(
-        20,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: VideoTile(
-            image:
-                "https://cdn.mos.cms.futurecdn.net/yL3oYd7H2FHDDXRXwjmbMf.jpg",
-            title: "How to Pray and Communicate with God",
-            author: "Wade Warren",
-            showPrimaryButton: false,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class VideoDownload extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: List.generate(
-        20,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: VideoTile(
-            image:
-                "https://cdn.mos.cms.futurecdn.net/yL3oYd7H2FHDDXRXwjmbMf.jpg",
-            title: "How to Pray and Communicate with God",
-            author: "Download 2020/30/03",
-            showPrimaryButton: false,
-            showSecondaryButton: false,
           ),
         ),
       ),

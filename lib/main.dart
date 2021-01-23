@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
+import 'package:jals/ui/article/article_library_view.dart';
 import 'package:jals/utils/theme.dart';
 
-import 'locator.dart';
+import 'utils/locator.dart';
 import 'managers/dialog_manager.dart';
-import 'router.dart';
+import 'utils/router.dart';
 import 'services/dialog_service.dart';
 import 'services/navigationService.dart';
 
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme().themeData,
       onGenerateRoute: AppRouter.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
-      home: SplashScreenView(),
+      home: ArticleLibrary(),
     );
 
     // home: VideoPlayer());

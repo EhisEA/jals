@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jals/jals_icons_icons.dart';
+import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/ui/authentication/components/auth_textfield.dart';
 import 'package:jals/ui/authentication/view_models/account_info_view_model.dart';
 import 'package:jals/utils/size_config.dart';

@@ -10,7 +10,7 @@ import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
 
-import 'ui/undefinedRoute.dart';
+import '../ui/undefinedRoute.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {

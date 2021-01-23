@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jals/jals_icons_icons.dart';
+import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
 
 import 'package:jals/ui/authentication/components/auth_textfield.dart';

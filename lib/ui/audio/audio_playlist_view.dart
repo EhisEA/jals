@@ -5,7 +5,7 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/article_tile.dart';
 
-class PlaylistView extends StatelessWidget {
+class AudioPlaylistView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

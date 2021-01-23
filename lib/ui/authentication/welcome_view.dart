@@ -7,7 +7,7 @@ import 'package:jals/widgets/button.dart';
 import 'package:jals/ui/authentication/components/social_button.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../jals_icons_icons.dart';
+import '../../utils/jals_icons_icons.dart';
 import '../../utils/size_config.dart';
 
 class WelcomeView extends StatelessWidget {

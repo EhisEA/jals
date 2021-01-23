@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/comments_widget.dart';
@@ -101,10 +102,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                buildIcon(Icons.favorite_border_outlined, "Listen Later"),
-                buildIcon(CupertinoIcons.square_arrow_down, "Download"),
-                buildIcon(CupertinoIcons.bubble_left, "Comment"),
-                buildIcon(Icons.more_vert, "more"),
+                buildIcon(JalsIcons.favorite, "Listen Later"),
+                buildIcon(JalsIcons.download, "Download"),
+                buildIcon(JalsIcons.comment, "Comment"),
+                buildIcon(JalsIcons.comment, "more"),
               ],
             ),
             SizedBox(height: 20),

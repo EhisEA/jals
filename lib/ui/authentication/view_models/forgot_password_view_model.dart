@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jals/base_view_model.dart';
+import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
 
-import '../../../locator.dart';
+import '../../../utils/locator.dart';
 
 class ForgotPasswordViewModel extends BaseViewModel {
   final TextEditingController emailController = TextEditingController();
