@@ -24,7 +24,7 @@ class LibraryView extends StatelessWidget {
                 color: Color(0xff1F2230),
                 child: Stack(
                   children: [
-                    SvgPicture.asset("assets/svgs/night2.svg"),
+                    SvgPicture.asset("assets/svgs/night1.svg"),
                   ],
                 ),
               ),

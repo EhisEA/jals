@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:jals/services/authentication_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
@@ -16,7 +17,8 @@ class VerificationViewModel extends BaseViewModel {
   StreamController<ErrorAnimationType> errorController =
       StreamController<ErrorAnimationType>();
   String currentText = "";
-
+  final AuthenticationService _authenticationService =
+      locator<AuthenticationService>();
   @override
   void dispose() {
     verificationController.dispose();
@@ -25,6 +27,7 @@ class VerificationViewModel extends BaseViewModel {
   }
 
   verify() async {
+    await _authenticationService.verifySignUpEmail(verificationController.text);
     _navigationService.navigateToReplace(PasswordViewRoute);
   }
 
