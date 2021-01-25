@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
-import 'package:jals/widgets/custom_button.dart';
+import 'package:jals/widgets/button.dart';
 
 class PaymentPageWithTokenView extends StatelessWidget {
   @override
@@ -28,15 +28,16 @@ class PaymentPageWithTokenView extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: getProportionatefontSize(20),
+                height: getProportionatefontSize(10),
               ),
               Container(
                 margin: EdgeInsets.symmetric(
                     horizontal: SizeConfig.screenWidth / 8),
                 child: Text(
                   "JALS Token are used to purchase contents such as videos, audios and articles on the app.",
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.sourceSansPro(
-                    fontSize: getProportionatefontSize(14),
+                    fontSize: getProportionateAdjustedfontSize(16),
                     fontWeight: FontWeight.w400,
                     color: Color(0xff222431).withOpacity(0.68),
                     fontStyle: FontStyle.normal,
@@ -54,7 +55,7 @@ class PaymentPageWithTokenView extends StatelessWidget {
               ),
               Container(
                 margin: UIHelper.kSidePadding,
-                child: CustomButton(
+                child: DefaultButton(
                   color: Color(0xff3C8AF0),
                   onPressed: () {},
                   title: "Purchase JALS Token",
@@ -79,7 +80,7 @@ class TokenPriceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getProportionatefontSize(72),
+      height: getProportionateAdjustedfontSize(72),
       width: SizeConfig.screenWidth,
       child: ListTile(
         title: Text(
@@ -164,7 +165,7 @@ class TopBox extends StatelessWidget {
                 child: Text(
                   "Buy JALS Token",
                   style: GoogleFonts.sourceSansPro(
-                    fontSize: getProportionatefontSize(22),
+                    fontSize: getProportionateAdjustedfontSize(22),
                     fontWeight: FontWeight.w600,
                     color: Color(0xffC16029),
                   ),
@@ -182,6 +183,7 @@ class TopBox extends StatelessWidget {
               Image.asset(
                 "icons/time.png",
                 height: getProportionatefontSize(48),
+                fit: BoxFit.cover,
               ),
               SizedBox(
                 width: getProportionatefontSize(15),

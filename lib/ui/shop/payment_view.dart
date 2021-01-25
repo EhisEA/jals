@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
+import 'package:jals/utils/text.dart';
 import 'package:jals/utils/ui_helper.dart';
 
 class PaymentView extends StatelessWidget {
@@ -29,38 +31,19 @@ class PaymentView extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: getProportionatefontSize(10),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextHeader(
+                  text: "Medititating with the Spirit",
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  "Medititating with the Spirit",
-                  style: GoogleFonts.sourceSansPro(
-                      fontSize: getProportionatefontSize(22),
-                      color: Color(0xff1F2230),
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.1),
-                ),
-              ),
-              SizedBox(
-                height: getProportionatefontSize(10),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  "21 December 2020",
-                  style: GoogleFonts.sourceSansPro(
-                    fontSize: getProportionatefontSize(12),
-                    color: Color(0xff222431).withOpacity(.54),
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                child: TextCaption2(text: "21 December 2020"),
               ),
               // !tile
-              SizedBox(height: 20),
+              SizedBox(height: getProportionatefontSize(20)),
 
               ItemDescriptionCard(
                 imagePath: "icons/video.png",
@@ -94,6 +77,7 @@ class PaymentView extends StatelessWidget {
                           icon: Icon(
                             Icons.favorite_border,
                             color: Colors.blue,
+                            size: getProportionatefontSize(20),
                           ),
                           onPressed: () {},
                         ),
@@ -164,44 +148,40 @@ class ItemDescriptionCard extends StatelessWidget {
         decoration: BoxDecoration(),
         height: getProportionatefontSize(75),
         width: SizeConfig.screenWidth,
-        child: ListTile(
-          title: Text(
-            title,
-            style: GoogleFonts.sourceSansPro(
-              fontSize: getProportionatefontSize(16),
-              color: Colors.black,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          subtitle: Text(
-            subtitle,
-            style: GoogleFonts.sourceSansPro(
-              fontSize: getProportionatefontSize(12),
-              color: Color(0xff222431),
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          leading: Container(
-            height: getProportionatefontSize(43),
-            width: getProportionatefontSize(40),
-            child: Center(
-              child: Image.asset(imagePath),
-            ),
-            decoration: BoxDecoration(
-              color: Color(0xffEEFFFA),
-            ),
-          ),
-          trailing: Text(
-            "\$$price",
-            style: GoogleFonts.sourceCodePro(
-              fontSize: getProportionatefontSize(18),
-              color: Color(0xff3C8AF0),
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+        child: Center(
+          child: ListTile(
+              title: TextHeader3(
+                text: title,
+                fontSize: getProportionatefontSize(14),
+              ),
+              subtitle: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: getProportionatefontSize(8),
+                  ),
+                  TextCaption2(
+                    text: subtitle,
+                  ),
+                ],
+              ),
+              leading: Container(
+                height: getProportionatefontSize(43),
+                width: getProportionatefontSize(40),
+                child: Center(
+                  child: Image.asset(imagePath),
+                ),
+                decoration: BoxDecoration(
+                  color: Color(0xffEEFFFA),
+                ),
+              ),
+              trailing: TextCaption2(
+                text: "\$$price",
+                color: kPrimaryColor,
+                fontSize: getProportionatefontSize(16),
+                fontWeight: FontWeight.w600,
+              )),
         ),
       ),
     );

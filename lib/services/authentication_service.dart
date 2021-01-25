@@ -1,146 +1,219 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:jals/constants/base_url.dart';
+import 'package:jals/enums/api_response.dart';
+import 'package:jals/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService with ChangeNotifier {
-  String _token;
+  final Client _client = Client();
+  final String userData = "userData";
+  UserModel _currentUser;
+  UserModel get currentUser => _currentUser;
+  String _authEmail;
+  String get authEmail => _authEmail;
   DateTime _expiryDate;
-  Timer _authTimer;
-
-  bool get isAuth {
-    return token != null;
-  }
-
-  String get token {
-    if (_expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
+  bool get isAuthenticated => _authToken != null;
+  Timer _timer;
+  String _authToken = "";
+  String get authToken {
+    if (_authToken != null &&
+        _expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now())) {
+      return _authToken;
     }
-
     return null;
   }
 
-  Future<void> signUp(String firstName, String lastName, String email,
-      String phone, String password) async {
-    String url = 'https://cloudmallng.com/api/user/register';
-
+// ============================****SignUp with Email****=================================
+  Future<ApiResponse> sendSignUpEmail(String email) async {
     try {
-      http.Response response = await http.post(url, body: {
-        'firstname': firstName,
-        'lastname': lastName,
-        'email': email,
-        'phone': phone,
-        'password': password,
-      });
-
-      if (response.statusCode != 200) {
-        //Throw an exception to signify that an error not related to network occurred.
-
+      Response response = await _client.post(
+        "$baseUrl/registration/",
+        body: {"email": email},
+        headers: headers,
+      );
+      if (response.statusCode == 201) {
+        _authEmail = email;
+        notifyListeners();
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
       }
+    } catch (e) {
+      return ApiResponse.Error;
+    }
+  }
+// =-==========================***Send Password to Register**8=================
 
-      final decodedData = jsonDecode(response.body);
-      _token = decodedData['token'];
-      _expiryDate = DateTime.now().add(Duration(hours: 3));
-      _autoLogout();
-
-      notifyListeners();
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      final userData = json
-          .encode({'token': _token, 'expiry': _expiryDate.toIso8601String()});
-      await prefs.setString('userData', userData);
-    } catch (error) {
-      throw error;
+  Future<ApiResponse> sendPasswordToRegister(String password) async {
+    try {
+      Response response = await _client.post(
+        "$baseUrl/password/reset/confirm/",
+        body: {"": password},
+        headers: headers,
+      );
+      if (response.statusCode == 201) {
+        //! Perform Operation.
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
     }
   }
 
-  Future<void> signIn(String email, String password) async {
-    String url = 'https://cloudmallng.com/api/user/login';
+// =====================***Login with Emaiol Address***====================
+  Future<ApiResponse> loginWithEmail(
+      {@required String email, @required String password}) async {
     try {
-      http.Response response = await http.post(url, body: {
-        'email': email,
-        'password': password,
-      });
-
-      if (response.statusCode != 200) {
-        throw Exception(jsonDecode(response.body)['message']);
-      }
-
+      Response response = await _client.post("$baseUrl/login",
+          body: {"email": email, "password": password}, headers: {});
       final decodedData = jsonDecode(response.body);
-//            print(decodedData);
-      _token = decodedData['token'];
-      _expiryDate = DateTime.now().add(Duration(hours: 3));
-      _autoLogout();
-      notifyListeners();
+      print(decodedData);
+      if (response.statusCode == 200) {
+        print("Login was successful");
+        // _currentUser=... && authToken
+        _expiryDate = DateTime.now().add(Duration(hours: 10));
+        _autoLogout();
+        notifyListeners();
+        // !Save token to the device.
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        final myData = {
+          "token": "",
+          "expiryDate": _expiryDate.toIso8601String()
+        };
+        await preferences.setString(userData, jsonEncode(myData));
 
-//            Store the token on the device
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      final userData = json
-          .encode({'token': _token, 'expiry': _expiryDate.toIso8601String()});
-      await prefs.setString('userData', userData);
-    } catch (error) {
-      throw error;
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
     }
   }
 
-  void logout() async {
-    _token = null;
+// ========================================****Verify SignUp Email****===============================
+  Future<ApiResponse> verifySignUpEmail(String code) async {
+    try {
+      Response response = await _client.post(
+        "$baseUrl/registration/verify-email/",
+        body: {
+          "key": code,
+        },
+      );
+      if (response.statusCode == 201) {
+        print("Registering to JALS was successful");
+        // _currentUser=... && authToken
+        _expiryDate = DateTime.now().add(Duration(hours: 10));
+        _autoLogout();
+        notifyListeners();
+        // !Save token to the device.
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        final myData = {
+          "token": "",
+          "expiryDate": _expiryDate.toIso8601String()
+        };
+        await preferences.setString(userData, jsonEncode(myData));
+
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
+  // ======================================****LogOut****==================
+  void logOut() async {
+    _authToken = null;
     _expiryDate = null;
-
-    if (_authTimer != null) {
-      _authTimer.cancel();
-      _authTimer = null;
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
     }
-
     notifyListeners();
-
-    // Clear the data stored in the sharedPreferences
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    // ! clear the token from the device.
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    await sharedPrefs.clear();
   }
 
-  void _autoLogout() {
-    if (_authTimer != null) {
-      _authTimer.cancel();
+// ==========================****Auto Logout****=====================
+  void _autoLogout() async {
+    if (_timer != null) {
+      _timer.cancel();
     }
-
-    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-
-    _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
+    final int timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+    _timer = Timer(Duration(seconds: timeToExpiry), _autoLogout);
+    //!???
+    notifyListeners();
   }
 
+  // ======================****Auto Login****=============
   Future<bool> autoLogin() async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      if (!prefs.containsKey('userData')) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      final prefsData = preferences.getString(userData);
+      final decodedData = jsonDecode(prefsData);
+      final timeToExpire = DateTime.parse(decodedData["expiryDate"]);
+      if (!preferences.containsKey(userData)) {
         return false;
       }
 
-      final extractedUserData =
-          json.decode(prefs.getString('userData')) as Map<String, Object>;
-      final expiryDate = DateTime.parse(extractedUserData['expiry']);
-
-      if (expiryDate.isBefore(DateTime.now())) {
+      if (timeToExpire.isBefore(DateTime.now())) {
         return false;
       }
-
-      _token = extractedUserData['token'];
-      _expiryDate = expiryDate;
-
+      _authToken = decodedData["token"];
+      _expiryDate = timeToExpire;
       notifyListeners();
-
       _autoLogout();
-
       return true;
-    } catch (error) {
-      print(error.toString());
+    } catch (e) {
+      print(e);
       return false;
+    }
+  }
+
+  // ======================****Forgot Password****==============
+
+  Future<ApiResponse> forgotPassword(String email) async {
+    try {
+      Response response = await _client.post(
+        baseUrl,
+      );
+      if (response.statusCode == 200) {
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+  // =================****Send Password Verification Code****...====================
+
+  Future<ApiResponse> forgotPasswordVerificationCode(String code) async {
+    try {
+      Response response = await _client.post(
+        baseUrl,
+      );
+      if (response.statusCode == 200) {
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
     }
   }
 }

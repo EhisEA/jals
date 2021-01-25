@@ -1,89 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:jals/constants/regex.dart';
+import 'package:jals/utils/jals_icons_icons.dart';
 
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
-import 'package:jals/ui/authentication/components/custom_textfield.dart';
+import 'package:jals/ui/authentication/components/auth_textfield.dart';
+import 'package:jals/ui/authentication/view_models/forgot_password_view_model.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
-import 'package:jals/widgets/custom_button.dart';
+import 'package:jals/widgets/button.dart';
+import 'package:stacked/stacked.dart';
 
-import '../../route_paths.dart';
-
-class ForgotPasswordView extends StatefulWidget {
-  @override
-  _ForgotPasswordViewState createState() => _ForgotPasswordViewState();
-}
-
-class _ForgotPasswordViewState extends State<ForgotPasswordView> {
-  final TextEditingController emailController = TextEditingController();
-  @override
-  void dispose() {
-    emailController.dispose();
-    super.dispose();
-  }
-
+class ForgotPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          // height: MediaQuery.of(context).size.width,
-          // width: MediaQuery.of(context).size.width,
-          margin: UIHelper.kSidePadding,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AuthAppBar(
-                  subtitle: "Let us help you reset your password",
-                  title: "Forgot your Password?",
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(10),
-                ),
-                CustomTextField(
-                  fieldColor: Colors.transparent,
-                  controller: emailController,
-                  hintText: "Johndoe@gmail.com",
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (String value) {},
-                  suffixIcon: Container(height: 10, width: 10),
-                  prefixIcon: Image.asset(
-                    "icons/email.png",
-                    color: Color(0xff3C8AF0),
+    return ViewModelBuilder<ForgotPasswordViewModel>.nonReactive(
+        viewModelBuilder: () => ForgotPasswordViewModel(),
+        builder: (context, model, _) {
+          return SafeArea(
+            child: Scaffold(
+              body: Container(
+                margin: UIHelper.kSidePadding,
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: model.formKey,
+                    child: Column(
+                      children: [
+                        AuthAppBar(
+                          subtitle: "Let us help you reset your password",
+                          title: "Forgot your Password?",
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(10),
+                        ),
+                        AuthTextField(
+                          fieldColor: Colors.transparent,
+                          controller: model.emailController,
+                          hintText: "Johndoe@gmail.com",
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: JalsIcons.envelope,
+                          title: "Email",
+                          validator: (String value) {
+                            if (!emmailRegExp.hasMatch(value)) {
+                              return "Invaild Email";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(30),
+                        ),
+                        DefaultButton(
+                          color: Color(0xff3C8AF0),
+                          onPressed: model.verifyEmail,
+                          title: "Continue",
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(30),
+                        ),
+                        buildRichText(context, model),
+                        SizedBox(height: 50),
+                      ],
+                    ),
                   ),
-                  title: "Email",
-                  validator: (String value) => value.isEmpty ? "" : null,
-                  obscure: false,
                 ),
-                SizedBox(
-                  height: getProportionateScreenHeight(30),
-                ),
-                CustomButton(
-                  color: Color(0xff3C8AF0),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                        context, RoutePaths.verificationForgotPasswordView);
-                  },
-                  title: "Continue",
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(30),
-                ),
-                buildRichText(context),
-                SizedBox(height: 50),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 
-  Widget buildRichText(context) {
+  Widget buildRichText(context, ForgotPasswordViewModel model) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, RoutePaths.loginView);
-      },
+      onTap: model.toLogin,
       child: Text.rich(
         TextSpan(
           text: "Remembered your password?",

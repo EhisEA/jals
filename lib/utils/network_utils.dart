@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../services/dialog_service.dart';
 
-import '../locator.dart';
+import 'locator.dart';
 
 class NetworkConfig {
   final DialogService _dialogService = locator<DialogService>();

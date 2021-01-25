@@ -5,7 +5,7 @@ import '../../../utils/size_config.dart';
 
 class SocialButton extends StatelessWidget {
   final Function onPressed;
-  final Widget icon;
+  final IconData icon;
   final String title;
   final Color color;
 
@@ -25,9 +25,15 @@ class SocialButton extends StatelessWidget {
           horizontal: 20,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            icon,
+            SizedBox(
+              width: getProportionateScreenWidth(30),
+            ),
+            Icon(
+              icon,
+              color: Colors.white,
+              size: getProportionatefontSize(30),
+            ),
             SizedBox(
               width: getProportionateScreenWidth(30),
             ),

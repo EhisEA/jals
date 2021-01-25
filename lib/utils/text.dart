@@ -23,10 +23,18 @@ class TextCaption extends StatelessWidget {
 
 class TextCaption2 extends StatelessWidget {
   final String text;
-
+  final Color color;
   final bool center;
+  final double fontSize;
+  final FontWeight fontWeight;
 
-  const TextCaption2({Key key, this.text, this.center = false})
+  const TextCaption2(
+      {Key key,
+      this.text,
+      this.center = false,
+      this.color,
+      this.fontWeight,
+      this.fontSize})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -35,9 +43,9 @@ class TextCaption2 extends StatelessWidget {
       "$text",
       textAlign: center ? TextAlign.center : TextAlign.left,
       style: TextStyle(
-        fontWeight: FontWeight.w400,
-        color: Color(0xff999CAD),
-        fontSize: getProportionatefontSize(12),
+        fontWeight: fontWeight ?? FontWeight.w400,
+        color: color ?? Color(0xff999CAD),
+        fontSize: fontSize ?? getProportionatefontSize(12),
         letterSpacing: 0.1,
       ),
     );
@@ -164,8 +172,17 @@ class TextHeader3 extends StatelessWidget {
   final String text;
 
   final bool center;
+  final Color color;
+  final double fontSize;
+  final FontWeight fontWeight;
 
-  const TextHeader3({Key key, this.text, this.center = false})
+  const TextHeader3(
+      {Key key,
+      this.text,
+      this.center = false,
+      this.color,
+      this.fontSize,
+      this.fontWeight})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -174,9 +191,9 @@ class TextHeader3 extends StatelessWidget {
       "$text",
       textAlign: center ? TextAlign.center : TextAlign.left,
       style: TextStyle(
-        fontWeight: FontWeight.w600,
+        fontWeight: fontWeight ?? FontWeight.w600,
 
-        fontSize: getProportionatefontSize(18),
+        fontSize: fontSize ?? getProportionatefontSize(18),
         // letterSpacing: 0.1,
       ),
     );

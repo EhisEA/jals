@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../utils/size_config.dart';
 
-class CustomButton extends StatelessWidget {
+class DefaultButton extends StatelessWidget {
   final Function onPressed;
   final String title;
   final Color color;
 
-  const CustomButton({Key key, this.onPressed, this.title, this.color})
+  const DefaultButton({Key key, this.onPressed, this.title, this.color})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double height = MediaQuery.of(context).size.height;
-    print(height);
+
     return Container(
       height: getProportionatefontSize(height < 1000 ? 54 : 38),
       width: getProportionateScreenWidth(335),
