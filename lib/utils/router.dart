@@ -9,6 +9,7 @@ import 'package:jals/ui/authentication/sign_up_view.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
+import 'package:jals/ui/home/home_view.dart';
 
 import '../ui/undefinedRoute.dart';
 
@@ -41,6 +42,9 @@ class AppRouter {
         break;
       case AccountInfoViewRoute:
         return MaterialPageRoute(builder: (context) => AccountInfoView());
+        break;
+      case HomeViewRoute:
+        return MaterialPageRoute(builder: (context) => HomeView());
         break;
       // case :
       //   return MaterialPageRoute(

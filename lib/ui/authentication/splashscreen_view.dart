@@ -9,17 +9,18 @@ class SplashScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<SplashScreenViewModel>.nonReactive(
-        viewModelBuilder: () => SplashScreenViewModel(),
-        onModelReady: (model) => model.checkLoginStatus(),
-        builder: (context, model, _) {
-          return SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.white,
-              body: Center(
-                child: Image.asset("icons/app_logo.png"),
-              ),
+      viewModelBuilder: () => SplashScreenViewModel(),
+      onModelReady: (model) => model.checkLoginStatus(),
+      builder: (context, model, _) {
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Image.asset("icons/app_logo.png"),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

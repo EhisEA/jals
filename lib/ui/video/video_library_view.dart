@@ -5,7 +5,6 @@ import 'package:jals/ui/video/components/video_watch_later.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/article_tile.dart';
 
 class VideoLibrary extends StatefulWidget {
   @override
