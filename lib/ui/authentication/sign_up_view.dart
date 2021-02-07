@@ -50,8 +50,10 @@ class SignUpView extends StatelessWidget {
                           height: getProportionateScreenHeight(30),
                         ),
                         model.state == ViewState.Busy
-                            ? CircularProgressIndicator(
-                                backgroundColor: Colors.blue,
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.blue,
+                                ),
                               )
                             : DefaultButton(
                                 color: Color(0xff3C8AF0),

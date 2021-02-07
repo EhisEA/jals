@@ -19,6 +19,7 @@ class AuthenticationService with ChangeNotifier {
   List<int> get otpCode => _otpCode;
   generateOtp() {
     Random rand = new Random.secure();
+    // ignore: unused_local_variable
     List<int> _otpCode = List<int>.generate(5, (i) => rand.nextInt(10));
     notifyListeners();
   }
@@ -39,11 +40,13 @@ class AuthenticationService with ChangeNotifier {
       if (response.statusCode == 201) {
         _userEmail = email;
         notifyListeners();
+        print(_userEmail);
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
       }
     } catch (e) {
+      print(e);
       return ApiResponse.Error;
     }
   }
