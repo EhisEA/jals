@@ -13,7 +13,8 @@ class AudioPlaylistView extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            leadingWidth: 45,
+            // leadingWidth: 45,
+
             leading: Icon(Icons.arrow_back_ios),
             collapsedHeight: getProportionatefontSize(90),
             expandedHeight: getProportionatefontSize(203),

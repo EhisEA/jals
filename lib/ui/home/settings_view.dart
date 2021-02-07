@@ -119,10 +119,10 @@ class _SettingsViewState extends State<SettingsView> {
                   ).py20(),
                   Row(
                     children: [
-                      Icon(
-                        Icons.login,
-                        color: Colors.blue,
-                      ),
+                      // Icon(
+                      //   Icons.login,
+                      //   color: Colors.blue,
+                      // ),
                       SizedBox(
                         width: 15,
                       ),

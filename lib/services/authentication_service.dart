@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:jals/constants/app_urls.dart';
 import 'package:jals/constants/base_url.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/user_model.dart';
@@ -9,119 +11,36 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService with ChangeNotifier {
   final Client _client = Client();
-  final String userData = "userData";
-  UserModel _currentUser;
-  UserModel get currentUser => _currentUser;
-  String _authEmail;
-  String get authEmail => _authEmail;
-  DateTime _expiryDate;
-  bool get isAuthenticated => _authToken != null;
-  Timer _timer;
-  String _authToken = "";
-  String get authToken {
-    if (_authToken != null &&
-        _expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now())) {
-      return _authToken;
-    }
-    return null;
+  String _userEmail = "";
+  String get userEmail => _userEmail;
+  UserModel _userModel;
+  UserModel get userModel => _userModel;
+  List<int> _otpCode;
+  List<int> get otpCode => _otpCode;
+  generateOtp() {
+    Random rand = new Random.secure();
+    // ignore: unused_local_variable
+    List<int> _otpCode = List<int>.generate(5, (i) => rand.nextInt(10));
+    notifyListeners();
   }
 
-// ============================****SignUp with Email****=================================
-  Future<ApiResponse> sendSignUpEmail(String email) async {
+  Future<ApiResponse> checkEmail({@required String email}) async {
     try {
+      generateOtp();
+      print(_otpCode[0]);
       Response response = await _client.post(
-        "$baseUrl/registration/",
-        body: {"email": email},
+        "${AppUrl.sendEmailToRegister}",
         headers: headers,
-      );
-      if (response.statusCode == 201) {
-        _authEmail = email;
-        notifyListeners();
-        return ApiResponse.Success;
-      } else {
-        return ApiResponse.Error;
-      }
-    } catch (e) {
-      return ApiResponse.Error;
-    }
-  }
-// =-==========================***Send Password to Register**8=================
-
-  Future<ApiResponse> sendPasswordToRegister(String password) async {
-    try {
-      Response response = await _client.post(
-        "$baseUrl/password/reset/confirm/",
-        body: {"": password},
-        headers: headers,
-      );
-      if (response.statusCode == 201) {
-        //! Perform Operation.
-        return ApiResponse.Success;
-      } else {
-        return ApiResponse.Error;
-      }
-    } catch (e) {
-      print(e);
-      return ApiResponse.Error;
-    }
-  }
-
-// =====================***Login with Emaiol Address***====================
-  Future<ApiResponse> loginWithEmail(
-      {@required String email, @required String password}) async {
-    try {
-      Response response = await _client.post("$baseUrl/login",
-          body: {"email": email, "password": password}, headers: {});
-      final decodedData = jsonDecode(response.body);
-      print(decodedData);
-      if (response.statusCode == 200) {
-        print("Login was successful");
-        // _currentUser=... && authToken
-        _expiryDate = DateTime.now().add(Duration(hours: 10));
-        _autoLogout();
-        notifyListeners();
-        // !Save token to the device.
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        final myData = {
-          "token": "",
-          "expiryDate": _expiryDate.toIso8601String()
-        };
-        await preferences.setString(userData, jsonEncode(myData));
-
-        return ApiResponse.Success;
-      } else {
-        return ApiResponse.Error;
-      }
-    } catch (e) {
-      print(e);
-      return ApiResponse.Error;
-    }
-  }
-
-// ========================================****Verify SignUp Email****===============================
-  Future<ApiResponse> verifySignUpEmail(String code) async {
-    try {
-      Response response = await _client.post(
-        "$baseUrl/registration/verify-email/",
         body: {
-          "key": code,
+          "email": email,
+          "code": int.tryParse(
+              "${_otpCode[0]}${_otpCode[1]}${_otpCode[2]}${_otpCode[3]}${_otpCode[4]}"),
         },
       );
       if (response.statusCode == 201) {
-        print("Registering to JALS was successful");
-        // _currentUser=... && authToken
-        _expiryDate = DateTime.now().add(Duration(hours: 10));
-        _autoLogout();
+        _userEmail = email;
         notifyListeners();
-        // !Save token to the device.
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        final myData = {
-          "token": "",
-          "expiryDate": _expiryDate.toIso8601String()
-        };
-        await preferences.setString(userData, jsonEncode(myData));
-
+        print(_userEmail);
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
@@ -132,88 +51,92 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  // ======================================****LogOut****==================
-  void logOut() async {
-    _authToken = null;
-    _expiryDate = null;
-    if (_timer != null) {
-      _timer.cancel();
-      _timer = null;
+  Future<ApiResponse> pushOtpCode({@required List<int> code}) async {
+    if (code == _otpCode) {
+      return ApiResponse.Success;
+    } else {
+      return ApiResponse.Error;
     }
-    notifyListeners();
-    // ! clear the token from the device.
+  }
+
+  Future<ApiResponse> createPassword({@required String password}) async {
+    try {
+      Response response = await _client.post(
+        "$baseUrl/rest-auth/registration/",
+        headers: headers,
+        body: {
+          "email": _userEmail,
+          "password1": password,
+          "password2": password,
+        },
+      );
+      if (response.statusCode == 201) {
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> loginWithEmail({
+    @required String email,
+    @required String password,
+  }) async {
+    try {
+      Response response = await _client.post(
+        "${AppUrl.login}",
+        headers: headers,
+        body: {
+          "email": email,
+          "password": password,
+        },
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode == 201) {
+        // decode data, get token and save to shared prefs
+        _saveDataLocally(decodedData);
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      return ApiResponse.Error;
+    }
+  }
+
+  _getDataFromPrefs() async {
     SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    await sharedPrefs.clear();
-  }
-
-// ==========================****Auto Logout****=====================
-  void _autoLogout() async {
-    if (_timer != null) {
-      _timer.cancel();
-    }
-    final int timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-    _timer = Timer(Duration(seconds: timeToExpiry), _autoLogout);
-    //!???
+    var prefsData = sharedPrefs.getString("userData");
+    _userModel = jsonDecode(prefsData);
     notifyListeners();
   }
 
-  // ======================****Auto Login****=============
+  _saveDataLocally(data) async {
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    await sharedPrefs.setString(
+      "userData",
+      jsonEncode(
+        UserModel.fromJson(data),
+      ),
+    );
+  }
+
   Future<bool> autoLogin() async {
     try {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      final prefsData = preferences.getString(userData);
-      final decodedData = jsonDecode(prefsData);
-      final timeToExpire = DateTime.parse(decodedData["expiryDate"]);
-      if (!preferences.containsKey(userData)) {
+      SharedPreferences sharePrefrences = await SharedPreferences.getInstance();
+      if (sharePrefrences.containsKey("userData")) {
+        _getDataFromPrefs();
+        return true;
+      } else {
+        print("No User Data was saved");
         return false;
       }
-
-      if (timeToExpire.isBefore(DateTime.now())) {
-        return false;
-      }
-      _authToken = decodedData["token"];
-      _expiryDate = timeToExpire;
-      notifyListeners();
-      _autoLogout();
-      return true;
     } catch (e) {
       print(e);
       return false;
-    }
-  }
-
-  // ======================****Forgot Password****==============
-
-  Future<ApiResponse> forgotPassword(String email) async {
-    try {
-      Response response = await _client.post(
-        baseUrl,
-      );
-      if (response.statusCode == 200) {
-        return ApiResponse.Success;
-      } else {
-        return ApiResponse.Error;
-      }
-    } catch (e) {
-      print(e);
-      return ApiResponse.Error;
-    }
-  }
-  // =================****Send Password Verification Code****...====================
-
-  Future<ApiResponse> forgotPasswordVerificationCode(String code) async {
-    try {
-      Response response = await _client.post(
-        baseUrl,
-      );
-      if (response.statusCode == 200) {
-        return ApiResponse.Success;
-      } else {
-        return ApiResponse.Error;
-      }
-    } catch (e) {
-      print(e);
-      return ApiResponse.Error;
     }
   }
 }
