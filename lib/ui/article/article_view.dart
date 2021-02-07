@@ -67,20 +67,20 @@ class ArticleView extends StatelessWidget {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.bookmark_outline,
-              color: Colors.black,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.share_outlined,
-              color: Colors.black,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(10.0),
+          //   child: Icon(
+          //     Icons.bookmark_outline,
+          //     color: Colors.black,
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.all(10.0),
+          //   child: Icon(
+          //     Icons.share_outlined,
+          //     color: Colors.black,
+          //   ),
+          // ),
           SizedBox(
             width: 10,
           )
