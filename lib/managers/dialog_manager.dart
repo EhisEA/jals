@@ -32,11 +32,11 @@ class _DialogManagerState extends State<DialogManager> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-              backgroundColor: kScaffoldColor,
+              // backgroundColor: kScaffoldColor,
               title: Text(request.title),
               content: Text(
                 request.description,
-                style: TextStyle(color: kTextColor),
+                // style: TextStyle(color: kTextColor),
               ),
               actions: <Widget>[
                 if (isConfirmationDialog)
