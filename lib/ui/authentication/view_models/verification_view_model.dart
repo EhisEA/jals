@@ -31,11 +31,18 @@ class VerificationViewModel extends BaseViewModel {
   }
 
   verify() async {
+    setBusy(ViewState.Busy);
     ApiResponse response = await _authenticationService.pushOtpCode(
-        // code: int.tryParse(verificationController.text),
-        );
+      code: verificationController.text,
+    );
+    setBusy(ViewState.Idle);
     if (response == ApiResponse.Success) {
-      _navigationService.navigateToReplace(PasswordViewRoute);
+      Future.microtask(
+          () => print("The future dot microtask function is running"));
+      Future.delayed(Duration(seconds: 2), () {
+        print("The future dot delayed function is running");
+        _navigationService.navigateToReplace(PasswordViewRoute);
+      });
     } else {
       await _dialogService.showDialog(
           buttonTitle: "OK",

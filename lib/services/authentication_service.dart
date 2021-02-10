@@ -15,29 +15,31 @@ class AuthenticationService with ChangeNotifier {
   String get userEmail => _userEmail;
   UserModel _userModel;
   UserModel get userModel => _userModel;
-  List<int> _otpCode;
-  List<int> get otpCode => _otpCode;
-  generateOtp() {
+  int _otpCode;
+  int get otpCode => _otpCode;
+  int generateOtp() {
     Random rand = new Random.secure();
     // ignore: unused_local_variable
-    List<int> _otpCode = List<int>.generate(5, (i) => rand.nextInt(10));
+    List<int> _otp = List<int>.generate(5, (i) => rand.nextInt(10));
+    int _otpCode =
+        int.tryParse("${_otp[0]}${_otp[1]}${_otp[2]}${_otp[3]}${_otp[4]}");
     notifyListeners();
+    return _otpCode;
   }
 
   Future<ApiResponse> checkEmail({@required String email}) async {
     try {
       generateOtp();
-      print(_otpCode[0]);
+      print(_otpCode);
       Response response = await _client.post(
         "${AppUrl.sendEmailToRegister}",
         headers: headers,
         body: {
           "email": email,
-          "code": int.tryParse(
-              "${_otpCode[0]}${_otpCode[1]}${_otpCode[2]}${_otpCode[3]}${_otpCode[4]}"),
+          "code": _otpCode,
         },
       );
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         _userEmail = email;
         notifyListeners();
         print(_userEmail);
@@ -51,8 +53,13 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> pushOtpCode({@required List<int> code}) async {
-    if (code == _otpCode) {
+  Future<ApiResponse> pushOtpCode({@required String code}) async {
+    print(code);
+    print(code);
+    print(code);
+    print(code);
+    print(code);
+    if (code == _otpCode.toString()) {
       return ApiResponse.Success;
     } else {
       return ApiResponse.Error;
@@ -62,7 +69,7 @@ class AuthenticationService with ChangeNotifier {
   Future<ApiResponse> createPassword({@required String password}) async {
     try {
       Response response = await _client.post(
-        "$baseUrl/rest-auth/registration/",
+        "${AppUrl.sendRegistrationPassword}",
         headers: headers,
         body: {
           "email": _userEmail,
@@ -70,6 +77,8 @@ class AuthenticationService with ChangeNotifier {
           "password2": password,
         },
       );
+      final Map<String, dynamic> decodedData = jsonDecode(response.body);
+      print(decodedData["status"]);
       if (response.statusCode == 201) {
         return ApiResponse.Success;
       } else {
@@ -93,11 +102,12 @@ class AuthenticationService with ChangeNotifier {
           "password": password,
         },
       );
-      final decodedData = jsonDecode(response.body);
-      print(decodedData);
-      if (response.statusCode == 201) {
+      final Map<String, dynamic> decodedData = jsonDecode(response.body);
+      print(decodedData["status"]);
+      print(decodedData["data"]["key"]);
+      if (response.statusCode == 200) {
         // decode data, get token and save to shared prefs
-        _saveDataLocally(decodedData);
+
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
@@ -140,3 +150,4 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 }
+// 3b79df4433f5aad10c8956e3bd0fb71e415790a7

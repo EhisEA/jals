@@ -20,7 +20,7 @@ class SignUpViewModel extends BaseViewModel {
   verifyEmail() async {
     if (formKey.currentState.validate()) {
       setBusy(ViewState.Busy);
-      await _networkConfig.onNetworkAvailabilityDialog(onNetwork);
+      await _networkConfig.onNetworkAvailabilityToast(onNetwork);
       setBusy(ViewState.Idle);
     }
     return null;
@@ -38,7 +38,7 @@ class SignUpViewModel extends BaseViewModel {
         await _dialogService.showDialog(
           buttonTitle: "OK",
           description:
-              "Sorry, this email address has been registered with already. Please try a new one .",
+              "An Error occured while trying to signup, Please try again.",
           title: "Sign Up Error",
         );
       }

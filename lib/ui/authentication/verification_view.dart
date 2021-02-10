@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
 import 'package:jals/ui/authentication/view_models/verification_view_model.dart';
+import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/button.dart';
@@ -48,11 +49,17 @@ class VerificationView extends StatelessWidget {
                       SizedBox(
                         height: getProportionateScreenHeight(10),
                       ),
-                      DefaultButton(
-                        color: Color(0xff3C8AF0),
-                        onPressed: model.verify,
-                        title: "Verify Email",
-                      ),
+                      model.state == ViewState.Busy
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.blue,
+                              ),
+                            )
+                          : DefaultButton(
+                              color: Color(0xff3C8AF0),
+                              onPressed: model.verify,
+                              title: "Verify Email",
+                            ),
                       SizedBox(
                         height: getProportionateScreenHeight(20),
                       ),
