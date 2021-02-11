@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/constants/regex.dart';
+import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
@@ -70,11 +71,15 @@ class EmailLoginView extends StatelessWidget {
                         height: getProportionateScreenHeight(15),
                       ),
                       // button
-                      DefaultButton(
-                        color: Color(0xff3C8AF0),
-                        onPressed: model.login,
-                        title: "Log in",
-                      ),
+                      model.state == ViewState.Busy
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : DefaultButton(
+                              color: Color(0xff3C8AF0),
+                              onPressed: model.login,
+                              title: "Log in",
+                            ),
                       SizedBox(
                         height: getProportionateScreenHeight(20),
                       ),

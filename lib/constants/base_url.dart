@@ -1,2 +1,2 @@
-final String baseUrl = "http://backendjals.herokuapp.com/rest-auth";
+final String baseUrl = "http://backendjals.herokuapp.com";
 final Map<String, String> headers = {"Content-Type": "application/json"};
