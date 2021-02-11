@@ -17,7 +17,7 @@ class _AccountInfoViewState extends State<AccountInfoView> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<AccountInfoViewModel>.nonReactive(
+    return ViewModelBuilder<AccountInfoViewModel>.reactive(
         viewModelBuilder: () => AccountInfoViewModel(),
         builder: (context, model, _) {
           return SafeArea(

@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
 
-import 'package:jals/ui/home/library_view.dart';
 import 'package:jals/utils/theme.dart';
 
 import 'utils/locator.dart';

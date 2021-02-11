@@ -17,10 +17,11 @@ class SignUpViewModel extends BaseViewModel {
       locator<AuthenticationService>();
   NetworkConfig _networkConfig = new NetworkConfig();
   DialogService _dialogService = locator<DialogService>();
+
   verifyEmail() async {
     if (formKey.currentState.validate()) {
       setBusy(ViewState.Busy);
-      await _networkConfig.onNetworkAvailabilityDialog(onNetwork);
+      await _networkConfig.onNetworkAvailabilityToast(onNetwork);
       setBusy(ViewState.Idle);
     }
     return null;
@@ -28,22 +29,18 @@ class SignUpViewModel extends BaseViewModel {
 
   onNetwork() async {
     try {
-      setBusy(ViewState.Busy);
       ApiResponse respone =
-          await _authenticationService.checkEmail(email: emailController.text);
-      setBusy(ViewState.Idle);
+          await _authenticationService.verifyEmail(email: emailController.text);
+
       if (respone == ApiResponse.Success) {
-        _navigationService.navigateToReplace(VerificationViewRoute);
-      } else {
-        await _dialogService.showDialog(
-          buttonTitle: "OK",
-          description:
-              "Sorry, this email address has been registered with already. Please try a new one .",
-          title: "Sign Up Error",
-        );
+        _navigationService.navigateTo(VerificationViewRoute);
       }
     } catch (e) {
-      print(e);
+      await _dialogService.showDialog(
+        buttonTitle: "OK",
+        description: "Something went wrong",
+        title: "Sign Up Error",
+      );
     }
   }
 

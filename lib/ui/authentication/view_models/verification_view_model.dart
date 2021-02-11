@@ -25,15 +25,16 @@ class VerificationViewModel extends BaseViewModel {
   DialogService _dialogService = locator<DialogService>();
   @override
   void dispose() {
-    verificationController.dispose();
+    // verificationController.dispose();
     errorController.close();
     super.dispose();
   }
 
   verify() async {
-    ApiResponse response = await _authenticationService.pushOtpCode(
-        // code: int.tryParse(verificationController.text),
-        );
+    setBusy(ViewState.Busy);
+    ApiResponse response = await _authenticationService.validateOtpCode(
+      code: verificationController.text,
+    );
     if (response == ApiResponse.Success) {
       _navigationService.navigateToReplace(PasswordViewRoute);
     } else {
@@ -42,6 +43,7 @@ class VerificationViewModel extends BaseViewModel {
           description: "The Code does not match",
           title: "Code Error");
     }
+    setBusy(ViewState.Idle);
   }
 
   onTextChange(String value) {

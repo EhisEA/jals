@@ -8,7 +8,7 @@ class SplashScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<SplashScreenViewModel>.nonReactive(
+    return ViewModelBuilder<SplashScreenViewModel>.reactive(
       viewModelBuilder: () => SplashScreenViewModel(),
       onModelReady: (model) => model.checkLoginStatus(),
       builder: (context, model, _) {

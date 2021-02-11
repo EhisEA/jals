@@ -1,11 +1,9 @@
-import 'dart:core';
-
-import 'package:jals/constants/base_url.dart';
+const String ServerBaseUrl = "http://backendjals.herokuapp.com";
 
 class AppUrl {
-  static String login = "$baseUrl/rest-auth/login/";
-  static String sendEmailToRegister = "$baseUrl/users/check_email/";
-  static String sendOtpCode = "";
-  static String sendRegistrationPassword = "$baseUrl/rest-auth/registration/";
-  static String logOut = "$baseUrl/rest-auth/logout/";
+  static const String Login = "$ServerBaseUrl/v1/rest-auth/login/";
+  static const String VerifyEmail = "$ServerBaseUrl/v1/users/check_email/";
+  static const String RegisterUser =
+      "$ServerBaseUrl/v1/rest-auth/registration/";
+  static const String LogOut = "$ServerBaseUrl/v1/rest-auth/logout/";
 }

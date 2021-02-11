@@ -14,7 +14,7 @@ class ForgotPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<ForgotPasswordViewModel>.nonReactive(
+    return ViewModelBuilder<ForgotPasswordViewModel>.reactive(
         viewModelBuilder: () => ForgotPasswordViewModel(),
         builder: (context, model, _) {
           return SafeArea(

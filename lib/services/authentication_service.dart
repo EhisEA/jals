@@ -7,42 +7,48 @@ import 'package:jals/constants/app_urls.dart';
 import 'package:jals/constants/base_url.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/user_model.dart';
+import 'package:jals/utils/network_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService with ChangeNotifier {
   final Client _client = Client();
-  String _userEmail = "";
-  String get userEmail => _userEmail;
+  final NetworkConfig _networkConfig = NetworkConfig();
+  String _userSignUpEmail = "";
   UserModel _userModel;
   UserModel get userModel => _userModel;
-  List<int> _otpCode;
-  List<int> get otpCode => _otpCode;
+  int _otpCode;
+  int get otpCode => _otpCode;
+
   generateOtp() {
     Random rand = new Random.secure();
     // ignore: unused_local_variable
-    List<int> _otpCode = List<int>.generate(5, (i) => rand.nextInt(10));
-    notifyListeners();
+    List<int> _generatedOtpCode =
+        List<int>.generate(6, (i) => rand.nextInt(10));
+    return int.parse(
+      "${_generatedOtpCode[0]}${_generatedOtpCode[1]}${_generatedOtpCode[2]}${_generatedOtpCode[3]}${_generatedOtpCode[4]}${_generatedOtpCode[5]}",
+    );
   }
 
-  Future<ApiResponse> checkEmail({@required String email}) async {
+  Future<ApiResponse> verifyEmail({@required String email}) async {
     try {
-      generateOtp();
-      print(_otpCode[0]);
+      print("1");
+      _otpCode = generateOtp();
+      print(_otpCode);
+      _userSignUpEmail = email;
       Response response = await _client.post(
-        "${AppUrl.sendEmailToRegister}",
-        headers: headers,
+        "${AppUrl.VerifyEmail}",
         body: {
           "email": email,
-          "code": int.tryParse(
-              "${_otpCode[0]}${_otpCode[1]}${_otpCode[2]}${_otpCode[3]}${_otpCode[4]}"),
+          "code": _otpCode.toString(),
         },
       );
-      if (response.statusCode == 201) {
-        _userEmail = email;
-        notifyListeners();
-        print(_userEmail);
+      var result = json.decode(response.body);
+      print(result);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
         return ApiResponse.Success;
       } else {
+        _networkConfig.isResponseSuccess(
+            response: result, errorTitle: "Sign Up Failure");
         return ApiResponse.Error;
       }
     } catch (e) {
@@ -51,25 +57,25 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> pushOtpCode({@required List<int> code}) async {
-    if (code == _otpCode) {
+  Future<ApiResponse> validateOtpCode({@required String code}) async {
+    if (code == _otpCode.toString()) {
       return ApiResponse.Success;
     } else {
       return ApiResponse.Error;
     }
   }
 
-  Future<ApiResponse> createPassword({@required String password}) async {
+  Future<ApiResponse> registerUser({@required String password}) async {
     try {
       Response response = await _client.post(
-        "$baseUrl/rest-auth/registration/",
-        headers: headers,
+        "${AppUrl.RegisterUser}",
         body: {
-          "email": _userEmail,
+          "email": _userSignUpEmail,
           "password1": password,
           "password2": password,
         },
       );
+      print(json.decode(response.body));
       if (response.statusCode == 201) {
         return ApiResponse.Success;
       } else {
@@ -86,8 +92,7 @@ class AuthenticationService with ChangeNotifier {
   }) async {
     try {
       Response response = await _client.post(
-        "${AppUrl.login}",
-        headers: headers,
+        "${AppUrl.Login}",
         body: {
           "email": email,
           "password": password,
