@@ -149,5 +149,30 @@ class AuthenticationService with ChangeNotifier {
       return false;
     }
   }
+
+  Future<ApiResponse> createUserAccountIfno(
+      {String userName,
+      String dateOfBirth,
+      String phoneNumber,
+      String avatarUrl}) async {
+    try {
+      Response response = await _client.post("${AppUrl.createUserAccountIno}",
+          headers: headers,
+          body: {
+            "user_name": userName,
+            "date_of_birth": dateOfBirth,
+            "phone_number": phoneNumber
+          });
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode == 201) {
+        return ApiResponse.Success;
+      }
+      return ApiResponse.Error;
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
 }
 // 3b79df4433f5aad10c8956e3bd0fb71e415790a7
