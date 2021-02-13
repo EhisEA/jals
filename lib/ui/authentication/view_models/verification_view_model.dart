@@ -13,29 +13,28 @@ import '../../../utils/locator.dart';
 
 class VerificationViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-
   final TextEditingController verificationController = TextEditingController();
   // ignore: close_sinks
   StreamController<ErrorAnimationType> errorController =
       StreamController<ErrorAnimationType>();
   String currentText = "";
-
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   DialogService _dialogService = locator<DialogService>();
   @override
   void dispose() {
-    verificationController.dispose();
+    // verificationController.dispose();
     errorController.close();
     super.dispose();
   }
 
+  bool _isForgotPassword = false;
+  bool get isForgotPassword => _isForgotPassword;
   verify() async {
     setBusy(ViewState.Busy);
-    ApiResponse response = await _authenticationService.pushOtpCode(
+    ApiResponse response = await _authenticationService.validateOtpCode(
       code: verificationController.text,
     );
-    setBusy(ViewState.Idle);
     if (response == ApiResponse.Success) {
       Future.microtask(
           () => print("The future dot microtask function is running"));
@@ -49,6 +48,7 @@ class VerificationViewModel extends BaseViewModel {
           description: "The Code does not match",
           title: "Code Error");
     }
+    setBusy(ViewState.Idle);
   }
 
   onTextChange(String value) {
@@ -57,5 +57,9 @@ class VerificationViewModel extends BaseViewModel {
     setBusy(ViewState.Idle);
   }
 
-  resendCode() async {}
+  resendCode() async {
+    setBusy(ViewState.Busy);
+    print("sending code to email");
+    setBusy(ViewState.Idle);
+  }
 }

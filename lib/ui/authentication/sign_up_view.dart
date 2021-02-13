@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jals/constants/regex.dart';
-import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
 import 'package:jals/ui/authentication/components/auth_textfield.dart';
@@ -15,7 +14,7 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<SignUpViewModel>.nonReactive(
+    return ViewModelBuilder<SignUpViewModel>.reactive(
         viewModelBuilder: () => SignUpViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -49,12 +48,8 @@ class SignUpView extends StatelessWidget {
                         SizedBox(
                           height: getProportionateScreenHeight(30),
                         ),
-                        model.state == ViewState.Busy
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.blue,
-                                ),
-                              )
+                        model.isBusy
+                            ? CircularProgressIndicator()
                             : DefaultButton(
                                 color: Color(0xff3C8AF0),
                                 onPressed: model.verifyEmail,

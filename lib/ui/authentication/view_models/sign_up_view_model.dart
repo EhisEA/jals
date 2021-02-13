@@ -17,6 +17,7 @@ class SignUpViewModel extends BaseViewModel {
       locator<AuthenticationService>();
   NetworkConfig _networkConfig = new NetworkConfig();
   DialogService _dialogService = locator<DialogService>();
+
   verifyEmail() async {
     if (formKey.currentState.validate()) {
       setBusy(ViewState.Busy);
@@ -28,22 +29,18 @@ class SignUpViewModel extends BaseViewModel {
 
   onNetwork() async {
     try {
-      setBusy(ViewState.Busy);
       ApiResponse respone =
-          await _authenticationService.checkEmail(email: emailController.text);
-      setBusy(ViewState.Idle);
+          await _authenticationService.verifyEmail(email: emailController.text);
+
       if (respone == ApiResponse.Success) {
-        _navigationService.navigateToReplace(VerificationViewRoute);
-      } else {
-        await _dialogService.showDialog(
-          buttonTitle: "OK",
-          description:
-              "An Error occured while trying to signup, Please try again.",
-          title: "Sign Up Error",
-        );
+        _navigationService.navigateTo(VerificationViewRoute);
       }
     } catch (e) {
-      print(e);
+      await _dialogService.showDialog(
+        buttonTitle: "OK",
+        description: "Something went wrong",
+        title: "Sign Up Error",
+      );
     }
   }
 

@@ -13,7 +13,7 @@ class PasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<PasswordViewModel>.nonReactive(
+    return ViewModelBuilder<PasswordViewModel>.reactive(
         viewModelBuilder: () => PasswordViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -51,11 +51,13 @@ class PasswordView extends StatelessWidget {
                     SizedBox(
                       height: getProportionateScreenHeight(30),
                     ),
-                    DefaultButton(
-                      title: "Confirm Password",
-                      onPressed: model.confirmPassword,
-                      color: kPrimaryColor,
-                    )
+                    model.isBusy
+                        ? CircularProgressIndicator()
+                        : DefaultButton(
+                            title: "Confirm Password",
+                            onPressed: model.confirmPassword,
+                            color: kPrimaryColor,
+                          )
                   ],
                 ),
               ),

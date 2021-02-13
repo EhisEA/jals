@@ -7,44 +7,48 @@ import 'package:jals/constants/app_urls.dart';
 import 'package:jals/constants/base_url.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/user_model.dart';
+import 'package:jals/utils/network_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService with ChangeNotifier {
   final Client _client = Client();
-  String _userEmail = "";
-  String get userEmail => _userEmail;
+  final NetworkConfig _networkConfig = NetworkConfig();
+  String _userSignUpEmail = "";
   UserModel _userModel;
   UserModel get userModel => _userModel;
   int _otpCode;
   int get otpCode => _otpCode;
-  int generateOtp() {
+
+  generateOtp() {
     Random rand = new Random.secure();
     // ignore: unused_local_variable
-    List<int> _otp = List<int>.generate(5, (i) => rand.nextInt(10));
-    int _otpCode =
-        int.tryParse("${_otp[0]}${_otp[1]}${_otp[2]}${_otp[3]}${_otp[4]}");
-    notifyListeners();
-    return _otpCode;
+    List<int> _generatedOtpCode =
+        List<int>.generate(6, (i) => rand.nextInt(10));
+    return int.parse(
+      "${_generatedOtpCode[0]}${_generatedOtpCode[1]}${_generatedOtpCode[2]}${_generatedOtpCode[3]}${_generatedOtpCode[4]}${_generatedOtpCode[5]}",
+    );
   }
 
-  Future<ApiResponse> checkEmail({@required String email}) async {
+  Future<ApiResponse> verifyEmail({@required String email}) async {
     try {
-      generateOtp();
+      print("1");
+      _otpCode = generateOtp();
       print(_otpCode);
+      _userSignUpEmail = email;
       Response response = await _client.post(
-        "${AppUrl.sendEmailToRegister}",
-        headers: headers,
+        "${AppUrl.VerifyEmail}",
         body: {
           "email": email,
-          "code": _otpCode,
+          "code": _otpCode.toString(),
         },
       );
-      if (response.statusCode == 200) {
-        _userEmail = email;
-        notifyListeners();
-        print(_userEmail);
+      var result = json.decode(response.body);
+      print(result);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
         return ApiResponse.Success;
       } else {
+        _networkConfig.isResponseSuccess(
+            response: result, errorTitle: "Sign Up Failure");
         return ApiResponse.Error;
       }
     } catch (e) {
@@ -53,12 +57,7 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> pushOtpCode({@required String code}) async {
-    print(code);
-    print(code);
-    print(code);
-    print(code);
-    print(code);
+  Future<ApiResponse> validateOtpCode({@required String code}) async {
     if (code == _otpCode.toString()) {
       return ApiResponse.Success;
     } else {
@@ -66,19 +65,17 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> createPassword({@required String password}) async {
+  Future<ApiResponse> registerUser({@required String password}) async {
     try {
       Response response = await _client.post(
-        "${AppUrl.sendRegistrationPassword}",
-        headers: headers,
+        "${AppUrl.RegisterUser}",
         body: {
-          "email": _userEmail,
+          "email": _userSignUpEmail,
           "password1": password,
           "password2": password,
         },
       );
-      final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData["status"]);
+      print(json.decode(response.body));
       if (response.statusCode == 201) {
         return ApiResponse.Success;
       } else {
@@ -95,8 +92,7 @@ class AuthenticationService with ChangeNotifier {
   }) async {
     try {
       Response response = await _client.post(
-        "${AppUrl.login}",
-        headers: headers,
+        "${AppUrl.Login}",
         body: {
           "email": email,
           "password": password,
@@ -156,7 +152,7 @@ class AuthenticationService with ChangeNotifier {
       String phoneNumber,
       String avatarUrl}) async {
     try {
-      Response response = await _client.post("${AppUrl.createUserAccountIno}",
+      Response response = await _client.post("${AppUrl.CreateUserAccountIno}",
           headers: headers,
           body: {
             "user_name": userName,
@@ -165,10 +161,67 @@ class AuthenticationService with ChangeNotifier {
           });
       final decodedData = jsonDecode(response.body);
       print(decodedData);
-      if (response.statusCode == 201) {
+      if (response.statusCode >= 200 || response.statusCode < 299) {
         return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Account Verification Error");
+        return ApiResponse.Error;
       }
+    } catch (e) {
+      print(e);
       return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> sendForgotPasswordEmail({String email}) async {
+    try {
+      print("Generating the Otp code...");
+      _otpCode = generateOtp();
+      print(_otpCode);
+      _userSignUpEmail = email;
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPasswordEmail}",
+        headers: headers,
+        body: {
+          "code": _otpCode,
+          "email": email,
+        },
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Forgot Password Error");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> sendForgotPassword(String password) async {
+    try {
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPassword}",
+        body: {
+          "email": _userSignUpEmail,
+          "new_password": password,
+        },
+        headers: headers,
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Password Update Error");
+        return ApiResponse.Error;
+      }
     } catch (e) {
       print(e);
       return ApiResponse.Error;

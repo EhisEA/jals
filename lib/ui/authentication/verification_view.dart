@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -16,7 +14,7 @@ class VerificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<VerificationViewModel>.nonReactive(
+    return ViewModelBuilder<VerificationViewModel>.reactive(
         viewModelBuilder: () => VerificationViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -45,16 +43,11 @@ class VerificationView extends StatelessWidget {
                       ),
                       SizedBox(height: getProportionateScreenHeight(20)),
                       pinCode(model),
-// !end
                       SizedBox(
                         height: getProportionateScreenHeight(10),
                       ),
-                      model.state == ViewState.Busy
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.blue,
-                              ),
-                            )
+                      model.isBusy
+                          ? CircularProgressIndicator()
                           : DefaultButton(
                               color: Color(0xff3C8AF0),
                               onPressed: model.verify,

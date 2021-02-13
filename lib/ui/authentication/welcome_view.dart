@@ -15,7 +15,7 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<WelcomeViewModel>.nonReactive(
+    return ViewModelBuilder<WelcomeViewModel>.reactive(
         viewModelBuilder: () => WelcomeViewModel(),
         builder: (context, model, _) {
           return SafeArea(

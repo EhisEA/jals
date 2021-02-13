@@ -22,6 +22,7 @@ class NetworkConfig {
       // checking is the response is an error
       if (response["status"] == "error") {
         String errorMsg;
+        //1242  2688
         // checking is error maessage is a list or just a string
         // if it's a list it would display the first massage
         // else just the error massage
@@ -36,7 +37,7 @@ class NetworkConfig {
         );
         // return false to indicate it was an error
         return false;
-      } else if (response["status"] == "success") {
+      } else if (response["status"] == "successful") {
         // return true to indicate the response status is success
         return true;
       }
@@ -101,10 +102,10 @@ class NetworkConfig {
 // =================================================
   // run a function if there is network or display
   // a toast showing there is no network conection
-  onNetworkAvailabilityToast(Function onNetwork) async {
+  Future onNetworkAvailabilityToast(Function onNetwork) async {
     if (await _networkAvailable()) {
       // if network  is available run the function [onNetwork]
-      onNetwork();
+      await onNetwork();
     } else {
       // if network isn't available show a Toast
       Fluttertoast.showToast(

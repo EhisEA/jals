@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/constants/regex.dart';
+import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
@@ -14,7 +15,7 @@ class ForgotPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<ForgotPasswordViewModel>.nonReactive(
+    return ViewModelBuilder<ForgotPasswordViewModel>.reactive(
         viewModelBuilder: () => ForgotPasswordViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -51,11 +52,15 @@ class ForgotPasswordView extends StatelessWidget {
                         SizedBox(
                           height: getProportionateScreenHeight(30),
                         ),
-                        DefaultButton(
-                          color: Color(0xff3C8AF0),
-                          onPressed: model.verifyEmail,
-                          title: "Continue",
-                        ),
+                        model.state == ViewState.Busy
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : DefaultButton(
+                                color: Color(0xff3C8AF0),
+                                onPressed: model.verifyEmail,
+                                title: "Continue",
+                              ),
                         SizedBox(
                           height: getProportionateScreenHeight(30),
                         ),
