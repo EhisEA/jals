@@ -72,7 +72,7 @@ class AccountInfoViewModel extends BaseViewModel {
       print(e);
       _dialogService.showDialog(
           buttonTitle: "OK",
-          description: "Somrthing went wrong",
+          description: "Something went wrong",
           title: "Account Verification Error");
     }
   }

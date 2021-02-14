@@ -17,6 +17,11 @@ class SignUpViewModel extends BaseViewModel {
       locator<AuthenticationService>();
   NetworkConfig _networkConfig = new NetworkConfig();
   DialogService _dialogService = locator<DialogService>();
+  @override
+  dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   verifyEmail() async {
     if (formKey.currentState.validate()) {
@@ -36,6 +41,7 @@ class SignUpViewModel extends BaseViewModel {
         _navigationService.navigateTo(VerificationViewRoute);
       }
     } catch (e) {
+      print(e);
       await _dialogService.showDialog(
         buttonTitle: "OK",
         description: "Something went wrong",

@@ -31,7 +31,7 @@ class AuthenticationService with ChangeNotifier {
 
   Future<ApiResponse> verifyEmail({@required String email}) async {
     try {
-      print("1");
+      print("Generating OTP Code....");
       _otpCode = generateOtp();
       print(_otpCode);
       _userSignUpEmail = email;
@@ -44,9 +44,12 @@ class AuthenticationService with ChangeNotifier {
       );
       var result = json.decode(response.body);
       print(result);
-      if (response.statusCode >= 200 || response.statusCode < 299) {
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print("There was Success...");
         return ApiResponse.Success;
       } else {
+        print("An Error Occured");
         _networkConfig.isResponseSuccess(
             response: result, errorTitle: "Sign Up Failure");
         return ApiResponse.Error;
@@ -101,11 +104,18 @@ class AuthenticationService with ChangeNotifier {
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData["status"]);
       print(decodedData["data"]["key"]);
+      print(decodedData);
       if (response.statusCode == 200) {
         // decode data, get token and save to shared prefs
-
+        _userModel = UserModel(
+          token: decodedData["data"]["key"],
+        );
+        notifyListeners();
+        _saveDataLocally(decodedData["data"]);
         return ApiResponse.Success;
       } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Login Error");
         return ApiResponse.Error;
       }
     } catch (e) {
@@ -134,6 +144,7 @@ class AuthenticationService with ChangeNotifier {
     try {
       SharedPreferences sharePrefrences = await SharedPreferences.getInstance();
       if (sharePrefrences.containsKey("userData")) {
+        print("User Data was Svaed ");
         _getDataFromPrefs();
         return true;
       } else {

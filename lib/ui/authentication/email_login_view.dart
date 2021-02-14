@@ -16,7 +16,7 @@ class EmailLoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ViewModelBuilder<EmailLoginViewModel>.nonReactive(
+    return ViewModelBuilder<EmailLoginViewModel>.reactive(
         viewModelBuilder: () => EmailLoginViewModel(),
         builder: (context, model, _) {
           return Scaffold(

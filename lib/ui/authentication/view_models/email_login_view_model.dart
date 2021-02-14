@@ -38,12 +38,11 @@ class EmailLoginViewModel extends BaseViewModel {
 
   onNetwork() async {
     try {
-      setBusy(ViewState.Busy);
       ApiResponse apiResponse = await _authenticationService.loginWithEmail(
           email: emailController.text, password: passwordController.text);
-      setBusy(ViewState.Idle);
+
       if (apiResponse == ApiResponse.Success) {
-        _navigationService.navigateToReplace(AccountInfoViewRoute);
+        _navigationService.navigateToReplace(HomeViewRoute);
       } else {
         // ! show handle error.
         await _dialogService.showDialog(
@@ -54,7 +53,6 @@ class EmailLoginViewModel extends BaseViewModel {
       }
     } catch (e) {
       print(e);
-      setBusy(ViewState.Idle);
     }
   }
 

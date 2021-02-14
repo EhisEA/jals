@@ -19,7 +19,8 @@ class _AccountInfoViewState extends State<AccountInfoView> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<AccountInfoViewModel>.reactive(
-        onModelReady: (model) => model.onModelReady,
+        // onModelReady: (model) => model.onModelReady,
+
         viewModelBuilder: () => AccountInfoViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -110,13 +111,15 @@ class _AccountInfoViewState extends State<AccountInfoView> {
                         SizedBox(
                           height: getProportionateScreenHeight(20),
                         ),
-                     model.state==ViewState.Busy?Center(
-                       child: CircularProgressIndicator(),
-                     ):DefaultButton(
-                          color: Color(0xff3C8AF0),
-                          onPressed: model.uploadDetails,
-                          title: "Explore JALS",
-                        ),
+                        model.state == ViewState.Busy
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : DefaultButton(
+                                color: Color(0xff3C8AF0),
+                                onPressed: model.uploadDetails,
+                                title: "Explore JALS",
+                              ),
                         SizedBox(
                           height: getProportionateScreenHeight(20),
                         ),
