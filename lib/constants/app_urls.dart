@@ -7,7 +7,7 @@ class AppUrl {
       "$ServerBaseUrl/v1/rest-auth/registration/";
   static const String LogOut = "$ServerBaseUrl/v1/rest-auth/logout/";
 
-  static const String CreateUserAccountIno = "$ServerBaseUrl/";
+  static const String CreateUserAccountIno = "$ServerBaseUrl/v1/users/";
   static const String SendForgotPasswordEmail =
       "$ServerBaseUrl/v1/users/forgot_password/";
   static const String SendForgotPassword =

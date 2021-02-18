@@ -19,8 +19,7 @@ class _AccountInfoViewState extends State<AccountInfoView> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<AccountInfoViewModel>.reactive(
-        // onModelReady: (model) => model.onModelReady,
-
+        onModelReady: (model) => model.onModelReady,
         viewModelBuilder: () => AccountInfoViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -41,7 +40,9 @@ class _AccountInfoViewState extends State<AccountInfoView> {
                             Spacer(),
                             InkWell(
                               // onTap: model.skip,
-                              onTap: model.pickDate(context),
+                              onTap: () {
+                                model.pickDate(context);
+                              },
                               child: Text(
                                 "Skip",
                                 style: GoogleFonts.sourceSansPro(

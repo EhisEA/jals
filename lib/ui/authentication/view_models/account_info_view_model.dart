@@ -66,6 +66,7 @@ class AccountInfoViewModel extends BaseViewModel {
               phoneNumber: phoneNumberController.text,
               userName: nameController.text);
       if (apiResponse == ApiResponse.Success) {
+        print("Success");
         _navigationService.navigateTo(HomeViewRoute);
       }
     } catch (e) {

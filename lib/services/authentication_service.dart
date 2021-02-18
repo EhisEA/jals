@@ -160,16 +160,20 @@ class AuthenticationService with ChangeNotifier {
       String phoneNumber,
       String avatarUrl}) async {
     try {
-      Response response = await _client.post("${AppUrl.CreateUserAccountIno}",
-          headers: headers,
-          body: {
-            "user_name": userName,
-            "date_of_birth": dateOfBirth,
-            "phone_number": phoneNumber
-          });
+      Response response = await _client.post(
+        "${AppUrl.CreateUserAccountIno}",
+        headers: headers,
+        body: {
+          "user_name": userName,
+          "date_of_birth": dateOfBirth,
+          "phone_number": phoneNumber
+        },
+      );
       final decodedData = jsonDecode(response.body);
       print(decodedData);
+      print(response.statusCode);
       if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("Successful ....");
         return ApiResponse.Success;
       } else {
         _networkConfig.isResponseSuccess(

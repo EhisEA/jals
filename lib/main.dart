@@ -13,15 +13,6 @@ import 'services/navigationService.dart';
 
 void main() {
   setupLocator(); //*====registaring get_it
-  Random rand = new Random.secure();
-  var _otpCode = List<int>.generate(5, (i) => rand.nextInt(10));
-  print(_otpCode.length);
-  print(_otpCode[0]);
-  print(_otpCode[1]);
-  print(_otpCode[2]);
-  print(_otpCode[3]);
-  print(_otpCode[4]);
-
   return runApp(
     // DevicePreview(
     //   enabled: !kReleaseMode,

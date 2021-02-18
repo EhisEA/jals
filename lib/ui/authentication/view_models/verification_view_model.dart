@@ -37,6 +37,7 @@ class VerificationViewModel extends BaseViewModel {
 // !==============OnModelReady Function============
   checkVerificationType(VerificationType type) {
     _verificationType = type;
+    notifyListeners();
   }
 
 // !=================Verify Email Function===============
@@ -48,7 +49,7 @@ class VerificationViewModel extends BaseViewModel {
     if (response == ApiResponse.Success) {
       PasswordType newPassword = PasswordType.NewPassword;
       PasswordType forgotPassword = PasswordType.ForgotPassword;
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 3), () {
         _navigationService.navigateToReplace(
           PasswordViewRoute,
           argument: _verificationType == VerificationType.NewUser
@@ -57,6 +58,7 @@ class VerificationViewModel extends BaseViewModel {
         );
       });
     } else {
+      verificationController.clear();
       await _dialogService.showDialog(
           buttonTitle: "OK",
           description: "The Code does not match",

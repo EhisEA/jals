@@ -22,6 +22,7 @@ class PasswordViewModel extends BaseViewModel {
   PasswordType get passowrdType => _passwordType;
   onModelReady(PasswordType type) {
     _passwordType = type;
+    notifyListeners();
   }
 
   confirmPassword() async {
