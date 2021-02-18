@@ -7,11 +7,15 @@ import 'package:jals/constants/app_urls.dart';
 import 'package:jals/constants/base_url.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/user_model.dart';
+import 'package:jals/route_paths.dart';
+import 'package:jals/services/navigationService.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService with ChangeNotifier {
   final Client _client = Client();
+  NavigationService _navigationService = locator<NavigationService>();
   final NetworkConfig _networkConfig = NetworkConfig();
   String _userSignUpEmail = "";
   UserModel _userModel;
@@ -19,7 +23,7 @@ class AuthenticationService with ChangeNotifier {
   int _otpCode;
   int get otpCode => _otpCode;
 
-  generateOtp() {
+  int generateOtp() {
     Random rand = new Random.secure();
     // ignore: unused_local_variable
     List<int> _generatedOtpCode =
@@ -103,22 +107,25 @@ class AuthenticationService with ChangeNotifier {
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData["status"]);
-      print(decodedData["data"]["key"]);
-      print(decodedData);
-      if (response.statusCode == 200) {
+      // print(decodedData);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("LOGGING IN WAS SUCCESSFUL");
         // decode data, get token and save to shared prefs
-        _userModel = UserModel(
-          token: decodedData["data"]["key"],
-        );
+        _userModel = UserModel.fromJson(decodedData);
         notifyListeners();
-        _saveDataLocally(decodedData["data"]);
+        SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+        await sharedPrefs.setString("userData", "My object"
+            // jsonEncode(
+            //   UserModel.fromJson(decodedData),
+            // ),
+            );
+        print("Saved The User Object to the SharedPreferences....");
         return ApiResponse.Success;
       } else {
-        _networkConfig.isResponseSuccess(
-            response: decodedData, errorTitle: "Login Error");
         return ApiResponse.Error;
       }
     } catch (e) {
+      print(" The error was $e");
       return ApiResponse.Error;
     }
   }
@@ -130,22 +137,12 @@ class AuthenticationService with ChangeNotifier {
     notifyListeners();
   }
 
-  _saveDataLocally(data) async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    await sharedPrefs.setString(
-      "userData",
-      jsonEncode(
-        UserModel.fromJson(data),
-      ),
-    );
-  }
-
   Future<bool> autoLogin() async {
     try {
       SharedPreferences sharePrefrences = await SharedPreferences.getInstance();
       if (sharePrefrences.containsKey("userData")) {
-        print("User Data was Svaed ");
-        _getDataFromPrefs();
+        print("User Data was Saved ");
+        // _getDataFromPrefs();
         return true;
       } else {
         print("No User Data was saved");
@@ -202,6 +199,7 @@ class AuthenticationService with ChangeNotifier {
       final decodedData = jsonDecode(response.body);
       print(decodedData);
       if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("Success");
         return ApiResponse.Success;
       } else {
         _networkConfig.isResponseSuccess(
@@ -236,6 +234,18 @@ class AuthenticationService with ChangeNotifier {
     } catch (e) {
       print(e);
       return ApiResponse.Error;
+    }
+  }
+
+  Future logOut() async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
+      print("Done");
+      await _navigationService.navigateToReplace(LoginViewRoute);
+      print("Exit 0");
+    } catch (e) {
+      print(e);
     }
   }
 }

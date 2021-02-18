@@ -47,12 +47,15 @@ class EmailLoginViewModel extends BaseViewModel {
         // ! show handle error.
         await _dialogService.showDialog(
             buttonTitle: "OK",
-            description:
-                "An error occured while trying to login. Please check your credentials and try again.",
+            description: "Invalid Credentials",
             title: "Login Error");
       }
     } catch (e) {
       print(e);
+      await _dialogService.showDialog(
+          buttonTitle: "OK",
+          description: "Invalid Credentials",
+          title: "Login Error");
     }
   }
 

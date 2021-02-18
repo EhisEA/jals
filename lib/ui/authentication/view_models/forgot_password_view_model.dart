@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/enums/api_response.dart';
+import 'package:jals/enums/verification_type.dart';
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/services/dialog_service.dart';
 import 'package:jals/utils/base_view_model.dart';
@@ -34,7 +35,9 @@ class ForgotPasswordViewModel extends BaseViewModel {
           .sendForgotPasswordEmail(email: emailController.text);
       if (apiResponse == ApiResponse.Success) {
         print("Successful");
-        _navigationService.navigateToReplace(VerificationViewRoute);
+        VerificationType verificationType = VerificationType.NewUser;
+        _navigationService.navigateToReplace(VerificationViewRoute,
+            argument: verificationType);
       }
     } catch (e) {
       print(e);

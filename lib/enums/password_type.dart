@@ -1,0 +1,1 @@
+enum PasswordType { NewPassword, ForgotPassword }
