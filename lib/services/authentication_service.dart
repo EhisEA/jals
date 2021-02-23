@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:jals/constants/app_urls.dart';
-import 'package:jals/constants/base_url.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/user_model.dart';
 import 'package:jals/route_paths.dart';
@@ -18,8 +17,8 @@ class AuthenticationService with ChangeNotifier {
   NavigationService _navigationService = locator<NavigationService>();
   final NetworkConfig _networkConfig = NetworkConfig();
   String _userSignUpEmail = "";
-  UserModel _userModel;
-  UserModel get userModel => _userModel;
+  UserModel _currentUser;
+  UserModel get currentUser => _currentUser;
   int _otpCode;
   int get otpCode => _otpCode;
 
@@ -49,7 +48,7 @@ class AuthenticationService with ChangeNotifier {
       var result = json.decode(response.body);
       print(result);
       print(response.statusCode);
-      if (response.statusCode == 200) {
+      if (response.statusCode >= 200 || response.statusCode < 299) {
         print("There was Success...");
         return ApiResponse.Success;
       } else {
@@ -83,7 +82,7 @@ class AuthenticationService with ChangeNotifier {
         },
       );
       print(json.decode(response.body));
-      if (response.statusCode == 201) {
+      if (response.statusCode >= 200 || response.statusCode < 299) {
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
@@ -107,18 +106,16 @@ class AuthenticationService with ChangeNotifier {
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData["status"]);
-      // print(decodedData);
       if (response.statusCode >= 200 || response.statusCode < 299) {
         print("LOGGING IN WAS SUCCESSFUL");
         // decode data, get token and save to shared prefs
-        _userModel = UserModel.fromJson(decodedData);
+        _currentUser = UserModel.fromJson(decodedData);
         notifyListeners();
         SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-        await sharedPrefs.setString("userData", "My object"
-            // jsonEncode(
-            //   UserModel.fromJson(decodedData),
-            // ),
-            );
+        await sharedPrefs.setString(
+          "userData",
+          jsonEncode(_currentUser.toJson()),
+        );
         print("Saved The User Object to the SharedPreferences....");
         return ApiResponse.Success;
       } else {
@@ -130,19 +127,21 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  _getDataFromPrefs() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    var prefsData = sharedPrefs.getString("userData");
-    _userModel = jsonDecode(prefsData);
-    notifyListeners();
+  _populateCurrentUser(Map<String, dynamic> user) {
+    if (user != null) {
+      // _currentUser = jsonDecode(UserModel.));
+    }
   }
 
   Future<bool> autoLogin() async {
     try {
       SharedPreferences sharePrefrences = await SharedPreferences.getInstance();
+
       if (sharePrefrences.containsKey("userData")) {
         print("User Data was Saved ");
-        // _getDataFromPrefs();
+        final decodedData = json.decode(sharePrefrences.getString("userData"));
+        await _populateCurrentUser(decodedData);
+
         return true;
       } else {
         print("No User Data was saved");

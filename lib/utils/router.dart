@@ -12,6 +12,7 @@ import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
 import 'package:jals/ui/home/home_view.dart';
+import 'package:jals/ui/video/video_library_view.dart';
 
 import '../ui/undefinedRoute.dart';
 
@@ -23,6 +24,9 @@ class AppRouter {
         break;
       case WelcomeViewRoute:
         return MaterialPageRoute(builder: (context) => WelcomeView());
+        break;
+      case VideoLibraryRoute:
+        return MaterialPageRoute(builder: (context) => VideoLibrary());
         break;
       case LoginViewRoute:
         return MaterialPageRoute(builder: (context) => LoginView());

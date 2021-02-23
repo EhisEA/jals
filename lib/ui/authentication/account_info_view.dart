@@ -108,6 +108,7 @@ class _AccountInfoViewState extends State<AccountInfoView> {
                           fieldColor: Colors.white,
                           prefixIcon: JalsIcons.date,
                           title: "Date of Birth",
+                          
                         ),
                         SizedBox(
                           height: getProportionateScreenHeight(20),
