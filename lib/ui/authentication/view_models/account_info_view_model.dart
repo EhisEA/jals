@@ -44,6 +44,7 @@ class AccountInfoViewModel extends BaseViewModel {
     if (date != null) {
       pickedDate = date;
       notifyListeners();
+      
     }
   }
 

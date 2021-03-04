@@ -49,7 +49,7 @@ dependencies:
   pin_code_fields: 
   sliver_tools: 
   date_time_picker: ^1.0.2
-  # video_player: ^1.0.1
+  video_player: ^1.0.1
   
 
 dev_dependencies:

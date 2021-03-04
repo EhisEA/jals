@@ -16,9 +16,13 @@ class VideoService extends ChangeNotifier {
 // !=====================***Functions***==============
   Future<List<VideoModel>> getVideoList() async {
     try {
-      Response response = await _client.get("${AppUrl.VideosList}", headers: {
-        "Authorization": "Token 3b79df4433f5aad10c8956e3bd0fb71e415790a7"
-      });
+      Response response = await _client.get(
+        "${AppUrl.VideosList}",
+        headers: httpHeaders(
+          isToken: true,
+          token: _authenticationService.currentUser.key,
+        ),
+      );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData["data"]);
       if (decodedData["status"] == "successful") {

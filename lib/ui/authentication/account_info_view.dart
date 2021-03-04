@@ -101,14 +101,17 @@ class _AccountInfoViewState extends State<AccountInfoView> {
                         SizedBox(
                           height: getProportionateScreenHeight(20),
                         ),
-                        AuthTextField(
-                          keyboardType: TextInputType.multiline,
+                        buildDateOfBirthField(
+                          context,
+                          callBack: () {
+                            model.pickDate(context);
+                            print("Will Unfocus Field");
+                            print("Will Unfocus Field");
+                            print("Will Unfocus Field");
+                            print("Will Unfocus Field");
+                            FocusScope.of(context).unfocus();
+                          },
                           controller: model.dateController,
-                          hintText: "31/07/1986",
-                          fieldColor: Colors.white,
-                          prefixIcon: JalsIcons.date,
-                          title: "Date of Birth",
-                          
                         ),
                         SizedBox(
                           height: getProportionateScreenHeight(20),
@@ -175,6 +178,48 @@ class _AccountInfoViewState extends State<AccountInfoView> {
         color: Colors.white,
         size: 14,
       ),
+    );
+  }
+
+  Widget buildDateOfBirthField(BuildContext context,
+      {@required VoidCallback callBack,
+      @required TextEditingController controller}) {
+    SizeConfig().init(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Date of Birth",
+            style: TextStyle(
+              fontSize: getProportionatefontSize(12),
+              color: Color(0xff1F2230).withOpacity(0.64),
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.normal,
+            )),
+        SizedBox(
+          height: getProportionateScreenHeight(10),
+        ),
+        Container(
+          width: getProportionateScreenWidth(334),
+          color: Colors.white,
+          child: Theme(
+            data: ThemeData(primaryColor: Colors.blue),
+            child: TextFormField(
+              validator: (value) =>
+                  value.isEmpty ? "Date of birth cannot be empty" : null,
+              controller: controller,
+              onTap: callBack,
+              decoration: InputDecoration(
+                hintText: "31/07/1986",
+                prefix: Icon(JalsIcons.date),
+                contentPadding: const EdgeInsets.only(top: 7),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
