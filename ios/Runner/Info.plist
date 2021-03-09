@@ -41,5 +41,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- Added this for the video player plugin to work for IOS -->
+	<key>NSAppTransportSecurity</key>
+<dict>
+  	<key>NSAllowsArbitraryLoads</key>
+  <true/>
+</dict>
+<!-- Ends Here -->
 </dict>
 </plist>

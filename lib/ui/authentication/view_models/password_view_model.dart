@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jals/enums/api_response.dart';
+import 'package:jals/enums/password_type.dart';
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/services/dialog_service.dart';
-import 'package:jals/ui/authentication/account_info_view.dart';
+
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
@@ -17,21 +18,30 @@ class PasswordViewModel extends BaseViewModel {
       locator<AuthenticationService>();
   DialogService _dialogService = locator<DialogService>();
   NetworkConfig _networkConfig = new NetworkConfig();
+  PasswordType _passwordType;
+  PasswordType get passowrdType => _passwordType;
+  onModelReady(PasswordType type) {
+    _passwordType = type;
+    notifyListeners();
+  }
 
   confirmPassword() async {
     setBusy(ViewState.Busy);
-    _navigationService.navigateToReplace(AccountInfoViewRoute);
-
-    await _networkConfig.onNetworkAvailabilityDialog(onNetwork);
+    await _networkConfig
+        .onNetworkAvailabilityDialog(confirmPasswordNetworkCall);
     setBusy(ViewState.Idle);
   }
 
   confirmPasswordNetworkCall() async {
     try {
-      ApiResponse response = await _authenticationService.registerUser(
-        password: passwordController.text,
-      );
+      ApiResponse response = _passwordType == PasswordType.NewPassword
+          ? await _authenticationService.registerUser(
+              password: passwordController.text,
+            )
+          : await _authenticationService
+              .sendForgotPassword(passwordController.text);
       if (response == ApiResponse.Success) {
+        print("Password Updating was succesfull");
         _navigationService.navigateToReplace(AccountInfoViewRoute);
       }
     } catch (e) {
@@ -41,6 +51,4 @@ class PasswordViewModel extends BaseViewModel {
           title: "Sign Up Error");
     }
   }
-
-  onNetwork() async {}
 }

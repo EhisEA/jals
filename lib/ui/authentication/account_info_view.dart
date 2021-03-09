@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/ui/authentication/components/auth_textfield.dart';
 import 'package:jals/ui/authentication/view_models/account_info_view_model.dart';
@@ -18,6 +19,7 @@ class _AccountInfoViewState extends State<AccountInfoView> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<AccountInfoViewModel>.reactive(
+        onModelReady: (model) => model.onModelReady,
         viewModelBuilder: () => AccountInfoViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -26,94 +28,108 @@ class _AccountInfoViewState extends State<AccountInfoView> {
               body: Container(
                 margin: UIHelper.kSidePadding,
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: getProportionateScreenHeight(10),
-                      ),
-                      Row(
-                        children: [
-                          Spacer(),
-                          InkWell(
-                            onTap: model.skip,
-                            child: Text(
-                              "Skip",
-                              style: GoogleFonts.sourceSansPro(
-                                fontSize: getProportionatefontSize(16),
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                color: Color(0xff01CC97),
+                  child: Form(
+                    key: model.formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: getProportionateScreenHeight(10),
+                        ),
+                        Row(
+                          children: [
+                            Spacer(),
+                            InkWell(
+                              // onTap: model.skip,
+                              onTap: () {
+                                model.pickDate(context);
+                              },
+                              child: Text(
+                                "Skip",
+                                style: GoogleFonts.sourceSansPro(
+                                  fontSize: getProportionatefontSize(16),
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
+                                  color: Color(0xff01CC97),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: getProportionateScreenHeight(30),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Account info",
-                            style: GoogleFonts.sourceSansPro(
-                              fontSize: getProportionatefontSize(30),
-                              fontWeight: FontWeight.w600,
-                              fontStyle: FontStyle.normal,
-                              color: Color(0xff1F2230),
+                          ],
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(30),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Account info",
+                              style: GoogleFonts.sourceSansPro(
+                                fontSize: getProportionatefontSize(30),
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FontStyle.normal,
+                                color: Color(0xff1F2230),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: getProportionateScreenHeight(30),
-                      ),
-                      buildBox(),
-                      SizedBox(
-                        height: getProportionateScreenHeight(30),
-                      ),
-                      AuthTextField(
-                        controller: model.nameController,
-                        fieldColor: Colors.white,
-                        keyboardType: TextInputType.multiline,
-                        hintText: "Usifo Murphy",
-                        prefixIcon: JalsIcons.account_circle,
-                        title: "Full Name",
-                        validator: (String v) => v.isEmpty ? "" : null,
-                      ),
-                      SizedBox(
-                        height: getProportionateScreenHeight(20),
-                      ),
-                      AuthTextField(
-                        keyboardType: TextInputType.multiline,
-                        controller: model.phoneNumberController,
-                        hintText: "+171615020202",
-                        fieldColor: Colors.white,
-                        prefixIcon: Icons.phone,
-                        title: "Phone Number",
-                      ),
-                      SizedBox(
-                        height: getProportionateScreenHeight(20),
-                      ),
-                      AuthTextField(
-                        keyboardType: TextInputType.multiline,
-                        controller: model.dateController,
-                        hintText: "31/07/1986",
-                        fieldColor: Colors.white,
-                        prefixIcon: JalsIcons.date,
-                        title: "Date of Birth",
-                      ),
-                      SizedBox(
-                        height: getProportionateScreenHeight(20),
-                      ),
-                      DefaultButton(
-                        color: Color(0xff3C8AF0),
-                        onPressed: model.uploadDetails,
-                        title: "Explore JALS",
-                      ),
-                      SizedBox(
-                        height: getProportionateScreenHeight(20),
-                      ),
-                    ],
+                          ],
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(30),
+                        ),
+                        buildBox(),
+                        SizedBox(
+                          height: getProportionateScreenHeight(30),
+                        ),
+                        AuthTextField(
+                          controller: model.nameController,
+                          fieldColor: Colors.white,
+                          keyboardType: TextInputType.multiline,
+                          hintText: "Usifo Murphy",
+                          prefixIcon: JalsIcons.account_circle,
+                          title: "Full Name",
+                          validator: (String v) => v.isEmpty ? "" : null,
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(20),
+                        ),
+                        AuthTextField(
+                          keyboardType: TextInputType.multiline,
+                          controller: model.phoneNumberController,
+                          hintText: "+171615020202",
+                          fieldColor: Colors.white,
+                          prefixIcon: Icons.phone,
+                          title: "Phone Number",
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(20),
+                        ),
+                        buildDateOfBirthField(
+                          context,
+                          callBack: () {
+                            model.pickDate(context);
+                            print("Will Unfocus Field");
+                            print("Will Unfocus Field");
+                            print("Will Unfocus Field");
+                            print("Will Unfocus Field");
+                            FocusScope.of(context).unfocus();
+                          },
+                          controller: model.dateController,
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(20),
+                        ),
+                        model.state == ViewState.Busy
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : DefaultButton(
+                                color: Color(0xff3C8AF0),
+                                onPressed: model.uploadDetails,
+                                title: "Explore JALS",
+                              ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(20),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -162,6 +178,48 @@ class _AccountInfoViewState extends State<AccountInfoView> {
         color: Colors.white,
         size: 14,
       ),
+    );
+  }
+
+  Widget buildDateOfBirthField(BuildContext context,
+      {@required VoidCallback callBack,
+      @required TextEditingController controller}) {
+    SizeConfig().init(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Date of Birth",
+            style: TextStyle(
+              fontSize: getProportionatefontSize(12),
+              color: Color(0xff1F2230).withOpacity(0.64),
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.normal,
+            )),
+        SizedBox(
+          height: getProportionateScreenHeight(10),
+        ),
+        Container(
+          width: getProportionateScreenWidth(334),
+          color: Colors.white,
+          child: Theme(
+            data: ThemeData(primaryColor: Colors.blue),
+            child: TextFormField(
+              validator: (value) =>
+                  value.isEmpty ? "Date of birth cannot be empty" : null,
+              controller: controller,
+              onTap: callBack,
+              decoration: InputDecoration(
+                hintText: "31/07/1986",
+                prefix: Icon(JalsIcons.date),
+                contentPadding: const EdgeInsets.only(top: 7),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

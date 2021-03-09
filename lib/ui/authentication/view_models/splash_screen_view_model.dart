@@ -14,7 +14,7 @@ class SplashScreenViewModel extends BaseViewModel {
     await Future.delayed(Duration(seconds: 3), () async {
       bool isValid = await _authenticationService.autoLogin();
       if (isValid) {
-        _navigationService.navigateToReplace(HomeViewRoute);
+        _navigationService.navigateToReplace(VideoLibraryRoute);
       } else {
         _navigationService.navigateToReplace(WelcomeViewRoute);
       }
