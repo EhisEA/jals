@@ -50,6 +50,7 @@ dependencies:
   sliver_tools: ^0.1.10+1
   hive: ^1.2.0
   hive_flutter: ^0.3.0+1
+  hive_generator: 
 
 dev_dependencies:
   flutter_test:
