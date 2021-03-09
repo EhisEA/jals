@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:jals/ui/article/article_library_view.dart';
+import 'package:jals/ui/audio/audio_library_view.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
+import 'package:jals/ui/video/video_library_view.dart';
 
 import 'package:jals/utils/theme.dart';
 
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme().themeData,
       onGenerateRoute: AppRouter.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
-      home: SplashScreenView(),
+      home: AudioLibrary(), //SplashScreenView(),
     );
 
     // home: VideoPlayer());

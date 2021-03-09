@@ -17,3 +17,19 @@ class ImageShimmerLoadingState extends StatelessWidget {
     );
   }
 }
+
+class ImageShimmerLoadingStateLight extends StatelessWidget {
+  const ImageShimmerLoadingStateLight({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      direction: ShimmerDirection.ltr,
+      baseColor: Colors.grey.shade400,
+      highlightColor: Colors.white,
+      child: Container(
+        decoration: BoxDecoration(color: kScaffoldColor),
+      ),
+    );
+  }
+}

@@ -49,6 +49,34 @@ class NetworkConfig {
     return false;
   }
 
+//checking if network call was successful
+  Future<bool> isResponseSuccessToast({@required response}) async {
+    // check if the rsponese is null
+    if (response != null) {
+      // checking is the response is an error
+      if (response["status"] == "error") {
+        String errorMsg;
+        //1242  2688
+        // checking is error maessage is a list or just a string
+        // if it's a list it would display the first massage
+        // else just the error massage
+        if (response["message"] is List) {
+          errorMsg = response["message"][0];
+        } else {
+          errorMsg = response["message"];
+        }
+        await Fluttertoast.showToast(msg: "$errorMsg");
+        // return false to indicate it was an error
+        return false;
+      } else if (response["status"] == "successful") {
+        // return true to indicate the response status is success
+        return true;
+      }
+    }
+    await Fluttertoast.showToast(msg: "Something went wrong");
+    return false;
+  }
+
 // =================================================
 // =================================================
 // =================================================

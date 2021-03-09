@@ -3,6 +3,7 @@ import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/image.dart';
+import 'package:jals/widgets/image_loader.dart';
 
 class ArticleTile extends StatelessWidget {
   final String image, title, author;
@@ -193,6 +194,64 @@ class VideoTile extends StatelessWidget {
                         : SizedBox(),
                   ],
                 ),
+                SizedBox(
+                  height: getProportionatefontSize(5),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class VideoTileLoading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Row(
+      children: [
+        Container(
+          height: getProportionatefontSize(100),
+          width: getProportionatefontSize(100),
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              height: 10,
+              width: 100,
+              child: ImageShimmerLoadingStateLight(),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: getProportionatefontSize(20),
+        ),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 2),
+            height: getProportionatefontSize(100),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 10,
+                  // width: 150,
+                  child: ImageShimmerLoadingStateLight(),
+                ),
+                SizedBox(
+                  height: getProportionatefontSize(10),
+                ),
+                Container(
+                  height: 10,
+                  width: 100,
+                  child: ImageShimmerLoadingStateLight(),
+                ),
+                SizedBox(
+                  height: getProportionatefontSize(5),
+                ),
+                Spacer(),
                 SizedBox(
                   height: getProportionatefontSize(5),
                 ),
