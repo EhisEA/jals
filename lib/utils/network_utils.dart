@@ -154,3 +154,5 @@ class NetworkConfig {
     }
   }
 }
+//  {status: error, message: {message: A user with this email already exists}}
+// {status: error, message: {non_field_errors: [Unable to log in with provided credentials.]}}

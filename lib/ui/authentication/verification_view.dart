@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jals/enums/verification_type.dart';
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
 import 'package:jals/ui/authentication/view_models/verification_view_model.dart';
 import 'package:jals/utils/size_config.dart';
@@ -10,11 +11,17 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stacked/stacked.dart';
 
 class VerificationView extends StatelessWidget {
+  final VerificationType verificationType;
+  VerificationView({@required this.verificationType});
   @override
   Widget build(BuildContext context) {
+    verificationType == VerificationType.ForgotPassword
+        ? print("VerificationType Password")
+        : print("VerificationType NewUser");
     SizeConfig().init(context);
     return ViewModelBuilder<VerificationViewModel>.reactive(
         viewModelBuilder: () => VerificationViewModel(),
+        onModelReady: (model) => model.checkVerificationType(verificationType),
         builder: (context, model, _) {
           return SafeArea(
             child: Scaffold(
@@ -25,7 +32,10 @@ class VerificationView extends StatelessWidget {
                     children: [
                       AuthAppBar(
                         subtitle: "Please enter code sent to Johndoe@gmail.com",
-                        title: "Verify Email",
+                        title:
+                            verificationType == VerificationType.ForgotPassword
+                                ? "Enter Verification Code"
+                                : "Verify Email",
                       ),
                       SizedBox(height: getProportionateScreenHeight(30)),
                       Row(
@@ -42,7 +52,6 @@ class VerificationView extends StatelessWidget {
                       ),
                       SizedBox(height: getProportionateScreenHeight(20)),
                       pinCode(model),
-// !end
                       SizedBox(
                         height: getProportionateScreenHeight(10),
                       ),

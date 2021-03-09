@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jals/constants/dummy_image.dart';
+import 'package:jals/models/video_model.dart';
+import 'package:jals/ui/video/video_player.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
@@ -101,107 +104,121 @@ class AudioTile extends StatelessWidget {
 }
 
 class VideoTile extends StatelessWidget {
-  final String image, title, author;
+  final VideoModel videoModel;
+  // final String image, title, author;
   final bool showPrimaryButton, showSecondaryButton;
 
   const VideoTile({
     Key key,
-    @required this.image,
-    @required this.title,
-    @required this.author,
+    @required this.videoModel,
+    // @required this.image,
+    // @required this.title,
+    // @required this.author,
     this.showPrimaryButton = true,
     this.showSecondaryButton = true,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Row(
-      children: [
-        Container(
-          height: getProportionatefontSize(100),
-          width: getProportionatefontSize(100),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: ShowNetworkImage(imageUrl: image),
-          ),
-        ),
-        SizedBox(
-          width: getProportionatefontSize(20),
-        ),
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 2),
-            height: getProportionatefontSize(100),
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextTitle(
-                        maxLines: 2,
-                        text: "$title+",
-                      ),
-                    ),
-                    Icon(Icons.more_vert),
-                  ],
-                ),
-                SizedBox(
-                  height: getProportionatefontSize(5),
-                ),
-                TextCaption(
-                  text: "$author",
-                ),
-                SizedBox(
-                  height: getProportionatefontSize(5),
-                ),
-                Spacer(),
-                Row(
-                  children: [
-                    showSecondaryButton
-                        ? ClipOval(
-                            child: Container(
-                              color: kGreen.withOpacity(0.15),
-                              child: Icon(
-                                Icons.play_arrow,
-                                color: kGreen,
-                                size: getProportionatefontSize(15),
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
-                    Spacer(),
-                    showPrimaryButton
-                        ? Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: kGreen,
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: getProportionatefontSize(20),
-                              vertical: getProportionatefontSize(2),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Buy",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: getProportionatefontSize(12)),
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
-                  ],
-                ),
-                SizedBox(
-                  height: getProportionatefontSize(5),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => VideoPlayerView(
+              videoModel: videoModel,
             ),
           ),
-        ),
-      ],
+        );
+      },
+      child: Row(
+        children: [
+          Container(
+            height: getProportionatefontSize(100),
+            width: getProportionatefontSize(100),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: ShowNetworkImage(
+                  imageUrl: videoModel.coverImage ?? dummyImage),
+            ),
+          ),
+          SizedBox(
+            width: getProportionatefontSize(20),
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 2),
+              height: getProportionatefontSize(100),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextTitle(
+                          maxLines: 2,
+                          text: "${videoModel.title}",
+                        ),
+                      ),
+                      Icon(Icons.more_vert),
+                    ],
+                  ),
+                  SizedBox(
+                    height: getProportionatefontSize(5),
+                  ),
+                  TextCaption(
+                    text: "${videoModel.author}",
+                  ),
+                  SizedBox(
+                    height: getProportionatefontSize(5),
+                  ),
+                  Spacer(),
+                  Row(
+                    children: [
+                      showSecondaryButton
+                          ? ClipOval(
+                              child: Container(
+                                color: kGreen.withOpacity(0.15),
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  color: kGreen,
+                                  size: getProportionatefontSize(15),
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
+                      Spacer(),
+                      showPrimaryButton
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: kGreen,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: getProportionatefontSize(20),
+                                vertical: getProportionatefontSize(2),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Buy",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: getProportionatefontSize(12)),
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
+                  SizedBox(
+                    height: getProportionatefontSize(5),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

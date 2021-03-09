@@ -27,10 +27,12 @@ class EmailLoginViewModel extends BaseViewModel {
 
   login() async {
     try {
-      // !I haven't made my network check.
+      setBusy(ViewState.Busy);
       await _networkConfig.onNetworkAvailabilityDialog(onNetwork);
+      setBusy(ViewState.Idle);
     } catch (e) {
       print(e);
+      setBusy(ViewState.Idle);
     }
   }
 
@@ -38,18 +40,22 @@ class EmailLoginViewModel extends BaseViewModel {
     try {
       ApiResponse apiResponse = await _authenticationService.loginWithEmail(
           email: emailController.text, password: passwordController.text);
+
       if (apiResponse == ApiResponse.Success) {
         _navigationService.navigateToReplace(HomeViewRoute);
       } else {
         // ! show handle error.
         await _dialogService.showDialog(
             buttonTitle: "OK",
-            description:
-                "An error occured while trying to login. Please check your credentials and try again.",
+            description: "Invalid Credentials",
             title: "Login Error");
       }
     } catch (e) {
       print(e);
+      await _dialogService.showDialog(
+          buttonTitle: "OK",
+          description: "Invalid Credentials",
+          title: "Login Error");
     }
   }
 

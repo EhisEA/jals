@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/enums/api_response.dart';
+import 'package:jals/enums/verification_type.dart';
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/services/dialog_service.dart';
 import 'package:jals/utils/base_view_model.dart';
@@ -17,6 +18,11 @@ class SignUpViewModel extends BaseViewModel {
       locator<AuthenticationService>();
   NetworkConfig _networkConfig = new NetworkConfig();
   DialogService _dialogService = locator<DialogService>();
+  @override
+  dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   verifyEmail() async {
     if (formKey.currentState.validate()) {
@@ -33,9 +39,12 @@ class SignUpViewModel extends BaseViewModel {
           await _authenticationService.verifyEmail(email: emailController.text);
 
       if (respone == ApiResponse.Success) {
-        _navigationService.navigateTo(VerificationViewRoute);
+        VerificationType verificationType = VerificationType.NewUser;
+        _navigationService.navigateTo(VerificationViewRoute,
+            argument: verificationType);
       }
     } catch (e) {
+      print(e);
       await _dialogService.showDialog(
         buttonTitle: "OK",
         description: "Something went wrong",

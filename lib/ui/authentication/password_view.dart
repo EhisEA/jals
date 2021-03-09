@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jals/enums/password_type.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
 
@@ -10,10 +11,13 @@ import 'package:jals/widgets/button.dart';
 import 'package:stacked/stacked.dart';
 
 class PasswordView extends StatelessWidget {
+  final PasswordType passwordType;
+  PasswordView({@required this.passwordType});
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<PasswordViewModel>.reactive(
+        onModelReady: (model) => model.onModelReady(passwordType),
         viewModelBuilder: () => PasswordViewModel(),
         builder: (context, model, _) {
           return SafeArea(
@@ -25,8 +29,12 @@ class PasswordView extends StatelessWidget {
                 child: Column(
                   children: [
                     AuthAppBar(
-                      subtitle: "Jesus A Lifestyle",
-                      title: "Create Password",
+                      subtitle: passwordType == PasswordType.ForgotPassword
+                          ? "Jesus A Lifestyle"
+                          : "Let us help you reset your password",
+                      title: passwordType == PasswordType.ForgotPassword
+                          ? "Forgot your Password?"
+                          : "Create Password",
                     ),
                     SizedBox(
                       height: getProportionateScreenHeight(20),

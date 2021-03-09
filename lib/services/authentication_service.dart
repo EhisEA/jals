@@ -4,22 +4,25 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:jals/constants/app_urls.dart';
-import 'package:jals/constants/base_url.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/user_model.dart';
+import 'package:jals/route_paths.dart';
+import 'package:jals/services/navigationService.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService with ChangeNotifier {
   final Client _client = Client();
+  NavigationService _navigationService = locator<NavigationService>();
   final NetworkConfig _networkConfig = NetworkConfig();
   String _userSignUpEmail = "";
-  UserModel _userModel;
-  UserModel get userModel => _userModel;
+  UserModel _currentUser;
+  UserModel get currentUser => _currentUser;
   int _otpCode;
   int get otpCode => _otpCode;
 
-  generateOtp() {
+  int generateOtp() {
     Random rand = new Random.secure();
     // ignore: unused_local_variable
     List<int> _generatedOtpCode =
@@ -31,7 +34,7 @@ class AuthenticationService with ChangeNotifier {
 
   Future<ApiResponse> verifyEmail({@required String email}) async {
     try {
-      print("1");
+      print("Generating OTP Code....");
       _otpCode = generateOtp();
       print(_otpCode);
       _userSignUpEmail = email;
@@ -44,9 +47,12 @@ class AuthenticationService with ChangeNotifier {
       );
       var result = json.decode(response.body);
       print(result);
+      print(response.statusCode);
       if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("There was Success...");
         return ApiResponse.Success;
       } else {
+        print("An Error Occured");
         _networkConfig.isResponseSuccess(
             response: result, errorTitle: "Sign Up Failure");
         return ApiResponse.Error;
@@ -76,7 +82,7 @@ class AuthenticationService with ChangeNotifier {
         },
       );
       print(json.decode(response.body));
-      if (response.statusCode == 201) {
+      if (response.statusCode >= 200 || response.statusCode < 299) {
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
@@ -98,42 +104,44 @@ class AuthenticationService with ChangeNotifier {
           "password": password,
         },
       );
-      final decodedData = jsonDecode(response.body);
-      print(decodedData);
-      if (response.statusCode == 201) {
+      final Map<String, dynamic> decodedData = jsonDecode(response.body);
+      print(decodedData["status"]);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("LOGGING IN WAS SUCCESSFUL");
         // decode data, get token and save to shared prefs
-        _saveDataLocally(decodedData);
+        _currentUser = UserModel.fromJson(decodedData);
+        notifyListeners();
+        SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+        await sharedPrefs.setString(
+          "userData",
+          jsonEncode(_currentUser.toJson()),
+        );
+        print("Saved The User Object to the SharedPreferences....");
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
       }
     } catch (e) {
+      print(" The error was $e");
       return ApiResponse.Error;
     }
   }
 
-  _getDataFromPrefs() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    var prefsData = sharedPrefs.getString("userData");
-    _userModel = jsonDecode(prefsData);
-    notifyListeners();
-  }
-
-  _saveDataLocally(data) async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    await sharedPrefs.setString(
-      "userData",
-      jsonEncode(
-        UserModel.fromJson(data),
-      ),
-    );
+  _populateCurrentUser(Map<String, dynamic> user) {
+    if (user != null) {
+      // _currentUser = jsonDecode(UserModel.));
+    }
   }
 
   Future<bool> autoLogin() async {
     try {
       SharedPreferences sharePrefrences = await SharedPreferences.getInstance();
+
       if (sharePrefrences.containsKey("userData")) {
-        _getDataFromPrefs();
+        print("User Data was Saved ");
+        final decodedData = json.decode(sharePrefrences.getString("userData"));
+        await _populateCurrentUser(decodedData);
+
         return true;
       } else {
         print("No User Data was saved");
@@ -144,4 +152,104 @@ class AuthenticationService with ChangeNotifier {
       return false;
     }
   }
+
+  Future<ApiResponse> createUserAccountIfno(
+      {String userName,
+      String dateOfBirth,
+      String phoneNumber,
+      String avatarUrl}) async {
+    try {
+      Response response = await _client.post(
+        "${AppUrl.CreateUserAccountIno}",
+        headers: headers,
+        body: {
+          "user_name": userName,
+          "date_of_birth": dateOfBirth,
+          "phone_number": phoneNumber
+        },
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      print(response.statusCode);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("Successful ....");
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Account Verification Error");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> sendForgotPasswordEmail({String email}) async {
+    try {
+      print("Generating the Otp code...");
+      _otpCode = generateOtp();
+      print(_otpCode);
+      _userSignUpEmail = email;
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPasswordEmail}",
+        headers: headers,
+        body: {
+          "code": _otpCode,
+          "email": email,
+        },
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("Success");
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Forgot Password Error");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> sendForgotPassword(String password) async {
+    try {
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPassword}",
+        body: {
+          "email": _userSignUpEmail,
+          "new_password": password,
+        },
+        headers: headers,
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Password Update Error");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
+  Future logOut() async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
+      print("Done");
+      await _navigationService.navigateToReplace(LoginViewRoute);
+      print("Exit 0");
+    } catch (e) {
+      print(e);
+    }
+  }
 }
+// 3b79df4433f5aad10c8956e3bd0fb71e415790a7

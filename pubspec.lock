@@ -35,7 +35,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0-nullsafety.1"
+    version: "2.4.2"
   auto_size_text:
     dependency: transitive
     description:
@@ -49,6 +49,7 @@ packages:
       name: boolean_selector
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.1.0-nullsafety.1"
   build:
     dependency: transitive
@@ -57,6 +58,9 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.2"
+=======
+    version: "2.0.0"
+>>>>>>> 4159f70e939bdbb9e16914a1ded2b188eb227abf
   cached_network_image:
     dependency: "direct main"
     description:
@@ -70,13 +74,14 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0-nullsafety.3"
+    version: "1.0.0"
   charcode:
     dependency: transitive
     description:
       name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.2.0-nullsafety.1"
   cli_util:
     dependency: transitive
@@ -85,20 +90,23 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+=======
+    version: "1.1.3"
+>>>>>>> 4159f70e939bdbb9e16914a1ded2b188eb227abf
   clock:
     dependency: transitive
     description:
       name: clock
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0-nullsafety.1"
+    version: "1.0.1"
   collection:
     dependency: transitive
     description:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.15.0-nullsafety.3"
+    version: "1.14.13"
   convert:
     dependency: transitive
     description:
@@ -120,6 +128,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+<<<<<<< HEAD
   dart_style:
     dependency: transitive
     description:
@@ -134,6 +143,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.0"
+=======
+  date_time_picker:
+    dependency: "direct main"
+    description:
+      name: date_time_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
+>>>>>>> 4159f70e939bdbb9e16914a1ded2b188eb227abf
   device_preview:
     dependency: "direct main"
     description:
@@ -147,7 +165,7 @@ packages:
       name: fake_async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0-nullsafety.1"
+    version: "1.1.0"
   ffi:
     dependency: transitive
     description:
@@ -335,14 +353,14 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.10-nullsafety.1"
+    version: "0.12.8"
   meta:
     dependency: transitive
     description:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0-nullsafety.3"
+    version: "1.1.8"
   nested:
     dependency: transitive
     description:
@@ -384,7 +402,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0-nullsafety.1"
+    version: "1.7.0"
   path_drawing:
     dependency: transitive
     description:
@@ -585,7 +603,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0-nullsafety.2"
+    version: "1.7.0"
   sqflite:
     dependency: transitive
     description:
@@ -606,7 +624,7 @@ packages:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.0-nullsafety.1"
+    version: "1.9.5"
   stacked:
     dependency: "direct main"
     description:
@@ -627,14 +645,14 @@ packages:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0-nullsafety.1"
+    version: "2.0.0"
   string_scanner:
     dependency: transitive
     description:
       name: string_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0-nullsafety.1"
+    version: "1.0.5"
   synchronized:
     dependency: transitive
     description:
@@ -648,13 +666,14 @@ packages:
       name: term_glyph
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0-nullsafety.1"
+    version: "1.1.0"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.2.19-nullsafety.2"
   time:
     dependency: transitive
@@ -663,13 +682,16 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.1"
+=======
+    version: "0.2.17"
+>>>>>>> 4159f70e939bdbb9e16914a1ded2b188eb227abf
   typed_data:
     dependency: transitive
     description:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0-nullsafety.3"
+    version: "1.2.0"
   url_launcher:
     dependency: "direct main"
     description:
@@ -725,7 +747,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0-nullsafety.3"
+    version: "2.0.8"
   velocity_x:
     dependency: "direct main"
     description:
@@ -769,5 +791,9 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
+<<<<<<< HEAD
   dart: ">=2.10.0 <2.11.0"
+=======
+  dart: ">=2.9.0-14.0.dev <3.0.0"
+>>>>>>> 4159f70e939bdbb9e16914a1ded2b188eb227abf
   flutter: ">=1.18.0-6.0.pre <2.0.0"
