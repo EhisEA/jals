@@ -8,20 +8,17 @@ import 'package:jals/services/authentication_service.dart';
 import 'package:jals/utils/locator.dart';
 
 class VideoService extends ChangeNotifier {
-  // !====================***Declarations**=============
+  // ====================***Declarations**=============
   final Client _client = new Client();
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
 
-// !=====================***Functions***==============
+// =====================***Functions***==============
   Future<List<VideoModel>> getVideoList() async {
     try {
       Response response = await _client.get(
         "${AppUrl.VideosList}",
-        headers: httpHeaders(
-          isToken: true,
-          token: _authenticationService.currentUser.key,
-        ),
+        headers: httpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData["data"]);
