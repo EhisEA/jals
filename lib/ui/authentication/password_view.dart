@@ -22,51 +22,54 @@ class PasswordView extends StatelessWidget {
         builder: (context, model, _) {
           return SafeArea(
               child: Scaffold(
-            body: Container(
-              // margin: UIHelper.kSidePadding,
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    AuthAppBar(
-                      subtitle: passwordType == PasswordType.ForgotPassword
-                          ? "Jesus A Lifestyle"
-                          : "Let us help you reset your password",
-                      title: passwordType == PasswordType.ForgotPassword
-                          ? "Forgot your Password?"
-                          : "Create Password",
-                    ),
-                    SizedBox(
-                      height: getProportionateScreenHeight(20),
-                    ),
-                    AuthTextField(
-                      fieldColor: Colors.grey[200],
-                      title: "Password",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "";
-                        } else {
-                          return null;
-                        }
-                      },
-                      keyboardType: TextInputType.multiline,
-                      prefixIcon: JalsIcons.password,
-                      controller: model.passwordController,
-                      isPassword: true,
-                      hintText: "Password(8 Characters)",
-                    ),
-                    // Sized box
-                    SizedBox(
-                      height: getProportionateScreenHeight(30),
-                    ),
-                    model.isBusy
-                        ? CircularProgressIndicator()
-                        : DefaultButton(
-                            title: "Confirm Password",
-                            onPressed: model.confirmPassword,
-                            color: kPrimaryColor,
-                          )
-                  ],
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Container(
+                // margin: UIHelper.kSidePadding,
+                alignment: Alignment.topCenter,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      AuthAppBar(
+                        subtitle: passwordType == PasswordType.ForgotPassword
+                            ? "Jesus A Lifestyle"
+                            : "Let us help you reset your password",
+                        title: passwordType == PasswordType.ForgotPassword
+                            ? "Forgot your Password?"
+                            : "Create Password",
+                      ),
+                      SizedBox(
+                        height: getProportionateScreenHeight(20),
+                      ),
+                      AuthTextField(
+                        fieldColor: Colors.grey[200],
+                        title: "Password",
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "";
+                          } else {
+                            return null;
+                          }
+                        },
+                        keyboardType: TextInputType.multiline,
+                        prefixIcon: JalsIcons.password,
+                        controller: model.passwordController,
+                        isPassword: true,
+                        hintText: "Password(8 Characters)",
+                      ),
+                      // Sized box
+                      SizedBox(
+                        height: getProportionateScreenHeight(30),
+                      ),
+                      model.isBusy
+                          ? CircularProgressIndicator()
+                          : DefaultButton(
+                              title: "Confirm Password",
+                              onPressed: model.confirmPassword,
+                              color: kPrimaryColor,
+                            )
+                    ],
+                  ),
                 ),
               ),
             ),

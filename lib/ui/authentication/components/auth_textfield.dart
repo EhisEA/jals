@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jals/utils/colors_utils.dart';
 
 import '../../../utils/size_config.dart';
 
@@ -82,7 +83,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
                 hintText: widget.hintText,
                 contentPadding: const EdgeInsets.only(top: 7),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
+                  borderSide: BorderSide(color: kPrimaryColor),
                 ),
               ),
             ),
