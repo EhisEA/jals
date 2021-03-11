@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/enums/verification_type.dart';
 import 'package:jals/ui/authentication/components/auth_appBar.dart';
+import 'package:jals/ui/authentication/components/pin_code_text_field.dart';
 import 'package:jals/ui/authentication/view_models/verification_view_model.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/button.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:stacked/stacked.dart';
+
+import 'components/pin_theme.dart';
 
 class VerificationView extends StatelessWidget {
   final VerificationType verificationType;
@@ -97,15 +99,20 @@ class VerificationView extends StatelessWidget {
         length: 6,
         animationType: AnimationType.fade,
         pinTheme: PinTheme(
+          inactiveFillColor: Colors.grey.shade100,
+          inactiveColor: Colors.transparent,
+          activeColor: Colors.grey.shade100,
+          // selectedColor: ,
+          selectedFillColor: Colors.white,
           shape: PinCodeFieldShape.box,
           fieldHeight: getProportionateScreenHeight(49),
           fieldWidth: getProportionateScreenWidth(51),
-          activeFillColor: Colors.white,
+          activeFillColor: Colors.grey.shade100,
         ),
         animationDuration: Duration(milliseconds: 300),
         // backgroundColor: Colors.blue.shade50,
-        // enableActiveFill: true,
-        errorAnimationController: model.errorController,
+        enableActiveFill: true,
+        // errorAnimationController: model.errorController,
         controller: model.verificationController,
         onCompleted: (v) {
           print("Completed");
