@@ -1,7 +1,18 @@
+// To parse this JSON data, do
+//
+//     final VideoModel = VideoModelFromJson(jsonString);
+
 import 'dart:convert';
 
-String contentModelToJson(ContentModel data) => json.encode(data.toJson());
+import 'package:hive/hive.dart';
+part 'content_model.g.dart';
 
+ContentModel videoModelFromJson(String str) =>
+    ContentModel.fromJson(json.decode(str));
+
+String videoModelToJson(ContentModel data) => json.encode(data.toJson());
+
+@HiveType(typeId: 1)
 class ContentModel {
   ContentModel({
     this.id,
@@ -14,13 +25,28 @@ class ContentModel {
     this.coverImage,
   });
 
+  @HiveField(0)
   int id;
+
+  @HiveField(1)
   String title;
+
+  @HiveField(2)
   String author;
+
+  @HiveField(3)
   DateTime createdAt;
+
+  @HiveField(4)
   int price;
+
+  @HiveField(5)
   String postType;
+
+  @HiveField(6)
   String dataUrl;
+
+  @HiveField(7)
   String coverImage;
 
   factory ContentModel.fromJson(Map<String, dynamic> json) => ContentModel(
