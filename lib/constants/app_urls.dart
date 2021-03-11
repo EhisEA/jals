@@ -1,17 +1,14 @@
-import 'package:flutter/foundation.dart';
+import 'package:jals/services/authentication_service.dart';
+import 'package:jals/utils/locator.dart';
 
 const String ServerBaseUrl = "http://backendjals.herokuapp.com";
-final Map<String, String> headers = {"Content-Type": "application/json"};
 
-Map<String, String> httpHeaders({String token, @required bool isToken}) {
-  return isToken
-      ? {
-          "Content-Type": "application/json",
-          "Authorization": "Token $token",
-        }
-      : {
-          "Content-Type": "application/json",
-        };
+Map<String, String> httpHeaders() {
+  final AuthenticationService _authenticationService =
+      locator<AuthenticationService>();
+  return {
+    "Authorization": "Token ${_authenticationService.currentUser.key}",
+  };
 }
 
 class AppUrl {
@@ -38,7 +35,7 @@ class AppUrl {
   static const String Explore = "$ServerBaseUrl/v1/posts/explore/";
   static const String DailyRead = "$ServerBaseUrl/v1/posts/get_scripture/";
   static const String ForYou = "$ServerBaseUrl/v1/posts/explore/";
-  static const String CreateUserAccountIno = "$ServerBaseUrl/v1/users/";
+  static const String CreateUserAccountInfo = "$ServerBaseUrl/v1/users/";
   static const String SendForgotPasswordEmail =
       "$ServerBaseUrl/v1/users/forgot_password/";
   static const String SendForgotPassword =
