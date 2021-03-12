@@ -1,18 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:jals/constants/app_urls.dart';
 import 'package:jals/enums/api_response.dart';
+import 'package:jals/models/login_status.dart';
 import 'package:jals/models/user_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
+import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthenticationService with ChangeNotifier {
+class AuthenticationService {
   final Client _client = Client();
   NavigationService _navigationService = locator<NavigationService>();
   final NetworkConfig _networkConfig = NetworkConfig();
@@ -21,6 +25,76 @@ class AuthenticationService with ChangeNotifier {
   UserModel get currentUser => _currentUser;
   int _otpCode;
   int get otpCode => _otpCode;
+
+  _populateCurrentUser(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser = UserModel.fromJson(user);
+      _saveUserLocally();
+    }
+  }
+
+  _updateCurrentUser(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser =
+          UserModel.fromJsonWithToken(_currentUser.key, user["data"]);
+      _saveUserLocally();
+    }
+  }
+
+  _populateCurrentUserFromPref(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser = UserModel.fromMap(user);
+      _saveUserLocally();
+    }
+  }
+
+  // for external data change
+  // where this changes occur
+  // ====== Edit profile (avatar, username, fullname)
+  // ====== view profile (cover image)
+  // ====== start up view (refresh user data incase changes where made from another device or from the web app)
+  void refreshUserData(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser = UserModel.fromJson(user);
+
+      _saveUserLocally();
+    }
+  }
+
+  Future<LoginStatus> isUserLoggedIn() async {
+    // final UserService _userService = UserService();
+    SharedPreferences _preferences;
+    _preferences = await SharedPreferences.getInstance();
+    String userJsonString = _preferences.getString("userData");
+
+    print(userJsonString);
+    if (userJsonString != null) {
+      await _populateCurrentUserFromPref(jsonDecode(userJsonString));
+      if (_currentUser.isDetailsComplete()) {
+        return LoginStatus.LoginComplete;
+      }
+      return LoginStatus.LoginIncomplete;
+    }
+
+    return LoginStatus.NoUser;
+  }
+
+  _saveUserLocally() async {
+    SharedPreferences _preferences;
+    _preferences = await SharedPreferences.getInstance();
+    // print(_currentUser.dateOfBirth);
+    print("===============");
+    print(_currentUser.fullName);
+    print(_currentUser.dateOfBirth);
+    print(_currentUser.key);
+    print(_currentUser.id);
+
+    _preferences.setString("userData", jsonEncode(_currentUser.toJson()));
+  }
+
+  //=======================================================================
+  //* ============= ++++++++----- Otp generator ----------++++++++ =================
+  //=======================================================================
 
   int generateOtp() {
     Random rand = new Random.secure();
@@ -48,7 +122,7 @@ class AuthenticationService with ChangeNotifier {
       var result = json.decode(response.body);
       print(result);
       print(response.statusCode);
-      if (response.statusCode >= 200 || response.statusCode < 299) {
+      if (response.statusCode >= 200 && response.statusCode < 299) {
         print("There was Success...");
         return ApiResponse.Success;
       } else {
@@ -105,31 +179,22 @@ class AuthenticationService with ChangeNotifier {
         },
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData["status"]);
-      if (response.statusCode >= 200 || response.statusCode < 299) {
-        print("LOGGING IN WAS SUCCESSFUL");
+      print(decodedData);
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        debugPrint("LOGGING IN WAS SUCCESSFUL1");
         // decode data, get token and save to shared prefs
-        _currentUser = UserModel.fromJson(decodedData);
-        notifyListeners();
-        SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-        await sharedPrefs.setString(
-          "userData",
-          jsonEncode(_currentUser.toJson()),
-        );
-        print("Saved The User Object to the SharedPreferences....");
+        // _currentUser = UserModel.fromJson(decodedData);
+        _populateCurrentUser(decodedData);
+
+        debugPrint("Saved The User Object to the SharedPreferences....");
+
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
       }
     } catch (e) {
-      print(" The error was $e");
+      debugPrint(" The error was $e");
       return ApiResponse.Error;
-    }
-  }
-
-  _populateCurrentUser(Map<String, dynamic> user) {
-    if (user != null) {
-      // _currentUser = jsonDecode(UserModel.));
     }
   }
 
@@ -139,8 +204,11 @@ class AuthenticationService with ChangeNotifier {
 
       if (sharePrefrences.containsKey("userData")) {
         print("User Data was Saved ");
-        final decodedData = json.decode(sharePrefrences.getString("userData"));
-        await _populateCurrentUser(decodedData);
+        print("=============== current users==========1111");
+        Map<String, dynamic> decodedData =
+            json.decode(sharePrefrences.getString("userData"));
+        print(decodedData);
+        await _populateCurrentUserFromPref(decodedData);
 
         return true;
       } else {
@@ -153,26 +221,54 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> createUserAccountIfno(
-      {String userName,
-      String dateOfBirth,
-      String phoneNumber,
-      String avatarUrl}) async {
+  Future<ApiResponse> createUserAccountInfo({
+    String fullName,
+    String dateOfBirth,
+    String phoneNumber,
+    File avatar,
+  }) async {
     try {
-      Response response = await _client.post(
-        "${AppUrl.CreateUserAccountIno}",
-        headers: headers,
-        body: {
-          "user_name": userName,
-          "date_of_birth": dateOfBirth,
-          "phone_number": phoneNumber
-        },
+// ============================================================
+      final String url = "${AppUrl.CreateUserAccountInfo}";
+      //image is a file variable holdint the selected  image
+      final imageUploadRequest = MultipartRequest(
+        'POST',
+        Uri.parse(url),
       );
+
+      // chack if avatar is not null
+      // before adding it to the request
+      if (avatar != null) {
+        // setting the image typr
+        final mimeTypeData =
+            lookupMimeType(avatar.path, headerBytes: [0xFF, 0xD8]).split("/");
+
+        // prepare the image
+        final file = MultipartFile(
+          "avatar",
+          File(avatar.path).readAsBytes().asStream(),
+          File(avatar.path).lengthSync(),
+          filename: avatar.path.split("/").last,
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+        );
+
+        // add the image to the request
+        imageUploadRequest.files.add(file);
+      }
+      imageUploadRequest.headers.addAll(httpHeaders());
+      imageUploadRequest.fields['full_name'] = fullName;
+      imageUploadRequest.fields['date_of_birth'] = dateOfBirth;
+      imageUploadRequest.fields['phone_number'] = phoneNumber;
+      final streamResponse = await imageUploadRequest.send();
+      final response = await Response.fromStream(streamResponse);
+
+// ============================================================
       final decodedData = jsonDecode(response.body);
       print(decodedData);
       print(response.statusCode);
-      if (response.statusCode >= 200 || response.statusCode < 299) {
+      if (response.statusCode >= 200 && response.statusCode < 299) {
         print("Successful ....");
+        _updateCurrentUser(decodedData);
         return ApiResponse.Success;
       } else {
         _networkConfig.isResponseSuccess(
@@ -193,7 +289,7 @@ class AuthenticationService with ChangeNotifier {
       _userSignUpEmail = email;
       Response response = await _client.post(
         "${AppUrl.SendForgotPasswordEmail}",
-        headers: headers,
+        headers: httpHeaders(),
         body: {
           "code": _otpCode,
           "email": email,
@@ -223,7 +319,7 @@ class AuthenticationService with ChangeNotifier {
           "email": _userSignUpEmail,
           "new_password": password,
         },
-        headers: headers,
+        headers: httpHeaders(),
       );
       final decodedData = jsonDecode(response.body);
       print(decodedData);

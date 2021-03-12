@@ -42,7 +42,11 @@ class EmailLoginViewModel extends BaseViewModel {
           email: emailController.text, password: passwordController.text);
 
       if (apiResponse == ApiResponse.Success) {
-        _navigationService.navigateToReplace(HomeViewRoute);
+        if (_authenticationService.currentUser.isDetailsComplete()) {
+          _navigationService.navigateToReplace(HomeViewRoute);
+        } else {
+          _navigationService.navigateToReplace(AccountInfoViewRoute);
+        }
       } else {
         // ! show handle error.
         await _dialogService.showDialog(

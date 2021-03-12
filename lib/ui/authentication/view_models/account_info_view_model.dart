@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/services/dialog_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
+import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/network_utils.dart';
+import 'package:jals/widgets/button.dart';
 
 import '../../../utils/locator.dart';
 
@@ -19,8 +25,8 @@ class AccountInfoViewModel extends BaseViewModel {
       locator<AuthenticationService>();
   DialogService _dialogService = locator<DialogService>();
   NetworkConfig _networkConfig = new NetworkConfig();
-  DateTime pickedDate;
-  TimeOfDay pickedTime;
+  DateTime pickedDate = DateTime(2000);
+  String currentAvatar;
   @override
   void dispose() {
     nameController.dispose();
@@ -29,29 +35,31 @@ class AccountInfoViewModel extends BaseViewModel {
     super.dispose();
   }
 
-  onModelReady() {
-    pickedDate = DateTime.now();
-    pickedTime = TimeOfDay.now();
+  AccountInfoViewModel() {
+    currentAvatar = _authenticationService.currentUser.avatar;
+    nameController.text = _authenticationService.currentUser.fullName;
+    phoneNumberController.text = _authenticationService.currentUser.phoneNumber;
+    dateController.text =
+        "${DateFormat('dd/MM/yyyy').format(_authenticationService.currentUser.dateOfBirth)}";
+    pickedDate = _authenticationService.currentUser.dateOfBirth;
   }
-
   pickDate(BuildContext context) async {
     DateTime date = await showDatePicker(
       initialDate: pickedDate,
       context: context,
-      firstDate: DateTime(DateTime.now().year - 1),
-      lastDate: DateTime(DateTime.now().year + 1),
+      firstDate: DateTime(1800),
+      lastDate: DateTime(DateTime.now().year - 4),
     );
     if (date != null) {
       pickedDate = date;
-      notifyListeners();
-      
     }
+    notifyListeners();
   }
 
-  uploadDetails() {
+  uploadDetails() async {
     if (formKey.currentState.validate()) {
       setBusy(ViewState.Busy);
-      _networkConfig.onNetworkAvailabilityDialog(onNetwork);
+      await _networkConfig.onNetworkAvailabilityDialog(onNetwork);
       setBusy(ViewState.Idle);
     } else {
       return null;
@@ -61,11 +69,12 @@ class AccountInfoViewModel extends BaseViewModel {
   onNetwork() async {
     try {
       ApiResponse apiResponse =
-          await _authenticationService.createUserAccountIfno(
-              avatarUrl: "",
-              dateOfBirth: pickedDate.toString(),
+          await _authenticationService.createUserAccountInfo(
+              avatar: image,
+              dateOfBirth:
+                  "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}",
               phoneNumber: phoneNumberController.text,
-              userName: nameController.text);
+              fullName: nameController.text);
       if (apiResponse == ApiResponse.Success) {
         print("Success");
         _navigationService.navigateTo(HomeViewRoute);
@@ -81,5 +90,55 @@ class AccountInfoViewModel extends BaseViewModel {
 
   skip() {
     _navigationService.navigateTo(HomeViewRoute);
+  }
+
+  // ===============================================
+  // ===================== Image ================
+  // ================================================
+
+  final picker = ImagePicker();
+  String imageUrl;
+  File image;
+
+  Future _getImage(source) async {
+    setSecondaryBusy(ViewState.Busy);
+    final pickedFile = await picker.getImage(source: source);
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+      setSecondaryBusy(ViewState.Idle);
+    }
+  }
+
+  showImageSelectionDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: kScaffoldColor,
+          title: Text("Select photo from"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                DefaultButtonBorderedIcon(
+                    icon: Icons.perm_media,
+                    press: () {
+                      _getImage(ImageSource.gallery);
+                      Navigator.pop(context);
+                    },
+                    text: "Gallery"),
+                Padding(padding: EdgeInsets.all(8.0)),
+                DefaultButtonBorderedIcon(
+                    icon: Icons.camera_alt,
+                    press: () {
+                      _getImage(ImageSource.camera);
+                      Navigator.pop(context);
+                    },
+                    text: "Camera"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

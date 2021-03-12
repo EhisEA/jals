@@ -1,3 +1,4 @@
+import 'package:jals/models/login_status.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/utils/base_view_model.dart';
@@ -11,13 +12,21 @@ class SplashScreenViewModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   checkLoginStatus() async {
-    await Future.delayed(Duration(seconds: 3), () async {
-      bool isValid = await _authenticationService.autoLogin();
-      if (isValid) {
-        _navigationService.navigateToReplace(VideoLibraryRoute);
-      } else {
+    // _authenticationService.logOut();
+    LoginStatus loginStatus = await _authenticationService.isUserLoggedIn();
+    switch (loginStatus) {
+      case LoginStatus.NoUser:
         _navigationService.navigateToReplace(WelcomeViewRoute);
-      }
-    });
+
+        break;
+      case LoginStatus.LoginComplete:
+        _navigationService.navigateToReplace(AccountInfoViewRoute);
+        break;
+      case LoginStatus.LoginIncomplete:
+        _navigationService.navigateToReplace(HomeViewRoute);
+        break;
+      default:
+        _navigationService.navigateToReplace(WelcomeViewRoute);
+    }
   }
 }
