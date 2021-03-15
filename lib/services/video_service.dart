@@ -18,7 +18,7 @@ class VideoService extends ChangeNotifier {
     try {
       Response response = await _client.get(
         "${AppUrl.VideosList}",
-        headers: httpHeaders(),
+        headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData["data"]);

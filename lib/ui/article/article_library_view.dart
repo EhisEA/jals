@@ -37,7 +37,7 @@ class _ArticleLibraryState extends State<ArticleLibrary>
               color: Colors.black,
             ),
           ),
-          title: TextHeader(text: "Article Library"),
+          title: TextHeader(text: "Article"),
           centerTitle: true,
           actions: [
             Padding(

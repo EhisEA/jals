@@ -14,16 +14,17 @@ class SplashScreenViewModel extends BaseViewModel {
   checkLoginStatus() async {
     // _authenticationService.logOut();
     LoginStatus loginStatus = await _authenticationService.isUserLoggedIn();
+
     switch (loginStatus) {
       case LoginStatus.NoUser:
         _navigationService.navigateToReplace(WelcomeViewRoute);
 
         break;
       case LoginStatus.LoginComplete:
-        _navigationService.navigateToReplace(AccountInfoViewRoute);
+        _navigationService.navigateToReplace(ArticleLibraryViewRoute);
         break;
       case LoginStatus.LoginIncomplete:
-        _navigationService.navigateToReplace(HomeViewRoute);
+        _navigationService.navigateToReplace(AccountInfoViewRoute);
         break;
       default:
         _navigationService.navigateToReplace(WelcomeViewRoute);

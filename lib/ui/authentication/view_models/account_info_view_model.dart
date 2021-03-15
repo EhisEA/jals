@@ -39,9 +39,11 @@ class AccountInfoViewModel extends BaseViewModel {
     currentAvatar = _authenticationService.currentUser.avatar;
     nameController.text = _authenticationService.currentUser.fullName;
     phoneNumberController.text = _authenticationService.currentUser.phoneNumber;
-    dateController.text =
-        "${DateFormat('dd/MM/yyyy').format(_authenticationService.currentUser.dateOfBirth)}";
-    pickedDate = _authenticationService.currentUser.dateOfBirth;
+    dateController.text = _authenticationService.currentUser.dateOfBirth == null
+        ? null
+        : "${DateFormat('dd/MM/yyyy').format(_authenticationService.currentUser.dateOfBirth)}";
+    pickedDate =
+        _authenticationService.currentUser.dateOfBirth ?? DateTime(2000, 2, 2);
   }
   pickDate(BuildContext context) async {
     DateTime date = await showDatePicker(

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jals/enums/password_type.dart';
 import 'package:jals/enums/verification_type.dart';
+import 'package:jals/models/article_model.dart';
 import 'package:jals/route_paths.dart';
+import 'package:jals/ui/article/article_library_view.dart';
+import 'package:jals/ui/article/article_view.dart';
 import 'package:jals/ui/authentication/account_info_view.dart';
 import 'package:jals/ui/authentication/email_login_view.dart';
 import 'package:jals/ui/authentication/forgot_password_view.dart';
@@ -45,9 +48,7 @@ class AppRouter {
       case PasswordViewRoute:
         PasswordType passwordType = settings.arguments as PasswordType;
         return MaterialPageRoute(
-            builder: (context) => PasswordView(
-                  passwordType: passwordType,
-                ));
+            builder: (context) => PasswordView(passwordType: passwordType));
         break;
       case ForgotPasswordViewRoute:
         return MaterialPageRoute(builder: (context) => ForgotPasswordView());
@@ -60,6 +61,17 @@ class AppRouter {
         break;
       case HomeViewRoute:
         return MaterialPageRoute(builder: (context) => HomeView());
+        break;
+      case ArticleLibraryViewRoute:
+        return MaterialPageRoute(builder: (context) => ArticleLibrary());
+        break;
+      case ArticleViewRoute:
+        ArticleModel article = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => ArticleView(
+            article: article,
+          ),
+        );
         break;
       // case :
       //   return MaterialPageRoute(

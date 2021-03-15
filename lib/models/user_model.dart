@@ -40,9 +40,9 @@ class UserModel {
         id: json["data"]["user"]["id"],
         fullName: json["data"]["user"]["full_name"],
         phoneNumber: json["data"]["user"]["phone_number"],
-        // dateOfBirth: json["data"]["user"]["date_of_birth"] == null
-        //     ? null
-        //     : DateTime.parse(json["data"]["user"]["date_of_birth"]),
+        dateOfBirth: json["data"]["user"]["date_of_birth"] == null
+            ? null
+            : DateTime.parse(json["data"]["user"]["date_of_birth"]),
         verified: json["data"]["user"]["verified"],
         avatar: json["data"]["user"]["avatar"],
       );

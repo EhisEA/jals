@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jals/ui/article/components/build_articles.dart';
+import 'package:jals/ui/article/components/build_news.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -68,29 +69,28 @@ class _ArticleAllState extends State<ArticleAll> {
                 ),
               ),
             ),
-            SliverClip(
-              child: SliverList(
-                delegate: SliverChildListDelegate(
-                  List.generate(
-                    20,
-                    (index) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: ArticleTile(
-                        image:
-                            "https://miro.medium.com/max/3182/1*ZdpBdyvqfb6qM1InKR2sQQ.png",
-                        title:
-                            "How to read, understand and decipher the teachings of Christ",
-                        author: "Esther Howard ",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            buildArticles(),
           ],
         )
       ],
     );
+  }
+
+  Widget buildArticles() {
+    switch (selected) {
+      case 0:
+        return BuildArticle(key: Key("0"));
+      case 1:
+        return BuildNews(key: Key("1"));
+
+        break;
+      case 2:
+        return BuildArticle(key: Key("2"));
+
+        break;
+      default:
+        return BuildArticle(key: Key("3"));
+    }
   }
 
   category({

@@ -3,7 +3,7 @@ import 'package:jals/utils/locator.dart';
 
 const String ServerBaseUrl = "http://backendjals.herokuapp.com";
 
-Map<String, String> httpHeaders() {
+Map<String, String> appHttpHeaders() {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   return {
@@ -48,7 +48,24 @@ class AppUrl {
   // =============================================================
   // =============================================================
   // =============================================================
+
   static const VideosList = "$ServerBaseUrl/v1/posts/videos/";
   static const VideosSearch = "$ServerBaseUrl/v1/posts/videos/search/";
-}
+
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // articles
+  // =============================================================
+  // =============================================================
+  // =============================================================
+
+  static const ArticleList = "$ServerBaseUrl/v1/posts/articles/";
+  static const TrendingList = "$ServerBaseUrl/v1/posts/articles/";
+  static const ArticleBookmarkList =
+      "$ServerBaseUrl/v1/posts/articles/get_bookmarks/";
+  static const BookmarkArticle = "$ServerBaseUrl/v1/posts/articles/";
+  static const NewsList = "$ServerBaseUrl/v1/posts/news/";
+
 // 3b79df4433f5aad10c8956e3bd0fb71e415790a7
+}
