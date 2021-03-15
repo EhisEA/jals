@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jals/utils/colors_utils.dart';
 
 import '../utils/size_config.dart';
 
@@ -32,6 +33,52 @@ class DefaultButton extends StatelessWidget {
             fontWeight: FontWeight.w600,
             letterSpacing: 0.02,
             color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DefaultButtonBorderedIcon extends StatelessWidget {
+  const DefaultButtonBorderedIcon(
+      {Key key, this.text, this.press, @required this.icon})
+      : super(key: key);
+  final String text;
+  final Function press;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: getProportionateScreenHeight(62),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+          color: kPrimaryColor,
+        )),
+        child: FlatButton(
+          onPressed: press,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 7, right: 7),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 18, //getProportionateScreenHeight(20),
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+                Icon(
+                  icon,
+                  color: Colors.white,
+                ),
+              ],
+            ),
           ),
         ),
       ),

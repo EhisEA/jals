@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jals/enums/password_type.dart';
+import 'package:jals/enums/verification_type.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/ui/authentication/account_info_view.dart';
 import 'package:jals/ui/authentication/email_login_view.dart';
@@ -10,6 +12,7 @@ import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
 import 'package:jals/ui/home/home_view.dart';
+import 'package:jals/ui/video/video_library_view.dart';
 
 import '../ui/undefinedRoute.dart';
 
@@ -22,17 +25,29 @@ class AppRouter {
       case WelcomeViewRoute:
         return MaterialPageRoute(builder: (context) => WelcomeView());
         break;
+      case VideoLibraryRoute:
+        return MaterialPageRoute(builder: (context) => VideoLibrary());
+        break;
       case LoginViewRoute:
         return MaterialPageRoute(builder: (context) => LoginView());
         break;
       case VerificationViewRoute:
-        return MaterialPageRoute(builder: (context) => VerificationView());
+        VerificationType verificationType;
+        verificationType = settings.arguments as VerificationType;
+        return MaterialPageRoute(
+            builder: (context) => VerificationView(
+                  verificationType: verificationType,
+                ));
         break;
       case SignUpViewRoute:
         return MaterialPageRoute(builder: (context) => SignUpView());
         break;
       case PasswordViewRoute:
-        return MaterialPageRoute(builder: (context) => PasswordView());
+        PasswordType passwordType = settings.arguments as PasswordType;
+        return MaterialPageRoute(
+            builder: (context) => PasswordView(
+                  passwordType: passwordType,
+                ));
         break;
       case ForgotPasswordViewRoute:
         return MaterialPageRoute(builder: (context) => ForgotPasswordView());

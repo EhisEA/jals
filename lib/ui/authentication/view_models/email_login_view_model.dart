@@ -38,23 +38,28 @@ class EmailLoginViewModel extends BaseViewModel {
 
   onNetwork() async {
     try {
-      setBusy(ViewState.Busy);
       ApiResponse apiResponse = await _authenticationService.loginWithEmail(
           email: emailController.text, password: passwordController.text);
-      setBusy(ViewState.Idle);
+
       if (apiResponse == ApiResponse.Success) {
-        _navigationService.navigateToReplace(AccountInfoViewRoute);
+        if (_authenticationService.currentUser.isDetailsComplete()) {
+          _navigationService.navigateToReplace(HomeViewRoute);
+        } else {
+          _navigationService.navigateToReplace(AccountInfoViewRoute);
+        }
       } else {
         // ! show handle error.
         await _dialogService.showDialog(
             buttonTitle: "OK",
-            description:
-                "An error occured while trying to login. Please check your credentials and try again.",
+            description: "Invalid Credentials",
             title: "Login Error");
       }
     } catch (e) {
       print(e);
-      setBusy(ViewState.Idle);
+      await _dialogService.showDialog(
+          buttonTitle: "OK",
+          description: "Invalid Credentials",
+          title: "Login Error");
     }
   }
 

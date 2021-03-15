@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:jals/models/content_model.dart';
+import 'package:jals/ui/home/components/view_models/home_content_display_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
+import 'package:jals/utils/text.dart';
+import 'package:jals/widgets/image.dart';
+import 'package:jals/widgets/image_loader.dart';
+import 'package:stacked/stacked.dart';
 
-class HomeList extends StatelessWidget {
+class HomeContentDisplay extends StatelessWidget {
   final String listTitle;
   final String svgimage;
 
-  const HomeList({
+  const HomeContentDisplay({
     Key key,
     @required this.listTitle,
     @required this.svgimage,
@@ -15,83 +22,143 @@ class HomeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
+    return ViewModelBuilder<HomeContentDisplayViewModel>.reactive(
+      viewModelBuilder: () => HomeContentDisplayViewModel(),
+      onModelReady: (model) => model.getContents(),
+      builder: (context, model, _) {
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    "$svgimage",
+                    height: getProportionatefontSize(20),
+                  ),
+                  Text(
+                    "$listTitle",
+                    style: TextStyle(
+                      fontSize: getProportionatefontSize(22),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    "VIEW ALL ",
+                    style: TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: getProportionatefontSize(14),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    ">",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: getProportionatefontSize(230),
+              child: model.isBusy
+                  ? loadingContent()
+                  : model.contents == null
+                      ? Center(
+                          child: InkWell(
+                            onTap: model.getContents,
+                            child: TextCaption2(
+                                text: "Retry", fontSize: 16, color: kTextColor),
+                          ),
+                        )
+                      : showContent(model.contents),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  loadingContent() {
+    ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(
-                "$svgimage",
-                height: getProportionatefontSize(20),
+              Container(
+                height: getProportionatefontSize(150),
+                width: getProportionatefontSize(150),
+                child: ImageShimmerLoadingState(),
               ),
-              Text(
-                "$listTitle",
-                style: TextStyle(
-                  fontSize: getProportionatefontSize(22),
-                  fontWeight: FontWeight.w600,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3.0),
+                child: Container(
+                  height: 10,
+                  width: double.infinity,
+                  child: ImageShimmerLoadingState(),
                 ),
               ),
-              Spacer(),
-              Text(
-                "VIEW ALL ",
-                style: TextStyle(
-                  color: kPrimaryColor,
-                  fontSize: getProportionatefontSize(14),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                ">",
-                style: TextStyle(color: Colors.grey),
+              SizedBox(height: 10),
+              Container(
+                height: 10,
+                width: 150,
+                child: ImageShimmerLoadingState(),
               ),
             ],
           ),
-        ),
-        Container(
-          height: getProportionatefontSize(230),
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: 20,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: getProportionatefontSize(150),
-                      width: getProportionatefontSize(150),
-                      color: kTextColor,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3.0),
-                      child: Text(
-                        "Declare your Love for God",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: getProportionatefontSize(14),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "22nd Dec 2021",
-                      style: TextStyle(
-                        fontSize: getProportionatefontSize(12),
-                        fontWeight: FontWeight.w400,
-                        color: kTextColor,
-                      ),
-                    ),
-                  ],
+        );
+      },
+    );
+  }
+
+  showContent(List<ContentModel> contents) {
+    ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: 20,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: getProportionatefontSize(150),
+                width: getProportionatefontSize(150),
+                child: ShowNetworkImage(
+                  imageUrl: "${contents[index].coverImage}",
                 ),
-              );
-            },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3.0),
+                child: Text(
+                  "${contents[index].title}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: getProportionatefontSize(14),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Text(
+                DateFormat("dd MMM yyyy").format(contents[index].createdAt),
+                // "22nd Dec 2021",
+                style: TextStyle(
+                  fontSize: getProportionatefontSize(12),
+                  fontWeight: FontWeight.w400,
+                  color: kTextColor,
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

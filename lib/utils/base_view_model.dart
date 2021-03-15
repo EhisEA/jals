@@ -10,14 +10,31 @@ class BaseViewModel extends ChangeNotifier {
 
   // UserModel get currentUser => _authenticationService.currentUser;
 
+  bool _disposed = false;
+  @override
+  void dispose() {
+    super.dispose();
+    _disposed = true;
+  }
+
   ViewState _state = ViewState.Idle;
   final moneyFormat = NumberFormat('#,###,###,###.00', 'en_US');
 
   ViewState get state => _state;
   bool get isBusy => _state == ViewState.Busy;
 
+  ViewState _secondaryState = ViewState.Idle;
+
+  ViewState get secondaryState => _secondaryState;
+  bool get isSecondaryBusy => _secondaryState == ViewState.Busy;
+
   setBusy(ViewState currentState) {
     _state = currentState;
     notifyListeners();
+  }
+
+  setSecondaryBusy(ViewState currentState) {
+    _secondaryState = currentState;
+    if (!_disposed) notifyListeners();
   }
 }

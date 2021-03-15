@@ -1,13 +1,64 @@
-import 'dart:core';
+import 'package:jals/services/authentication_service.dart';
+import 'package:jals/utils/locator.dart';
 
-import 'package:jals/constants/base_url.dart';
+const String ServerBaseUrl = "http://backendjals.herokuapp.com";
+
+Map<String, String> httpHeaders() {
+  final AuthenticationService _authenticationService =
+      locator<AuthenticationService>();
+  return {
+    "Authorization": "Token ${_authenticationService.currentUser.key}",
+  };
+}
 
 class AppUrl {
-  static String login = "$baseUrl/rest-auth/login/";
-  static String sendEmailToRegister = "$baseUrl/users/check_email/";
-  static String sendRegistrationPassword = "$baseUrl/rest-auth/registration/";
-  static String logOut = "$baseUrl/rest-auth/logout/";
-  static String createUserAccountIno = "$baseUrl/v1/users/";
-  static String forgotPasswordEmail = "$baseUrl";
-  static String sendForgotPassword = "";
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // AUTHENTICATION
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  static const String Login = "$ServerBaseUrl/v1/rest-auth/login/";
+  static const String VerifyEmail = "$ServerBaseUrl/v1/users/check_email/";
+  static const String RegisterUser =
+      "$ServerBaseUrl/v1/rest-auth/registration/";
+  static const String LogOut = "$ServerBaseUrl/v1/rest-auth/logout/";
+
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // HOME VIEW
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  static const String Explore = "$ServerBaseUrl/v1/posts/explore/";
+  static const String DailyRead = "$ServerBaseUrl/v1/posts/get_scripture/";
+  static const String ForYou = "$ServerBaseUrl/v1/posts/explore/";
+  static const String CreateUserAccountInfo = "$ServerBaseUrl/v1/users/";
+  static const String SendForgotPasswordEmail =
+      "$ServerBaseUrl/v1/users/forgot_password/";
+  static const String SendForgotPassword =
+      "$ServerBaseUrl/v1/users/forgot_password/";
+
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // Videos
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  static const VideosList = "$ServerBaseUrl/v1/posts/videos/";
+  static const VideosSearch = "$ServerBaseUrl/v1/posts/videos/search/";
+
+  static const BookmarkedVideos =
+      '$ServerBaseUrl/v1/posts/videos/get_bookmarks/';
+  static String addToBoomarks({String uid}) {
+    return "$ServerBaseUrl/v1/posts/videos/$uid/add_to_bookmarks/";
+  }
+
+  static String removeFromBookmarks({String uid}) {
+    return "$ServerBaseUrl/v1/posts/videos/$uid/remove_from_bookmarks/";
+  }
 }
+// 3b79df4433f5aad10c8956e3bd0fb71e415790a7

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 const kPrimaryLightColor = Color(0xFFB32929);
-const kPrimaryGradientColor = LinearGradient(
+LinearGradient kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
-  colors: [Color(0xFF827F9), Color(0xFF2F80ED)],
+  colors: <Color>[Color(0xFF827F9), Color(0xFF2F80ED)],
 );
 const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xff1F2230);
@@ -12,10 +12,10 @@ const kGreen = Color(0xFF01CC97);
 const kAnimationDuration = Duration(milliseconds: 200);
 const kScaffoldColor = Color(0xff191A1D);
 
-const kIndicatorGradient = LinearGradient(
+LinearGradient kIndicatorGradient = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
-  colors: [Color(0xFF827F9), Color(0xFF2F80ED)],
+  colors: <Color>[Color(0xFF827F9), Color(0xFF2F80ED)],
 );
 
 Map<int, Color> color2 = {

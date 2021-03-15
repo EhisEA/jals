@@ -1,50 +1,134 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:jals/constants/app_urls.dart';
-import 'package:jals/constants/base_url.dart';
 import 'package:jals/enums/api_response.dart';
+import 'package:jals/models/login_status.dart';
 import 'package:jals/models/user_model.dart';
+import 'package:jals/route_paths.dart';
+import 'package:jals/services/navigationService.dart';
+import 'package:jals/utils/locator.dart';
+import 'package:jals/utils/network_utils.dart';
+import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthenticationService with ChangeNotifier {
+class AuthenticationService {
   final Client _client = Client();
-  String _userEmail = "";
-  String get userEmail => _userEmail;
-  UserModel _userModel;
-  UserModel get userModel => _userModel;
+  NavigationService _navigationService = locator<NavigationService>();
+  final NetworkConfig _networkConfig = NetworkConfig();
+  String _userSignUpEmail = "";
+  UserModel _currentUser;
+  UserModel get currentUser => _currentUser;
   int _otpCode;
   int get otpCode => _otpCode;
+
+  _populateCurrentUser(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser = UserModel.fromJson(user);
+      _saveUserLocally();
+    }
+  }
+
+  _updateCurrentUser(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser =
+          UserModel.fromJsonWithToken(_currentUser.key, user["data"]);
+      _saveUserLocally();
+    }
+  }
+
+  _populateCurrentUserFromPref(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser = UserModel.fromMap(user);
+      _saveUserLocally();
+    }
+  }
+
+  // for external data change
+  // where this changes occur
+  // ====== Edit profile (avatar, username, fullname)
+  // ====== view profile (cover image)
+  // ====== start up view (refresh user data incase changes where made from another device or from the web app)
+  void refreshUserData(Map<String, dynamic> user) {
+    if (user != null) {
+      _currentUser = UserModel.fromJson(user);
+
+      _saveUserLocally();
+    }
+  }
+
+  Future<LoginStatus> isUserLoggedIn() async {
+    // final UserService _userService = UserService();
+    SharedPreferences _preferences;
+    _preferences = await SharedPreferences.getInstance();
+    String userJsonString = _preferences.getString("userData");
+
+    print(userJsonString);
+    if (userJsonString != null) {
+      await _populateCurrentUserFromPref(jsonDecode(userJsonString));
+      if (_currentUser.isDetailsComplete()) {
+        return LoginStatus.LoginComplete;
+      }
+      return LoginStatus.LoginIncomplete;
+    }
+
+    return LoginStatus.NoUser;
+  }
+
+  _saveUserLocally() async {
+    SharedPreferences _preferences;
+    _preferences = await SharedPreferences.getInstance();
+    // print(_currentUser.dateOfBirth);
+    print("===============");
+    print(_currentUser.fullName);
+    print(_currentUser.dateOfBirth);
+    print(_currentUser.key);
+    print(_currentUser.id);
+
+    _preferences.setString("userData", jsonEncode(_currentUser.toJson()));
+  }
+
+  //=======================================================================
+  //* ============= ++++++++----- Otp generator ----------++++++++ =================
+  //=======================================================================
+
   int generateOtp() {
     Random rand = new Random.secure();
     // ignore: unused_local_variable
-    List<int> _otp = List<int>.generate(5, (i) => rand.nextInt(10));
-    int _otpCode =
-        int.tryParse("${_otp[0]}${_otp[1]}${_otp[2]}${_otp[3]}${_otp[4]}");
-    notifyListeners();
-    return _otpCode;
+    List<int> _generatedOtpCode =
+        List<int>.generate(6, (i) => rand.nextInt(10));
+    return int.parse(
+      "${_generatedOtpCode[0]}${_generatedOtpCode[1]}${_generatedOtpCode[2]}${_generatedOtpCode[3]}${_generatedOtpCode[4]}${_generatedOtpCode[5]}",
+    );
   }
 
-  Future<ApiResponse> checkEmail({@required String email}) async {
+  Future<ApiResponse> verifyEmail({@required String email}) async {
     try {
-      generateOtp();
+      print("Generating OTP Code....");
+      _otpCode = generateOtp();
       print(_otpCode);
+      _userSignUpEmail = email;
       Response response = await _client.post(
-        "${AppUrl.sendEmailToRegister}",
-        headers: headers,
+        "${AppUrl.VerifyEmail}",
         body: {
           "email": email,
-          "code": _otpCode,
+          "code": _otpCode.toString(),
         },
       );
-      if (response.statusCode == 200) {
-        _userEmail = email;
-        notifyListeners();
-        print(_userEmail);
+      var result = json.decode(response.body);
+      print(result);
+      print(response.statusCode);
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        print("There was Success...");
         return ApiResponse.Success;
       } else {
+        print("An Error Occured");
+        _networkConfig.isResponseSuccess(
+            response: result, errorTitle: "Sign Up Failure");
         return ApiResponse.Error;
       }
     } catch (e) {
@@ -53,12 +137,7 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> pushOtpCode({@required String code}) async {
-    print(code);
-    print(code);
-    print(code);
-    print(code);
-    print(code);
+  Future<ApiResponse> validateOtpCode({@required String code}) async {
     if (code == _otpCode.toString()) {
       return ApiResponse.Success;
     } else {
@@ -66,20 +145,18 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> createPassword({@required String password}) async {
+  Future<ApiResponse> registerUser({@required String password}) async {
     try {
       Response response = await _client.post(
-        "${AppUrl.sendRegistrationPassword}",
-        headers: headers,
+        "${AppUrl.RegisterUser}",
         body: {
-          "email": _userEmail,
+          "email": _userSignUpEmail,
           "password1": password,
           "password2": password,
         },
       );
-      final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData["status"]);
-      if (response.statusCode == 201) {
+      print(json.decode(response.body));
+      if (response.statusCode >= 200 || response.statusCode < 299) {
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
@@ -95,50 +172,44 @@ class AuthenticationService with ChangeNotifier {
   }) async {
     try {
       Response response = await _client.post(
-        "${AppUrl.login}",
-        headers: headers,
+        "${AppUrl.Login}",
         body: {
           "email": email,
           "password": password,
         },
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData["status"]);
-      print(decodedData["data"]["key"]);
-      if (response.statusCode == 200) {
+      print(decodedData);
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        debugPrint("LOGGING IN WAS SUCCESSFUL1");
         // decode data, get token and save to shared prefs
+        // _currentUser = UserModel.fromJson(decodedData);
+        _populateCurrentUser(decodedData);
+
+        debugPrint("Saved The User Object to the SharedPreferences....");
 
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
       }
     } catch (e) {
+      debugPrint(" The error was $e");
       return ApiResponse.Error;
     }
-  }
-
-  _getDataFromPrefs() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    var prefsData = sharedPrefs.getString("userData");
-    _userModel = jsonDecode(prefsData);
-    notifyListeners();
-  }
-
-  _saveDataLocally(data) async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    await sharedPrefs.setString(
-      "userData",
-      jsonEncode(
-        UserModel.fromJson(data),
-      ),
-    );
   }
 
   Future<bool> autoLogin() async {
     try {
       SharedPreferences sharePrefrences = await SharedPreferences.getInstance();
+
       if (sharePrefrences.containsKey("userData")) {
-        _getDataFromPrefs();
+        print("User Data was Saved ");
+        print("=============== current users==========1111");
+        Map<String, dynamic> decodedData =
+            json.decode(sharePrefrences.getString("userData"));
+        print(decodedData);
+        await _populateCurrentUserFromPref(decodedData);
+
         return true;
       } else {
         print("No User Data was saved");
@@ -150,28 +221,130 @@ class AuthenticationService with ChangeNotifier {
     }
   }
 
-  Future<ApiResponse> createUserAccountIfno(
-      {String userName,
-      String dateOfBirth,
-      String phoneNumber,
-      String avatarUrl}) async {
+  Future<ApiResponse> createUserAccountInfo({
+    String fullName,
+    String dateOfBirth,
+    String phoneNumber,
+    File avatar,
+  }) async {
     try {
-      Response response = await _client.post("${AppUrl.createUserAccountIno}",
-          headers: headers,
-          body: {
-            "user_name": userName,
-            "date_of_birth": dateOfBirth,
-            "phone_number": phoneNumber
-          });
+// ============================================================
+      final String url = "${AppUrl.CreateUserAccountInfo}";
+      //image is a file variable holdint the selected  image
+      final imageUploadRequest = MultipartRequest(
+        'POST',
+        Uri.parse(url),
+      );
+
+      // chack if avatar is not null
+      // before adding it to the request
+      if (avatar != null) {
+        // setting the image typr
+        final mimeTypeData =
+            lookupMimeType(avatar.path, headerBytes: [0xFF, 0xD8]).split("/");
+
+        // prepare the image
+        final file = MultipartFile(
+          "avatar",
+          File(avatar.path).readAsBytes().asStream(),
+          File(avatar.path).lengthSync(),
+          filename: avatar.path.split("/").last,
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1]),
+        );
+
+        // add the image to the request
+        imageUploadRequest.files.add(file);
+      }
+      imageUploadRequest.headers.addAll(httpHeaders());
+      imageUploadRequest.fields['full_name'] = fullName;
+      imageUploadRequest.fields['date_of_birth'] = dateOfBirth;
+      imageUploadRequest.fields['phone_number'] = phoneNumber;
+      final streamResponse = await imageUploadRequest.send();
+      final response = await Response.fromStream(streamResponse);
+
+// ============================================================
       final decodedData = jsonDecode(response.body);
       print(decodedData);
-      if (response.statusCode == 201) {
+      print(response.statusCode);
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        print("Successful ....");
+        _updateCurrentUser(decodedData);
         return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Account Verification Error");
+        return ApiResponse.Error;
       }
-      return ApiResponse.Error;
     } catch (e) {
       print(e);
       return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> sendForgotPasswordEmail({String email}) async {
+    try {
+      print("Generating the Otp code...");
+      _otpCode = generateOtp();
+      print(_otpCode);
+      _userSignUpEmail = email;
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPasswordEmail}",
+        headers: httpHeaders(),
+        body: {
+          "code": _otpCode,
+          "email": email,
+        },
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("Success");
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Forgot Password Error");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> sendForgotPassword(String password) async {
+    try {
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPassword}",
+        body: {
+          "email": _userSignUpEmail,
+          "new_password": password,
+        },
+        headers: httpHeaders(),
+      );
+      final decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Password Update Error");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
+  Future logOut() async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.clear();
+      print("Done");
+      await _navigationService.navigateToReplace(LoginViewRoute);
+      print("Exit 0");
+    } catch (e) {
+      print(e);
     }
   }
 }

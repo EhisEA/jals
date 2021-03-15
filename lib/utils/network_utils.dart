@@ -22,13 +22,27 @@ class NetworkConfig {
       // checking is the response is an error
       if (response["status"] == "error") {
         String errorMsg;
+        //1242  2688
         // checking is error maessage is a list or just a string
         // if it's a list it would display the first massage
         // else just the error massage
-        if (response["message"] is List) {
-          errorMsg = response["message"][0];
+
+        // print(response["error"].toList()[0]);
+        if (response["message"] is List || response["error"] is List) {
+          errorMsg = response["message"] != null
+              ? response["message"][0]
+              : response["error"][0];
+        } else if (response["message"] is Map || response["error"] is Map) {
+          Map message = response["message"] != null
+              ? response["message"]
+              : response["error"];
+          if (message.values.toList()[0] is List) {
+            errorMsg = message.values.toList()[0][0];
+          } else {
+            errorMsg = message.values.toList()[0];
+          }
         } else {
-          errorMsg = response["message"];
+          errorMsg = response["message"] ?? response["error"];
         }
         await _dialogService.showDialog(
           title: '$errorTitle',
@@ -36,7 +50,7 @@ class NetworkConfig {
         );
         // return false to indicate it was an error
         return false;
-      } else if (response["status"] == "success") {
+      } else if (response["status"] == "successful") {
         // return true to indicate the response status is success
         return true;
       }
@@ -45,6 +59,34 @@ class NetworkConfig {
       title: '$errorTitle',
       description: 'Network Error',
     );
+    return false;
+  }
+
+//checking if network call was successful
+  Future<bool> isResponseSuccessToast({@required response}) async {
+    // check if the rsponese is null
+    if (response != null) {
+      // checking is the response is an error
+      if (response["status"] == "error") {
+        String errorMsg;
+        //1242  2688
+        // checking is error maessage is a list or just a string
+        // if it's a list it would display the first massage
+        // else just the error massage
+        if (response["message"] is List) {
+          errorMsg = response["message"][0];
+        } else {
+          errorMsg = response["message"];
+        }
+        await Fluttertoast.showToast(msg: "$errorMsg");
+        // return false to indicate it was an error
+        return false;
+      } else if (response["status"] == "successful") {
+        // return true to indicate the response status is success
+        return true;
+      }
+    }
+    await Fluttertoast.showToast(msg: "Something went wrong");
     return false;
   }
 
@@ -80,10 +122,10 @@ class NetworkConfig {
 // =================================================
   // run a function if there is network or display
   // a dialog showing there is no network conection
-  onNetworkAvailabilityDialog(Function onNetwork) async {
+  Future onNetworkAvailabilityDialog(Function onNetwork) async {
     // if network  is available run the function [onNetwork]
     if (await _networkAvailable()) {
-      onNetwork();
+      await onNetwork();
     } else {
       // if network isn't available show a dialog
       await _dialogService.showDialog(
@@ -101,10 +143,10 @@ class NetworkConfig {
 // =================================================
   // run a function if there is network or display
   // a toast showing there is no network conection
-  onNetworkAvailabilityToast(Function onNetwork) async {
+  Future onNetworkAvailabilityToast(Function onNetwork) async {
     if (await _networkAvailable()) {
       // if network  is available run the function [onNetwork]
-      onNetwork();
+      await onNetwork();
     } else {
       // if network isn't available show a Toast
       Fluttertoast.showToast(
@@ -125,3 +167,5 @@ class NetworkConfig {
     }
   }
 }
+//  {status: error, message: {message: A user with this email already exists}}
+// {status: error, message: {non_field_errors: [Unable to log in with provided credentials.]}}
