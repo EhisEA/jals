@@ -69,7 +69,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                   radius: 25,
                                   child: IconButton(
                                     onPressed: () {
-                                      model.videoPlayerController.play();
+                                      // model.videoPlayerController.play();
+
                                       // model.tooglePlayMode();
                                       // print("just toogled the boolean value");
                                       // model.isPlaying
