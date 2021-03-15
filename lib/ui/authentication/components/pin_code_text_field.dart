@@ -195,9 +195,9 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
     _inputList = List<String>(widget.length);
     _initializeValues();
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 500),
-        // vsync: this,
-        TickerProvider: this);
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
     _offsetAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(.1, 0.0),

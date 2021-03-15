@@ -7,6 +7,7 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/comments_widget.dart';
 import 'package:stacked/stacked.dart';
+import 'package:video_player/video_player.dart';
 // import 'package:video_player/video_player.dart';
 
 class VideoPlayerView extends StatefulWidget {
@@ -43,7 +44,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                     color: Colors.black,
                     child: Stack(
                       children: [
-                        Image.asset("assets/images/image1.png"),
+                        // Image.asset("assets/images/image1.png"),
+                        VideoPlayer(
+                          model.videoPlayerController,
+                        ),
 
                         // Video
                         Align(
@@ -55,7 +59,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    // model.
+                                    model.tooglePlayMode();
+                                    model.isPlaying
+                                        ? model.videoPlayerController.pause()
+                                        : model.videoPlayerController.play();
                                   },
                                   icon: Icon(
                                     Icons.fast_rewind,
@@ -66,10 +73,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                 CircleAvatar(
                                   radius: 25,
                                   child: IconButton(
-                                    onPressed: () {
-                                      model.togglePlayMode();
-                                    },
-                                    icon: model.isPaused
+                                    onPressed: () {},
+                                    icon: model.isPlaying
                                         ? Icon(Icons.pause)
                                         : Icon(Icons.play_arrow),
                                   ),
@@ -133,14 +138,21 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                   GestureDetector(
-                     onTap:(){
-                       toogleBookmark();
-                       print("Toogled the bookmark boolean value..");
-                       videoModel.is_bookmarked?model.removeFrombookmarks(videoModel.uid):model.addVideoToBookmark(videoModel.uid);
-                     },
-                     child: buildIcon(JalsIcons.favorite, "Listen Later",color:videoModel.is_bookmarked||model.isBookmarked?Colors.red:Color(0xff979797),),
-                   ),
+                    GestureDetector(
+                      onTap: () {
+                        print("Toogled the bookmark boolean value..");
+                        widget.videoModel.is_bookmarked
+                            ? model.removeFrombookmarks(widget.videoModel.id)
+                            : model.addVideoToBookmark(widget.videoModel.id);
+                      },
+                      child: buildIcon(
+                        JalsIcons.favorite,
+                        "Listen Later",
+                        color: widget.videoModel.is_bookmarked
+                            ? Colors.red
+                            : Color(0xff979797),
+                      ),
+                    ),
                     buildIcon(JalsIcons.download, "Download"),
                     buildIcon(JalsIcons.comment, "Comment"),
                     buildIcon(JalsIcons.comment, "more"),
@@ -159,12 +171,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
 
   var p = 10.0;
 
-  Widget buildIcon(icon, text,{Color color}) {
+  Widget buildIcon(icon, text, {Color color}) {
     return Column(
       children: [
         Icon(
           icon,
-          color: color??Color(0xff979797),
+          color: color ?? Color(0xff979797),
         ),
         Text(
           text,

@@ -23,7 +23,7 @@ class VideoModel {
     this.is_bookmarked = false,
   });
 
-  int id;
+  String id;
   String title;
   String author;
   DateTime createdAt;

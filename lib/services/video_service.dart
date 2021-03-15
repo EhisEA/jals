@@ -22,7 +22,7 @@ class VideoService extends ChangeNotifier {
       print(decodedData["data"]);
       if (decodedData["status"] == "successful") {
         print("Success");
-        List videos = decodedData["data"];
+        List videos = decodedData["data"]["results"];
         return videos.map((e) => VideoModel.fromJson(e)).toList();
       } else {
         // Handle Error
@@ -44,7 +44,7 @@ class VideoService extends ChangeNotifier {
       print(decodedData["data"]);
       if (decodedData["status"] == "successful") {
         print("Success");
-        List videos = decodedData["data"];
+        List videos = decodedData["data"]["results"];
         return videos.map((e) => VideoModel.fromJson(e)).toList();
       } else {
         // Handle Error
@@ -67,8 +67,6 @@ class VideoService extends ChangeNotifier {
       if (decodedData["status"] == "sucessful") {
         return ApiResponse.Success;
       } else {
-
-
         print("An error occured");
         return ApiResponse.Error;
       }

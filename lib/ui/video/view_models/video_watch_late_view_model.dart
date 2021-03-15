@@ -34,8 +34,6 @@ class VideoWatchLaterViewModel extends BaseViewModel {
             description:
                 "An Error Occured while trying to fetch your video list, Please try again.");
       }
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 }
