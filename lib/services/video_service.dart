@@ -19,13 +19,13 @@ class VideoService extends ChangeNotifier {
         headers: httpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData["data"]);
+      print(decodedData);
       if (decodedData["status"] == "successful") {
-        print("Success");
         List videos = decodedData["data"]["results"];
         return videos.map((e) => VideoModel.fromJson(e)).toList();
       } else {
         // Handle Error
+        print("Error");
         return [];
       }
     } catch (e) {
@@ -41,12 +41,12 @@ class VideoService extends ChangeNotifier {
         headers: httpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData["data"]);
       if (decodedData["status"] == "successful") {
         print("Success");
         List videos = decodedData["data"]["results"];
         return videos.map((e) => VideoModel.fromJson(e)).toList();
       } else {
+        print("Error");
         // Handle Error
         return [];
       }
@@ -64,7 +64,7 @@ class VideoService extends ChangeNotifier {
         headers: httpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      if (decodedData["status"] == "sucessful") {
+      if (decodedData["status"] == "successful") {
         return ApiResponse.Success;
       } else {
         print("An error occured");
@@ -84,7 +84,8 @@ class VideoService extends ChangeNotifier {
         headers: httpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      if (decodedData["status"] == "sucessful") {
+      print(decodedData);
+      if (decodedData["status"] == "successful") {
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;

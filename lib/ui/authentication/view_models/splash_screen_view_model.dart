@@ -23,7 +23,8 @@ class SplashScreenViewModel extends BaseViewModel {
         _navigationService.navigateToReplace(AccountInfoViewRoute);
         break;
       case LoginStatus.LoginIncomplete:
-        _navigationService.navigateToReplace(HomeViewRoute);
+        // _navigationService.navigateToReplace(HomeViewRoute);
+        _navigationService.navigateToReplace(VideoLibraryRoute);
         break;
       default:
         _navigationService.navigateToReplace(WelcomeViewRoute);

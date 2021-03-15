@@ -27,7 +27,6 @@ class VideoAllViewModel extends BaseViewModel {
       } else {
         _allVideoList = [];
         notifyListeners();
-        print("Notified Listeners");
         await _dialogService.showDialog(
             title: "Fetching Videos Error",
             buttonTitle: "OK",

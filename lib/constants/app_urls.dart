@@ -7,7 +7,7 @@ Map<String, String> httpHeaders() {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   return {
-    "Authorization": "Token ${_authenticationService.currentUser.key}",
+    "Authorization": "Token 3d31aa3d1a1159e1eb494ad25f97ffcf661ca58b",
   };
 }
 
