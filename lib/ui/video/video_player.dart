@@ -58,12 +58,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {
-                                    model.tooglePlayMode();
-                                    model.isPlaying
-                                        ? model.videoPlayerController.pause()
-                                        : model.videoPlayerController.play();
-                                  },
+                                  onPressed: () {},
                                   icon: Icon(
                                     Icons.fast_rewind,
                                     color: Color(0xffD9D9D9),
@@ -73,7 +68,14 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                 CircleAvatar(
                                   radius: 25,
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      model.videoPlayerController.play();
+                                      // model.tooglePlayMode();
+                                      // print("just toogled the boolean value");
+                                      // model.isPlaying
+                                      //     ? model.videoPlayerController.pause()
+                                      //     : model.videoPlayerController.play();
+                                    },
                                     icon: model.isPlaying
                                         ? Icon(Icons.pause)
                                         : Icon(Icons.play_arrow),
@@ -99,8 +101,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   max: 100,
                   value: p,
                   onChanged: (value) {
-                    p = value;
-                    setState(() {});
+                    value = value;
+                    setState(() {
+                      // model.videoPlayerController
+                      //     .seekTo(Duration(seconds: p.toInt()));
+                    });
                   },
                 ),
                 Padding(

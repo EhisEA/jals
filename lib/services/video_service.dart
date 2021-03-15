@@ -25,7 +25,7 @@ class VideoService extends ChangeNotifier {
         return videos.map((e) => VideoModel.fromJson(e)).toList();
       } else {
         // Handle Error
-        print("Error");
+        print("Error Occured");
         return [];
       }
     } catch (e) {
