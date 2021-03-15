@@ -9,6 +9,7 @@ import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
+import 'package:jals/widgets/back_icon.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:stacked/stacked.dart';
 
@@ -74,17 +75,7 @@ class ArticleView extends StatelessWidget {
               elevation: 1,
               backgroundColor: Colors.white,
               leading: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: IconButton(
-                  onPressed: () {
-                    locator<NavigationService>().goBack();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
+                  padding: const EdgeInsets.all(10.0), child: BackIcon()),
               actions: [
                 model.article == null
                     ? SizedBox()

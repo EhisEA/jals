@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:jals/route_paths.dart';
+import 'package:jals/services/navigationService.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/article_tile.dart';
@@ -39,19 +42,21 @@ class LibraryView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 buildCategory(
-                  color: kPrimaryColor,
-                  title: "Video",
-                  icon: Icons.videocam,
-                ),
+                    color: kPrimaryColor,
+                    title: "Video",
+                    icon: Icons.videocam,
+                    routeName: VideoLibraryRoute),
                 buildCategory(
                   color: Color(0xff6FCF97),
                   title: "Audio",
                   icon: CupertinoIcons.double_music_note,
+                  routeName: ArticleLibraryViewRoute,
                 ),
                 buildCategory(
                   color: Color(0xff4E3FCE),
                   title: "Articles",
                   icon: CupertinoIcons.book,
+                  routeName: ArticleLibraryViewRoute,
                 ),
               ],
             ),
@@ -87,28 +92,34 @@ class LibraryView extends StatelessWidget {
     @required String title,
     @required Color color,
     @required IconData icon,
+    @required String routeName,
   }) {
-    return Container(
-      height: getProportionatefontSize(100),
-      width: getProportionatefontSize(100),
-      color: color,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: getProportionatefontSize(40),
-            color: Colors.white,
-          ),
-          SizedBox(height: 5),
-          Text(
-            "$title",
-            style: TextStyle(
+    return InkWell(
+      onTap: () {
+        locator<NavigationService>().navigateTo(routeName);
+      },
+      child: Container(
+        height: getProportionatefontSize(100),
+        width: getProportionatefontSize(100),
+        color: color,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: getProportionatefontSize(40),
               color: Colors.white,
-              fontSize: getProportionatefontSize(12),
             ),
-          ),
-        ],
+            SizedBox(height: 5),
+            Text(
+              "$title",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: getProportionatefontSize(12),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -21,7 +21,7 @@ class SplashScreenViewModel extends BaseViewModel {
 
         break;
       case LoginStatus.LoginComplete:
-        _navigationService.navigateToReplace(ArticleLibraryViewRoute);
+        _navigationService.navigateToReplace(HomeViewRoute);
         break;
       case LoginStatus.LoginIncomplete:
         _navigationService.navigateToReplace(AccountInfoViewRoute);

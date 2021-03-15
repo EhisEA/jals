@@ -5,6 +5,7 @@ import 'package:jals/ui/article/components/article_download.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
+import 'package:jals/widgets/back_icon.dart';
 
 class ArticleLibrary extends StatefulWidget {
   @override
@@ -32,10 +33,7 @@ class _ArticleLibraryState extends State<ArticleLibrary>
           backgroundColor: Colors.white,
           leading: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
+            child: BackIcon(),
           ),
           title: TextHeader(text: "Article"),
           centerTitle: true,
