@@ -75,6 +75,7 @@ class HomeView extends StatelessWidget {
       builder: (context) {
         return ViewModelBuilder<DailyReadViewModel>.reactive(
           viewModelBuilder: () => locator<DailyReadViewModel>(),
+          disposeViewModel: false,
           builder: (context, model, _) {
             return Center(
               child: Container(

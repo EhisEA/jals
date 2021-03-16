@@ -4,7 +4,6 @@ import 'package:jals/ui/audio/components/audio_playlist.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/article_tile.dart';
 
 import 'components/audio_all.dart';
 

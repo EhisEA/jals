@@ -17,6 +17,12 @@ import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService {
+  String abu = 'hold';
+  List<int> g = [
+    2,
+    4,
+    5,
+  ];
   final Client _client = Client();
   NavigationService _navigationService = locator<NavigationService>();
   final NetworkConfig _networkConfig = NetworkConfig();
@@ -255,7 +261,7 @@ class AuthenticationService {
         // add the image to the request
         imageUploadRequest.files.add(file);
       }
-      imageUploadRequest.headers.addAll(httpHeaders());
+      imageUploadRequest.headers.addAll(appHttpHeaders());
       imageUploadRequest.fields['full_name'] = fullName;
       imageUploadRequest.fields['date_of_birth'] = dateOfBirth;
       imageUploadRequest.fields['phone_number'] = phoneNumber;
@@ -289,7 +295,7 @@ class AuthenticationService {
       _userSignUpEmail = email;
       Response response = await _client.post(
         "${AppUrl.SendForgotPasswordEmail}",
-        headers: httpHeaders(),
+        headers: appHttpHeaders(),
         body: {
           "code": _otpCode,
           "email": email,
@@ -319,7 +325,7 @@ class AuthenticationService {
           "email": _userSignUpEmail,
           "new_password": password,
         },
-        headers: httpHeaders(),
+        headers: appHttpHeaders(),
       );
       final decodedData = jsonDecode(response.body);
       print(decodedData);

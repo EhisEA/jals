@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/services/video_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class VideoPlayerViewViewModel extends BaseViewModel {
-  NetworkConfig _networkConfig = new NetworkConfig();
   VideoService _videoService = locator<VideoService>();
-
+  bool isPaused = false;
   VideoPlayerController videoPlayerController;
-  bool isPlaying = false;
-  @override
-  void dispose() {
-    videoPlayerController.dispose();
-    super.dispose();
-  }
-
-  tooglePlayMode() {
-    isPlaying = !isPlaying;
+  NetworkConfig _networkConfig = new NetworkConfig();
+  void togglePlayMode() {
+    isPaused = !isPaused;
     notifyListeners();
   }
 

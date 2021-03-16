@@ -16,7 +16,7 @@ class VideoService extends ChangeNotifier {
     try {
       Response response = await _client.get(
         "${AppUrl.VideosList}",
-        headers: httpHeaders(),
+        headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData);
@@ -38,7 +38,7 @@ class VideoService extends ChangeNotifier {
     try {
       Response response = await _client.get(
         "${AppUrl.BookmarkedVideos}",
-        headers: httpHeaders(),
+        headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       if (decodedData["status"] == "successful") {
@@ -61,7 +61,7 @@ class VideoService extends ChangeNotifier {
       print("Loading;");
       Response response = await _client.get(
         "${AppUrl.addToBoomarks(uid: uid)}",
-        headers: httpHeaders(),
+        headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       if (decodedData["status"] == "successful") {
@@ -81,7 +81,7 @@ class VideoService extends ChangeNotifier {
       print("Loading;");
       Response response = await _client.get(
         "${AppUrl.removeFromBookmarks(uid: uid)}",
-        headers: httpHeaders(),
+        headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData);

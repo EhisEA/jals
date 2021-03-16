@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jals/enums/password_type.dart';
 import 'package:jals/enums/verification_type.dart';
+import 'package:jals/models/article_model.dart';
 import 'package:jals/route_paths.dart';
+import 'package:jals/ui/article/article_library_view.dart';
+import 'package:jals/ui/article/article_view.dart';
 import 'package:jals/ui/authentication/account_info_view.dart';
 import 'package:jals/ui/authentication/email_login_view.dart';
 import 'package:jals/ui/authentication/forgot_password_view.dart';
@@ -11,7 +14,7 @@ import 'package:jals/ui/authentication/sign_up_view.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
-import 'package:jals/ui/home/home_view.dart';
+import 'package:jals/ui/home/home_base.dart';
 import 'package:jals/ui/video/video_library_view.dart';
 
 import '../ui/undefinedRoute.dart';
@@ -45,9 +48,7 @@ class AppRouter {
       case PasswordViewRoute:
         PasswordType passwordType = settings.arguments as PasswordType;
         return MaterialPageRoute(
-            builder: (context) => PasswordView(
-                  passwordType: passwordType,
-                ));
+            builder: (context) => PasswordView(passwordType: passwordType));
         break;
       case ForgotPasswordViewRoute:
         return MaterialPageRoute(builder: (context) => ForgotPasswordView());
@@ -59,7 +60,18 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => AccountInfoView());
         break;
       case HomeViewRoute:
-        return MaterialPageRoute(builder: (context) => HomeView());
+        return MaterialPageRoute(builder: (context) => HomeBaseView());
+        break;
+      case ArticleLibraryViewRoute:
+        return MaterialPageRoute(builder: (context) => ArticleLibrary());
+        break;
+      case ArticleViewRoute:
+        ArticleModel article = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => ArticleView(
+            article: article,
+          ),
+        );
         break;
       // case :
       //   return MaterialPageRoute(

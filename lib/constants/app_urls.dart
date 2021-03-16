@@ -3,11 +3,11 @@ import 'package:jals/utils/locator.dart';
 
 const String ServerBaseUrl = "http://backendjals.herokuapp.com";
 
-Map<String, String> httpHeaders() {
+Map<String, String> appHttpHeaders() {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   return {
-    "Authorization": "Token 3d31aa3d1a1159e1eb494ad25f97ffcf661ca58b",
+    "Authorization": "Token ${_authenticationService.currentUser.key}",
   };
 }
 
@@ -60,5 +60,22 @@ class AppUrl {
   static String removeFromBookmarks({String uid}) {
     return "$ServerBaseUrl/v1/posts/videos/$uid/remove_from_bookmarks/";
   }
+
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // articles
+  // =============================================================
+  // =============================================================
+  // =============================================================
+
+  static const ArticleList = "$ServerBaseUrl/v1/posts/articles/";
+  static const TrendingList = "$ServerBaseUrl/v1/posts/articles/";
+  static const ArticleBookmarkList =
+      "$ServerBaseUrl/v1/posts/articles/get_bookmarks/";
+  static const BookmarkArticle = "$ServerBaseUrl/v1/posts/articles/";
+  static const NewsList = "$ServerBaseUrl/v1/posts/news/";
+
+// 3b79df4433f5aad10c8956e3bd0fb71e415790a7
 }
 // 3b79df4433f5aad/10c8956e3bd0fb71e415790a7

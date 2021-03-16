@@ -12,3 +12,5 @@ const String HomeViewRoute = "HomeViewRoute";
 const String CreateSignUpPasswordViewRoute = "CreateSignUpPasswordViewRoute";
 const String PaymentPageWithTokenViewRoute = "PaymentPageWithTokenViewRoute";
 const String VideoLibraryRoute = "videoLibraryRoute";
+const String ArticleLibraryViewRoute = "ArticleLibraryViewRoute";
+const String ArticleViewRoute = "ArticleViewRoute";

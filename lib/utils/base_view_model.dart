@@ -30,7 +30,7 @@ class BaseViewModel extends ChangeNotifier {
 
   setBusy(ViewState currentState) {
     _state = currentState;
-    notifyListeners();
+    if (!_disposed) notifyListeners();
   }
 
   setSecondaryBusy(ViewState currentState) {

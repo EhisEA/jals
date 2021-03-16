@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:jals/services/hive_database_service.dart';
-import 'package:jals/ui/audio/audio_library_view.dart';
-import 'package:jals/ui/authentication/splashscreen_view.dart';
+
+import 'package:jals/ui/home/home_base.dart';
 import 'package:jals/utils/theme.dart';
 import 'utils/locator.dart';
 import 'managers/dialog_manager.dart';
@@ -53,7 +51,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme().themeData,
       onGenerateRoute: AppRouter.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
-      home: SplashScreenView(),
+      home: HomeBaseView(),
     );
 
     // home: VideoPlayer());
