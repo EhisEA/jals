@@ -4,10 +4,10 @@ import 'package:jals/utils/locator.dart';
 const String ServerBaseUrl = "http://backendjals.herokuapp.com";
 
 Map<String, String> appHttpHeaders() {
-  final AuthenticationService _authenticationService =
-      locator<AuthenticationService>();
+  // locator<AuthenticationService>();
   return {
-    "Authorization": "Token ${_authenticationService.currentUser.key}",
+    /////////////////////////////
+    "Authorization": "Token  47fdfc2bcdcd5b4fd4193934c496df6e20b48622"
   };
 }
 
@@ -16,7 +16,7 @@ class AppUrl {
   // =============================================================
   // =============================================================
   // AUTHENTICATION
-  // =============================================================
+  // =============================================================////////////////////////////////////////////////////////////////////////////////////////
   // =============================================================
   // =============================================================
   static const String Login = "$ServerBaseUrl/v1/rest-auth/login/";

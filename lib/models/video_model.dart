@@ -21,6 +21,7 @@ class VideoModel {
     this.coverImage,
     // ignore: non_constant_identifier_names
     this.is_bookmarked = false,
+    this.isDownloaded = false,
   });
 
   String id;
@@ -33,6 +34,7 @@ class VideoModel {
   String coverImage;
   // ignore: non_constant_identifier_names
   bool is_bookmarked;
+  bool isDownloaded;
   factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
         id: json["id"],
         title: json["title"],

@@ -119,11 +119,7 @@ packages:
       name: cached_network_image
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "2.5.1"
-=======
-    version: "2.5.0"
->>>>>>> 4d629bf52d57cc7c6875ac9852dd98bc9f8a6fb7
   characters:
     dependency: transitive
     description:

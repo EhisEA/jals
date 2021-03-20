@@ -1,0 +1,1 @@
+enum SmallViewState { Occuppied, Done }
