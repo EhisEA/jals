@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:jals/enums/small_viewstate.dart';
 import 'package:jals/models/video_model.dart';
 import 'package:jals/ui/video/view_models/video_player_view_model.dart';
-import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
@@ -114,7 +113,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 ),
                 Slider(
                   min: 0.0,
-                  max: model.totalTime.toDouble(),
+                  max: model.totalTime.toDouble() ?? 50.0,
                   value: model.currentTime.toDouble(),
                   onChanged: (value) {
                     print(value);

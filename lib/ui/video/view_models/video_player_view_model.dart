@@ -23,25 +23,11 @@ class VideoPlayerViewViewModel extends BaseViewModel {
   }
 
   String convertTotal() {
-    var value = totalTime / 60;
-    if (value >= 1) {
-      return "${value.toInt()}" +
-          ":" +
-          "${value.remainder(1.0).roundToDouble()}";
-    } else {
-      return "$value" + ":" + "00";
-    }
+    return totalDuration == null ? "0.0" : "${totalDuration.inMinutes}";
   }
 
   String convertCurrent() {
-    var value = currentTime / 60;
-    if (value >= 1) {
-      return "${value.toInt()}" +
-          ":" +
-          "${value.remainder(1.0).roundToDouble().toInt()}";
-    } else {
-      return "$value" + ":" + "00";
-    }
+    return currentDuration == null ? "0.0" : "${currentDuration.inMinutes}";
   }
 
   formart(Duration d) => d.toString().split('.').first.padLeft(8, '0');
