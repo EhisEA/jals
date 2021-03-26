@@ -3,6 +3,9 @@ import 'package:jals/services/navigationService.dart';
 import 'package:jals/utils/locator.dart';
 
 class BackIcon extends StatelessWidget {
+  final Color color;
+
+  const BackIcon({Key key, this.color}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -11,7 +14,7 @@ class BackIcon extends StatelessWidget {
       },
       icon: Icon(
         Icons.arrow_back_ios,
-        color: Colors.black,
+        color: color??Colors.black,
       ),
     );
   }
