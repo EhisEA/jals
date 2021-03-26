@@ -50,7 +50,7 @@ class LibraryView extends StatelessWidget {
                   color: Color(0xff6FCF97),
                   title: "Audio",
                   icon: CupertinoIcons.double_music_note,
-                  routeName: ArticleLibraryViewRoute,
+                  routeName: AudioLibraryViewRoute,
                 ),
                 buildCategory(
                   color: Color(0xff4E3FCE),
