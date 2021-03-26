@@ -4,7 +4,7 @@ import 'package:jals/ui/audio/components/audio_playlist.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/article_tile.dart';
+import 'package:jals/widgets/back_icon.dart';
 
 import 'components/audio_all.dart';
 
@@ -34,10 +34,7 @@ class _AudioLibraryState extends State<AudioLibrary>
           backgroundColor: Colors.white,
           leading: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
+            child: BackIcon(),
           ),
           title: TextHeader(text: "Audio Library"),
           centerTitle: true,
