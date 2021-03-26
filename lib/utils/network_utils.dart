@@ -62,6 +62,24 @@ class NetworkConfig {
     return false;
   }
 
+
+  //checking if network call was successful
+  Future<bool> isResponseSuccessBool(
+      {@required response}) async {
+    // check if the rsponese is null
+    if (response != null) {
+      // checking is the response is an error
+      if (response["status"] == "error") {
+        // return false to indicate it was an error
+        return false;
+      } else if (response["status"] == "successful") {
+        // return true to indicate the response status is success
+        return true;
+      }
+    }
+    return false;
+  }
+
 //checking if network call was successful
   Future<bool> isResponseSuccessToast({@required response}) async {
     // check if the rsponese is null
