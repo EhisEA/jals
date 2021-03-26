@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jals/constants/dummy_image.dart';
 import 'package:jals/models/article_model.dart';
+import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/video_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
@@ -78,40 +79,44 @@ class ArticleTile extends StatelessWidget {
 }
 
 class AudioTile extends StatelessWidget {
-  final String image, title, author;
+  final AudioModel audio;
+  final _navigationService=locator<NavigationService>();
+   AudioTile({Key key, this.audio}) : super(key: key);
 
-  const AudioTile(
-      {Key key, @required this.image, @required this.title, this.author = ""})
-      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Row(
-      children: [
-        Container(
-          height: getProportionatefontSize(60),
-          width: getProportionatefontSize(60),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: ShowNetworkImage(imageUrl: image),
-          ),
-        ),
-        Expanded(
-          child: ListTile(
-            trailing: Icon(Icons.more_vert),
-            title: TextTitle(
-              text: "$title",
-              maxLines: 2,
+    return InkWell(
+      onTap: (){
+        _navigationService.navigateTo(AudioPlayerViewRoute,argument: audio);
+      },
+      child: Row(
+        children: [
+          Container(
+            height: getProportionatefontSize(60),
+            width: getProportionatefontSize(60),
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: ShowNetworkImage(imageUrl: audio.coverImage),
             ),
-            subtitle: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 7.0),
-              child: TextCaption(
-                text: "$author",
+          ),
+          Expanded(
+            child: ListTile(
+              trailing: Icon(Icons.more_vert),
+              title: TextTitle(
+                text: "${audio.title}",
+                maxLines: 2,
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 7.0),
+                child: TextCaption(
+                  text: "${audio.author}",
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
