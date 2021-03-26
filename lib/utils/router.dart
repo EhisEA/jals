@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:jals/enums/password_type.dart';
 import 'package:jals/enums/verification_type.dart';
 import 'package:jals/models/article_model.dart';
+import 'package:jals/models/audio_model.dart';
+import 'package:jals/models/playlist_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/ui/article/article_library_view.dart';
 import 'package:jals/ui/article/article_view.dart';
+import 'package:jals/ui/audio/audio_library_view.dart';
+import 'package:jals/ui/audio/audio_player_view.dart';
+import 'package:jals/ui/audio/audio_playlist_view.dart';
 import 'package:jals/ui/authentication/account_info_view.dart';
 import 'package:jals/ui/authentication/email_login_view.dart';
 import 'package:jals/ui/authentication/forgot_password_view.dart';
@@ -72,6 +77,25 @@ class AppRouter {
             article: article,
           ),
         );
+        break;
+      case AudioPlaylistViewRoute:
+        PlayListModel playList = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => AudioPlaylistView(
+            playList: playList,
+          ),
+        );
+        break;
+      case AudioPlayerViewRoute:
+        AudioModel audio = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => AudioPlayerView(
+            audio: audio,
+          ),
+        );
+        break;
+      case AudioLibraryViewRoute:
+        return MaterialPageRoute(builder: (context) => AudioLibrary());
         break;
       // case :
       //   return MaterialPageRoute(
