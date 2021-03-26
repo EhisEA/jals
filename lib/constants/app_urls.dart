@@ -67,5 +67,20 @@ class AppUrl {
   static const BookmarkArticle = "$ServerBaseUrl/v1/posts/articles/";
   static const NewsList = "$ServerBaseUrl/v1/posts/news/";
 
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // Audio
+  // =============================================================
+  // =============================================================
+  // ===================================
+  static const AudioList = "$ServerBaseUrl/v1/posts/audio/";
+  static const Playlist = "$ServerBaseUrl/v1/posts/playlists/";
+  // static const TrendingList = "$ServerBaseUrl/v1/posts/articles/";
+  // static const ArticleBookmarkList =
+  //     "$ServerBaseUrl/v1/posts/articles/get_bookmarks/";
+  // static const BookmarkArticle = "$ServerBaseUrl/v1/posts/articles/";
+  // static const NewsList = "$ServerBaseUrl/v1/posts/news/";
+
 // 3b79df4433f5aad10c8956e3bd0fb71e415790a7
 }
