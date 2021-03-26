@@ -11,7 +11,7 @@ class VideoAllViewModel extends BaseViewModel {
   DialogService _dialogService = locator<DialogService>();
   List<VideoModel> _allVideoList = [];
   List<VideoModel> get allVideoList => [..._allVideoList];
-
+  bool hasError = false;
   getAllVideos() async {
     setBusy(ViewState.Busy);
     await _networkConfig.onNetworkAvailabilityDialog(onNetwork);
@@ -23,19 +23,21 @@ class VideoAllViewModel extends BaseViewModel {
       List<VideoModel> videos = await _videoService.getVideoList();
       if (videos.length >= 1) {
         _allVideoList = videos;
+        hasError = false;
         notifyListeners();
       } else {
+        hasError = true;
         _allVideoList = [];
         notifyListeners();
-        print("Notified Listeners");
-        await _dialogService.showDialog(
-            title: "Fetching Videos Error",
-            buttonTitle: "OK",
-            description:
-                "An Error Occured while trying to fetch your video list, Please try again.");
+        // await _dialogService.showDialog(
+        //     title: "Fetching Videos Error",
+        //     buttonTitle: "OK",
+        //     description:
+        //         "An Error Occured while trying to fetch your video list, Please try again.");
       }
     } catch (e) {
       print(e);
+      hasError = true;
     }
   }
 }

@@ -19,9 +19,12 @@ class VideoModel {
     this.postType,
     this.dataUrl,
     this.coverImage,
+    // ignore: non_constant_identifier_names
+    this.is_bookmarked = false,
+    this.isDownloaded = false,
   });
 
-  int id;
+  String id;
   String title;
   String author;
   DateTime createdAt;
@@ -29,7 +32,9 @@ class VideoModel {
   String postType;
   String dataUrl;
   String coverImage;
-
+  // ignore: non_constant_identifier_names
+  bool is_bookmarked;
+  bool isDownloaded;
   factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
         id: json["id"],
         title: json["title"],
@@ -39,6 +44,7 @@ class VideoModel {
         postType: json["post_type"],
         dataUrl: json["data_url"],
         coverImage: json["cover_image"],
+        is_bookmarked: json["is_bookmarked"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,5 +56,6 @@ class VideoModel {
         "post_type": postType,
         "data_url": dataUrl,
         "cover_image": coverImage,
+        "is_bookmarked": false,
       };
 }
