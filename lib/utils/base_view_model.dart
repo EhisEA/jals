@@ -28,7 +28,7 @@ class BaseViewModel extends ChangeNotifier {
   ViewState get secondaryState => _secondaryState;
   bool get isSecondaryBusy => _secondaryState == ViewState.Busy;
 
-  setBusy(ViewState currentState) {
+  void setBusy(ViewState currentState) {
     _state = currentState;
     if (!_disposed) notifyListeners();
   }

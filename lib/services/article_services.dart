@@ -91,9 +91,17 @@ class ArticleService {
     }
   }
 
+  String addTo(String url, List<String> others) {
+    others.forEach((element) {
+      url = url + element;
+    });
+    return url;
+  }
+
   Future<bool> addArticleToBookmark(String id) async {
     try {
       String url = AppUrl.ArticleList + id + "/add_to_bookmarks/";
+      url = addTo(AppUrl.ArticleList, [id, "/add_to_bookmarks/"]);
       http.Response response = await http.get(
         url,
         headers: appHttpHeaders(),
