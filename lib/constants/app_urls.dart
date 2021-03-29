@@ -4,10 +4,10 @@ import 'package:jals/utils/locator.dart';
 const String ServerBaseUrl = "http://backendjals.herokuapp.com";
 
 Map<String, String> appHttpHeaders() {
-  final AuthenticationService _authenticationService =
-      locator<AuthenticationService>();
+  // locator<AuthenticationService>();
   return {
-    "Authorization": "Token ${_authenticationService.currentUser.key}",
+    /////////////////////////////
+    "Authorization": "Token  47fdfc2bcdcd5b4fd4193934c496df6e20b48622"
   };
 }
 
@@ -16,7 +16,7 @@ class AppUrl {
   // =============================================================
   // =============================================================
   // AUTHENTICATION
-  // =============================================================
+  // =============================================================////////////////////////////////////////////////////////////////////////////////////////
   // =============================================================
   // =============================================================
   static const String Login = "$ServerBaseUrl/v1/rest-auth/login/";
@@ -48,9 +48,18 @@ class AppUrl {
   // =============================================================
   // =============================================================
   // =============================================================
-
   static const VideosList = "$ServerBaseUrl/v1/posts/videos/";
   static const VideosSearch = "$ServerBaseUrl/v1/posts/videos/search/";
+
+  static const BookmarkedVideos =
+      '$ServerBaseUrl/v1/posts/videos/get_bookmarks/';
+  static String addToBoomarks({String uid}) {
+    return "$ServerBaseUrl/v1/posts/videos/$uid/add_to_bookmarks/";
+  }
+
+  static String removeFromBookmarks({String uid}) {
+    return "$ServerBaseUrl/v1/posts/videos/$uid/remove_from_bookmarks/";
+  }
 
   // =============================================================
   // =============================================================
@@ -84,3 +93,4 @@ class AppUrl {
 
 // 3b79df4433f5aad10c8956e3bd0fb71e415790a7
 }
+// 3b79df4433f5aad/10c8956e3bd0fb71e415790a7

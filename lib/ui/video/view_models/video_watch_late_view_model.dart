@@ -20,14 +20,13 @@ class VideoWatchLaterViewModel extends BaseViewModel {
 
   onNetwork() async {
     try {
-      var videos = await _videoService.getVideoList();
+      List<VideoModel> videos = await _videoService.getBookmarkedVideoList();
       if (videos.length >= 1) {
         _videoWatchLaterList = videos;
         notifyListeners();
       } else {
         _videoWatchLaterList = [];
         notifyListeners();
-        print("Notified Listeners");
         await _dialogService.showDialog(
             title: "Fetching Videos Error",
             buttonTitle: "OK",
