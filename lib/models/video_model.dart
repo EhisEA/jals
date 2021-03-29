@@ -1,41 +1,39 @@
 // To parse this JSON data, do
 //
-//     final VideoModel = VideoModelFromJson(jsonString);
+//     final videoModel = videoModelFromJson(jsonString);
 
 import 'dart:convert';
 
-VideoModel videoModelFromJson(String str) =>
-    VideoModel.fromJson(json.decode(str));
+VideoModel videoModelFromJson(String str) => VideoModel.fromJson(json.decode(str));
 
 String videoModelToJson(VideoModel data) => json.encode(data.toJson());
 
 class VideoModel {
-  VideoModel({
-    this.id,
-    this.title,
-    this.author,
-    this.createdAt,
-    this.price,
-    this.postType,
-    this.dataUrl,
-    this.coverImage,
-    // ignore: non_constant_identifier_names
-    this.is_bookmarked = false,
-    this.isDownloaded = false,
-  });
+    VideoModel({
+        this.id,
+        this.title,
+        this.author,
+        this.createdAt,
+        this.price,
+        this.postType,
+        this.dataUrl,
+        this.coverImage,
+        this.isBookmarked,
+        this.purchased,
+    });
 
-  String id;
-  String title;
-  String author;
-  DateTime createdAt;
-  int price;
-  String postType;
-  String dataUrl;
-  String coverImage;
-  // ignore: non_constant_identifier_names
-  bool is_bookmarked;
-  bool isDownloaded;
-  factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
+    String id;
+    String title;
+    String author;
+    DateTime createdAt;
+    int price;
+    String postType;
+    String dataUrl;
+    String coverImage;
+    bool isBookmarked;
+    bool purchased;
+
+    factory VideoModel.fromJson(Map<String, dynamic> json) => VideoModel(
         id: json["id"],
         title: json["title"],
         author: json["author"],
@@ -44,10 +42,11 @@ class VideoModel {
         postType: json["post_type"],
         dataUrl: json["data_url"],
         coverImage: json["cover_image"],
-        is_bookmarked: json["is_bookmarked"],
-      );
+        isBookmarked: json["is_bookmarked"],
+        purchased: json["purchased"],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
         "author": author,
@@ -56,6 +55,7 @@ class VideoModel {
         "post_type": postType,
         "data_url": dataUrl,
         "cover_image": coverImage,
-        "is_bookmarked": false,
-      };
+        "is_bookmarked": isBookmarked,
+        "purchased": purchased,
+    };
 }
