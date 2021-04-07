@@ -5,6 +5,7 @@ import 'package:jals/ui/video/components/video_watch_later.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
+import 'package:jals/widgets/back_icon.dart';
 
 class VideoLibrary extends StatefulWidget {
   @override
@@ -30,13 +31,7 @@ class _VideoLibraryState extends State<VideoLibrary>
         appBar: AppBar(
           elevation: 1,
           backgroundColor: Colors.white,
-          leading: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-          ),
+          leading:BackIcon(),
           title: TextHeader(text: "Video Library"),
           centerTitle: true,
           actions: [

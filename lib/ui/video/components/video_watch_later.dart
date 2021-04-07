@@ -4,9 +4,15 @@ import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:stacked/stacked.dart';
 
-class VideoWatchLater extends StatelessWidget {
+class VideoWatchLater extends StatefulWidget {
+  @override
+  _VideoWatchLaterState createState() => _VideoWatchLaterState();
+}
+
+class _VideoWatchLaterState extends State<VideoWatchLater> with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ViewModelBuilder<VideoWatchLaterViewModel>.reactive(
       onModelReady: (model) => model.getAllVideos(),
       disposeViewModel: false,
@@ -36,4 +42,8 @@ class VideoWatchLater extends StatelessWidget {
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

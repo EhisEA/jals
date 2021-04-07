@@ -3,34 +3,51 @@ import 'package:flutter/material.dart';
 import 'package:jals/enums/small_viewstate.dart';
 import 'package:jals/models/video_model.dart';
 import 'package:jals/ui/video/view_models/video_player_view_model.dart';
+import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/comments_widget.dart';
+import 'package:jals/widgets/back_icon.dart';
+import 'package:jals/widgets/comment_widget.dart';
+import 'package:jals/widgets/extended_text_field.dart';
+import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerView extends StatefulWidget {
-  final VideoModel videoModel;
+  final VideoModel video;
 
-  const VideoPlayerView({Key key, @required this.videoModel}) : super(key: key);
+  const VideoPlayerView({Key key, this.video}) : super(key: key);
   @override
   _VideoPlayerViewState createState() => _VideoPlayerViewState();
 }
 
 class _VideoPlayerViewState extends State<VideoPlayerView> {
+  CommentWidgetViewModel _commentWidgetViewModel;
+  @override
+  dispose() {
+    super.dispose();
+    _commentWidgetViewModel.dispose();
+  }
+
+  @override
+  void initState() {
+    _commentWidgetViewModel = CommentWidgetViewModel(widget.video.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<VideoPlayerViewViewModel>.reactive(
       onModelReady: (model) {
-        model.initializeVideo(videoUrl: widget.videoModel.dataUrl);
+        model.initializeVideo(videoModel: widget.video);
       },
       viewModelBuilder: () => VideoPlayerViewViewModel(),
       builder: (context, model, child) {
         return Scaffold(
           appBar: AppBar(
-            leading: Icon(Icons.arrow_back_ios, color: Colors.black),
+            leading: BackIcon(),
             title: TextHeader(
               text: "Watch Video",
             ),
@@ -76,17 +93,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                   radius: 25,
                                   child: IconButton(
                                     // move this function to viewmodel
-                                    onPressed: () {
-                                      setState(() {
-                                        model.videoPlayerController.value
-                                                .isPlaying
-                                            ? model.videoPlayerController
-                                                .pause()
-                                            : model.videoPlayerController
-                                                .play();
-                                      });
-                                    },
-                                    icon: !model.videoPlayerController.value
+                                    onPressed: model.pauseOrPlay,
+                                    icon: model.videoPlayerController.value
                                             .isPlaying
                                         ? Icon(Icons.pause)
                                         : Icon(Icons.play_arrow),
@@ -116,16 +124,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   max: model.totalTime.toDouble() ?? 50.0,
                   value: model.currentTime.toDouble(),
                   onChanged: (value) {
-                    print(value);
-                    setState(
-                      () {
-                        model.videoPlayerController.seekTo(
-                          Duration(
-                            seconds: value.toInt(),
-                          ),
-                        );
-                      },
-                    );
+                    model.seek(Duration(seconds: value.toInt()));
                   },
                 ),
                 Padding(
@@ -147,7 +146,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   // width: MediaQuery.of(context).size.width / 1.6,
                   child: TextHeader3(
-                    text: "${widget.videoModel.title}",
+                    text: "${widget.video.title}",
                     center: true,
                   ),
                 ),
@@ -155,7 +154,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: TextCaption2(
-                    text: "${widget.videoModel.author}",
+                    text: "${widget.video.author}",
                     center: true,
                   ),
                 ),
@@ -165,33 +164,39 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        print("Toogled the bookmark boolean value..");
-                        setState(() {
-                          widget.videoModel.is_bookmarked
-                              ? model.removeFromBookmarks(widget.videoModel.id)
-                              : model.addToBookmarks(widget.videoModel.id);
-                        });
+
+                        model.video.isBookmarked
+                            ? model.removeFromBookmarks(widget.video.id)
+                            : model.addToBookmarks(widget.video.id);
                       },
                       child: buildIcon(
                         model.smallViewState == SmallViewState.Occuppied
                             ? Icons.wifi_protected_setup
-                            : widget.videoModel.is_bookmarked
+                            : model.video.isBookmarked
                                 ? Icons.favorite
                                 : JalsIcons.favorite,
                         "Listen Later",
-                        color: widget.videoModel.is_bookmarked
-                            ? Colors.red
-                            : Color(0xff979797),
+                        color: 
+                        model.video.isBookmarked
+                            ? kPrimaryColor//Colors.red
+                            : null,
                       ),
                     ),
                     buildIcon(JalsIcons.download, "Download"),
-                    buildIcon(JalsIcons.comment, "Comment"),
-                    buildIcon(JalsIcons.comment, "more"),
+                    InkWell(
+                      onTap: () {
+                        showBottomSheet(context, _commentWidgetViewModel);
+                      },
+                      child: buildIcon(JalsIcons.comment, "Comment"),
+                    ),
+                    buildIcon(JalsIcons.more, "more"),
                   ],
                 ),
                 SizedBox(height: 25),
                 Divider(),
-                CommentsWidget()
+                CommentWidget(
+                  commentWidgetViewModel: _commentWidgetViewModel,
+                )
               ],
             ),
           ),
@@ -200,12 +205,65 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     );
   }
 
-  var p = 10.0;
+  showBottomSheet(
+      BuildContext context, CommentWidgetViewModel commentWidgetViewModel) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => ViewModelBuilder<CommentWidgetViewModel>.reactive(
+          viewModelBuilder: () => commentWidgetViewModel,
+          disposeViewModel: false,
+          builder: (context, model, _) {
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: model.isSecondaryBusy
+                  ? Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      child: Form(
+                        key: model.formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Center(child: TextHeader(text: "Comment")),
+                            SizedBox(height: 20),
+                            TextCaption(text: "Comment"),
+                            SizedBox(height: 10),
+                            ExtendedTextField(
+                              title: "Comment",
+                              controller: model.commentController,
+                              multiline: true,
+                            ),
+                            SizedBox(height: 30),
+                            InkWell(
+                              onTap: model.sendComment,
+                              child: Center(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: kPrimaryColor,
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 50,
+                                    vertical: 10,
+                                  ),
+                                  child: TextCaptionWhite(
+                                    text: "Post Comment",
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+            );
+          }),
+    );
+  }
 
   Widget buildIcon(IconData icon, text, {Color color}) {
     return Column(
       children: [
-        Icon(icon),
+        Icon(icon,color: color??Colors.black87,),
         Text(
           text,
           style: TextStyle(

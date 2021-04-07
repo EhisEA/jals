@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/enums/small_viewstate.dart';
+import 'package:jals/models/video_model.dart';
+import 'package:jals/services/comment_service.dart';
 import 'package:jals/services/video_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
@@ -8,10 +11,12 @@ import 'package:jals/utils/network_utils.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerViewViewModel extends BaseViewModel {
+  format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+
   VideoPlayerController videoPlayerController;
-  bool bookmark = false;
+  VideoModel video;
   NetworkConfig _networkConfig = new NetworkConfig();
-  VideoService _videoService = locator<VideoService>();
+  VideoService _videoService = VideoService();
   int currentTime = 0;
   int totalTime = 0;
   Duration totalDuration;
@@ -23,11 +28,11 @@ class VideoPlayerViewViewModel extends BaseViewModel {
   }
 
   String convertTotal() {
-    return totalDuration == null ? "0.0" : "${totalDuration.inMinutes}";
+    return totalDuration == null ? "00:00" : formart(totalDuration);
   }
 
   String convertCurrent() {
-    return currentDuration == null ? "0.0" : "${currentDuration.inMinutes}";
+    return currentDuration == null ? "00:00" : formart(currentDuration);
   }
 
   formart(Duration d) => d.toString().split('.').first.padLeft(8, '0');
@@ -42,10 +47,30 @@ class VideoPlayerViewViewModel extends BaseViewModel {
     });
   }
 
-  void initializeVideo({String videoUrl}) async {
+  pauseOrPlay() {
+    videoPlayerController.value.isPlaying ? _pause() : _play();
+  }
+
+  _play() {
+    videoPlayerController.play();
+    setBusy(ViewState.Idle);
+  }
+
+  _pause() {
+    videoPlayerController.pause();
+    setBusy(ViewState.Idle);
+  }
+
+  seek(Duration seekDuration) {
+    videoPlayerController.seekTo(seekDuration);
+    setBusy(ViewState.Idle);
+  }
+
+  void initializeVideo({VideoModel videoModel}) async {
+    this.video = videoModel;
     print('========INITIALIZING THE VIDEO LAYER');
     setBusy(ViewState.Busy);
-    videoPlayerController = VideoPlayerController.network(videoUrl)
+    videoPlayerController = VideoPlayerController.network(videoModel.dataUrl)
       ..initialize().then((value) {
         if (videoPlayerController.value.initialized) {
           setBusy(ViewState.Idle);
@@ -70,9 +95,13 @@ class VideoPlayerViewViewModel extends BaseViewModel {
     if (response == ApiResponse.Success) {
       await Fluttertoast.showToast(
           msg: 'Added to watch later list.', fontSize: 16.0);
+      video.isBookmarked = true;
+      setBusy(ViewState.Idle);
     } else {
       await Fluttertoast.showToast(
           msg: 'Cannot add to watch later list.', fontSize: 16.0);
+      video.isBookmarked = false;
+      setBusy(ViewState.Idle);
     }
   }
 

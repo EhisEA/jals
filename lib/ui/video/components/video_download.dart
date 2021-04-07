@@ -4,9 +4,15 @@ import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:stacked/stacked.dart';
 
-class VideoDownload extends StatelessWidget {
+class VideoDownload extends StatefulWidget {
+  @override
+  _VideoDownloadState createState() => _VideoDownloadState();
+}
+
+class _VideoDownloadState extends State<VideoDownload> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ViewModelBuilder<VideoDownloadViewModel>.reactive(
       onModelReady: (model) => model.getAllVideos(),
       viewModelBuilder: () => VideoDownloadViewModel(),
@@ -34,4 +40,8 @@ class VideoDownload extends StatelessWidget {
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

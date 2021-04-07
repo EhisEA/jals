@@ -5,9 +5,15 @@ import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/button.dart';
 import 'package:stacked/stacked.dart';
 
-class VideoAll extends StatelessWidget {
+class VideoAll extends StatefulWidget {
+  @override
+  _VideoAllState createState() => _VideoAllState();
+}
+
+class _VideoAllState extends State<VideoAll> with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ViewModelBuilder<VideoAllViewModel>.reactive(
       onModelReady: (model) => model.getAllVideos(),
       disposeViewModel: false,
@@ -26,10 +32,6 @@ class VideoAll extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: VideoTile(
                           videoModel: model.allVideoList[index],
-                          // image:
-                          //     "https://cdn.mos.cms.futurecdn.net/yL3oYd7H2FHDDXRXwjmbMf.jpg",
-                          // title: "How to Pray and Communicate with God",
-                          // author: "Wade Warren",
                         ),
                       ),
                     ),
@@ -48,4 +50,8 @@ class VideoAll extends StatelessWidget {
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

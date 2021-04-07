@@ -26,7 +26,7 @@ class VideoModel {
     String title;
     String author;
     DateTime createdAt;
-    int price;
+    double price;
     String postType;
     String dataUrl;
     String coverImage;
@@ -38,7 +38,7 @@ class VideoModel {
         title: json["title"],
         author: json["author"],
         createdAt: DateTime.parse(json["created_at"]),
-        price: json["price"],
+        price: double.parse(json["price"].toString()),
         postType: json["post_type"],
         dataUrl: json["data_url"],
         coverImage: json["cover_image"],
