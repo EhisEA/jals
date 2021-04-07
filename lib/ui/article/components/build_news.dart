@@ -6,7 +6,8 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:stacked/stacked.dart';
 
 class BuildNews extends StatefulWidget {
-  const BuildNews({Key key}) : super(key: key);
+  final ArticleNewsViewModel articleNewsViewModel;
+  const BuildNews({Key key, @required this.articleNewsViewModel}) : super(key: key);
   @override
   _BuildNewsState createState() => _BuildNewsState();
 }
@@ -17,7 +18,9 @@ class _BuildNewsState extends State<BuildNews>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<ArticleNewsViewModel>.reactive(
-      onModelReady: (model) => model.getArticles(),
+      // onModelReady: (model) => model.getArticles(),
+      viewModelBuilder: () => widget.articleNewsViewModel,
+      disposeViewModel: false,
       builder: (context, model, _) {
         return model.isBusy
             ? SliverToBoxAdapter(
@@ -34,7 +37,7 @@ class _BuildNewsState extends State<BuildNews>
                       children: [
                         SizedBox(height: 20),
                         DefaultButton(
-                          onPressed: model.getArticles,
+                          onPressed: model.getNews,
                           title: "Retry",
                         ),
                       ],
@@ -56,7 +59,6 @@ class _BuildNewsState extends State<BuildNews>
                     ),
                   );
       },
-      viewModelBuilder: () => ArticleNewsViewModel(),
     );
   }
 

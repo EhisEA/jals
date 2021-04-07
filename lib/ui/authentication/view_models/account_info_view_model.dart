@@ -36,6 +36,9 @@ class AccountInfoViewModel extends BaseViewModel {
   }
 
   AccountInfoViewModel() {
+    if(_authenticationService.currentUser==null){
+      return;
+    }
     currentAvatar = _authenticationService.currentUser.avatar;
     nameController.text = _authenticationService.currentUser.fullName;
     phoneNumberController.text = _authenticationService.currentUser.phoneNumber;

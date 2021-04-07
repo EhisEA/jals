@@ -37,16 +37,6 @@ class _StoreViewState extends State<StoreView> {
           title: TextHeader(
             text: "Store",
           ),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-              size: getProportionatefontSize(16),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
         ),
         body: Column(
           children: [

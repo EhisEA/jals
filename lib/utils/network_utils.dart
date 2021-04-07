@@ -30,8 +30,8 @@ class NetworkConfig {
         // print(response["error"].toList()[0]);
         if (response["message"] is List || response["error"] is List) {
           errorMsg = response["message"] != null
-              ? response["message"][0]
-              : response["error"][0];
+              ? response["message"][0]??"Something went wrong"
+              : response["error"][0]??"Something went wrong";
         } else if (response["message"] is Map || response["error"] is Map) {
           Map message = response["message"] != null
               ? response["message"]
@@ -169,7 +169,7 @@ class NetworkConfig {
       // if network isn't available show a Toast
       Fluttertoast.showToast(
           msg: "No Internet connection",
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.black,
           textColor: Colors.white,
           fontSize: 16.0);
     }

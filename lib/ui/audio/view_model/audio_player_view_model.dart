@@ -11,6 +11,7 @@ class AudioPlayerViewModel extends BaseViewModel {
 
   @override
   dispose() {
+    audioPlayer.stop();
     audioPlayer.dispose();
     super.dispose();
   }
@@ -23,6 +24,7 @@ class AudioPlayerViewModel extends BaseViewModel {
     });
 
     audioPlayer.onAudioPositionChanged.listen((Duration duration) {
+      
       streamPosition = duration;
       setBusy(ViewState.Idle);
     });
@@ -36,6 +38,7 @@ class AudioPlayerViewModel extends BaseViewModel {
     });
 // audioPlayer.
     audioPlayer.onPlayerError.listen((error) {
+      audioPlayer.state;
       print("eeeeeeee");
       print(error);
     });

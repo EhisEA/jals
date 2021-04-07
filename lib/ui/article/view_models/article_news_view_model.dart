@@ -7,13 +7,16 @@ class ArticleNewsViewModel extends BaseViewModel {
   NetworkConfig _networkConfig = NetworkConfig();
   ArticleService _articleService = ArticleService();
   List<ArticleModel> news;
-  getArticles() async {
+  ArticleNewsViewModel(){
+    getNews();
+  }
+  getNews() async {
     setBusy(ViewState.Busy);
-    await _networkConfig.onNetworkAvailabilityDialog(getArticlesNewtworkCall);
+    await _networkConfig.onNetworkAvailabilityToast(_getNewssNewtworkCall);
     setBusy(ViewState.Idle);
   }
 
-  getArticlesNewtworkCall() async {
+  _getNewssNewtworkCall() async {
     news = await _articleService.getNews();
   }
 }

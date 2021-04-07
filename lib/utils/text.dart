@@ -79,14 +79,17 @@ class TextCaptionWhite extends StatelessWidget {
   final String text;
   final double fontSize;
   final FontWeight fontWeight;
+  final int maxLine;
 
-  const TextCaptionWhite({Key key, this.text, this.fontSize, this.fontWeight})
+  const TextCaptionWhite({Key key, this.text, this.fontSize, this.fontWeight, this.maxLine})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Text(
       "$text",
+      maxLines: maxLine,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontWeight: fontWeight ?? FontWeight.w600,
         color: Color(0xffffffff),

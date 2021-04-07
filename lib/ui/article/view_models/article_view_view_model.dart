@@ -30,7 +30,7 @@ class ArticleViewViewModel extends BaseViewModel {
   getArticleDetailsNetworkCall(String id) async {
     article = await _articleService.getArticleDetails(id);
     if (article != null) {
-      downloaded = _hiveDatabaseService.checkArticleDownloadStatus(article);
+      downloaded = _hiveDatabaseService.checkArticleDownloadStatus(article.id);
     }
   }
 

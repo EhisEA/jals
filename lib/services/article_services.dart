@@ -21,7 +21,6 @@ class ArticleService {
       articles = result["data"]["results"]
           .map<ArticleModel>((element) => ArticleModel.fromJson(element))
           .toList();
-      print(articles.length);
       return articles;
     } catch (e) {
       debugPrint("====error=====");
@@ -63,6 +62,7 @@ class ArticleService {
       var result = json.decode(response.body);
       print(result);
       article = ArticleModel.fromJson(result["data"]);
+      print(article.isBookmarked);
       return article;
     } catch (e) {
       debugPrint("====error=====");

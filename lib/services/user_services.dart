@@ -15,16 +15,17 @@ class UserServices {
       List<ContentModel> contents = [];
       Response response = await _client.get(AppUrl.Explore);
       var result = json.decode(response.body);
-      if (await _networkConfig.isResponseSuccessToast(
+      if (await _networkConfig.isResponseSuccessBool(
         response: result,
       )) {
-        result.forEach((event) {
-          contents.add(ContentModel.fromJson(event));
+        result["data"].forEach((event) {
+          contents.add(ContentModel().fromJson(event));
         });
         return contents;
       }
       return null;
     } catch (e) {
+      print(e);
       return null;
     }
   }
@@ -34,11 +35,11 @@ class UserServices {
       List<ContentModel> contents = [];
       Response response = await _client.get(AppUrl.Explore);
       var result = json.decode(response.body);
-      if (await _networkConfig.isResponseSuccessToast(
+      if (await _networkConfig.isResponseSuccessBool(
         response: result,
       )) {
         result.forEach((event) {
-          contents.add(ContentModel.fromJson(event));
+          contents.add(ContentModel().fromJson(event));
         });
         return contents;
       }

@@ -60,9 +60,14 @@ class HomeContentDisplay extends StatelessWidget {
               ),
             ),
             Container(
-              height: getProportionatefontSize(230),
+              height: 250,
+              // width: 300,
+              //getProportionatefontSize(230),
+              
               child: model.isBusy
-                  ? loadingContent()
+                  ? 
+                  Center(child: CircularProgressIndicator())
+                  // loadingContent()
                   : model.contents == null
                       ? Center(
                           child: InkWell(
@@ -71,7 +76,7 @@ class HomeContentDisplay extends StatelessWidget {
                                 text: "Retry", fontSize: 16, color: kTextColor),
                           ),
                         )
-                      : showContent(model.contents),
+                      : showContent( model),
             )
           ],
         );
@@ -80,7 +85,7 @@ class HomeContentDisplay extends StatelessWidget {
   }
 
   loadingContent() {
-    ListView.builder(
+    return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
       itemCount: 20,
@@ -116,46 +121,50 @@ class HomeContentDisplay extends StatelessWidget {
     );
   }
 
-  showContent(List<ContentModel> contents) {
-    ListView.builder(
+  showContent( HomeContentDisplayViewModel model) {
+    List<ContentModel> contents= model.contents;
+    return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      itemCount: 20,
+      itemCount: contents.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: getProportionatefontSize(150),
-                width: getProportionatefontSize(150),
-                child: ShowNetworkImage(
-                  imageUrl: "${contents[index].coverImage}",
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3.0),
-                child: Text(
-                  "${contents[index].title}",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: getProportionatefontSize(14),
-                    fontWeight: FontWeight.w600,
+          child: InkWell(
+            onTap: ()=>model.openContent(index),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: getProportionatefontSize(150),
+                  width: getProportionatefontSize(150),
+                  child: ShowNetworkImage(
+                    imageUrl: "${contents[index].coverImage}",
                   ),
                 ),
-              ),
-              Text(
-                DateFormat("dd MMM yyyy").format(contents[index].createdAt),
-                // "22nd Dec 2021",
-                style: TextStyle(
-                  fontSize: getProportionatefontSize(12),
-                  fontWeight: FontWeight.w400,
-                  color: kTextColor,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3.0),
+                  child: Text(
+                    "${contents[index].title}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: getProportionatefontSize(14),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Text(
+                  DateFormat("dd MMM yyyy").format(contents[index].createdAt),
+                  // "22nd Dec 2021",
+                  style: TextStyle(
+                    fontSize: getProportionatefontSize(12),
+                    fontWeight: FontWeight.w400,
+                    color: kTextColor,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

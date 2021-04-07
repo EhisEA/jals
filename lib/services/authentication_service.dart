@@ -161,8 +161,11 @@ class AuthenticationService {
           "password2": password,
         },
       );
+      var decodedData= json.decode(response.body);
       print(json.decode(response.body));
       if (response.statusCode >= 200 || response.statusCode < 299) {
+        _populateCurrentUser(decodedData);
+        
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
@@ -262,18 +265,23 @@ class AuthenticationService {
         imageUploadRequest.files.add(file);
       }
       imageUploadRequest.headers.addAll(appHttpHeaders());
-      imageUploadRequest.fields['full_name'] = fullName;
-      imageUploadRequest.fields['date_of_birth'] = dateOfBirth;
-      imageUploadRequest.fields['phone_number'] = phoneNumber;
+
+      // all the if check is to avoid null for being sent to db
+      if (fullName != null) {
+        imageUploadRequest.fields['full_name'] = fullName;
+      }
+      if (dateOfBirth != null) {
+        imageUploadRequest.fields['date_of_birth'] = dateOfBirth;
+      }
+      if (phoneNumber != null) {
+        imageUploadRequest.fields['phone_number'] = phoneNumber;
+      }
       final streamResponse = await imageUploadRequest.send();
       final response = await Response.fromStream(streamResponse);
 
 // ============================================================
       final decodedData = jsonDecode(response.body);
-      print(decodedData);
-      print(response.statusCode);
       if (response.statusCode >= 200 && response.statusCode < 299) {
-        print("Successful ....");
         _updateCurrentUser(decodedData);
         return ApiResponse.Success;
       } else {
@@ -285,7 +293,34 @@ class AuthenticationService {
       print(e);
       return ApiResponse.Error;
     }
+
   }
+
+  
+
+
+  Future<ApiResponse> changePassword({String oldPassword,String newPassword}) async {
+    try {
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPasswordEmail}",
+        headers: appHttpHeaders(),
+        body: {
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+        },
+      );
+      if (response.statusCode >= 200 || response.statusCode < 299) {
+        print("Success");
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
 
   Future<ApiResponse> sendForgotPasswordEmail({String email}) async {
     try {

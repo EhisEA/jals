@@ -7,7 +7,7 @@ Map<String, String> appHttpHeaders() {
   // locator<AuthenticationService>();
   return {
     /////////////////////////////
-    "Authorization": "Token  47fdfc2bcdcd5b4fd4193934c496df6e20b48622"
+    "Authorization": "Token "+locator<AuthenticationService>().currentUser.key,
   };
 }
 
@@ -85,6 +85,20 @@ class AppUrl {
   // ===================================
   static const AudioList = "$ServerBaseUrl/v1/posts/audio/";
   static const Playlist = "$ServerBaseUrl/v1/posts/playlists/";
+  static String playlistWithId (String id)=> "$ServerBaseUrl/v1/posts/playlists/"+id+"/";
+
+
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // Comments
+  // =============================================================
+  // =============================================================
+  // ===================================
+
+  static const Comment = "$ServerBaseUrl/v1/posts/";
+  static String postComment (String id)=> Comment+id+"/add_comment/";
+  static String getComment (String id)=> Comment+id+"/get_post_comments/";
   // static const TrendingList = "$ServerBaseUrl/v1/posts/articles/";
   // static const ArticleBookmarkList =
   //     "$ServerBaseUrl/v1/posts/articles/get_bookmarks/";

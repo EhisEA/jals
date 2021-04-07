@@ -123,15 +123,12 @@ class AudioTile extends StatelessWidget {
 
 class VideoTile extends StatelessWidget {
   final VideoModel videoModel;
-  // final String image, title, author;
   final bool showPrimaryButton, showSecondaryButton;
+  final _navigationService=locator<NavigationService>();
 
-  const VideoTile({
+  VideoTile({
     Key key,
     @required this.videoModel,
-    // @required this.image,
-    // @required this.title,
-    // @required this.author,
     this.showPrimaryButton = true,
     this.showSecondaryButton = true,
   }) : super(key: key);
@@ -140,13 +137,7 @@ class VideoTile extends StatelessWidget {
     SizeConfig().init(context);
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => VideoPlayerView(
-              videoModel: videoModel,
-            ),
-          ),
-        );
+        _navigationService.navigateTo(VideoPlayerViewRoute,argument: videoModel);
       },
       child: Row(
         children: [

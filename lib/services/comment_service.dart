@@ -5,25 +5,26 @@ import 'package:http/http.dart' as http;
 import 'package:jals/constants/app_urls.dart';
 import 'package:jals/models/article_model.dart';
 import 'package:jals/models/audio_model.dart';
+import 'package:jals/models/comment_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/utils/network_utils.dart';
 
-class AudioService {
+class CommentService {
   final NetworkConfig _networkConfig = NetworkConfig();
-  Future<List<AudioModel>> getAudioList() async {
+  Future<List<CommentModel>> getComments(String id) async {
     try {
-      List<AudioModel> audios;
-      String url = AppUrl.AudioList;
+      List<CommentModel> comment;
+      String url = AppUrl.getComment(id);
       http.Response response = await http.get(
         url,
         headers: appHttpHeaders(),
       );
       var result = json.decode(response.body);
       print(result);
-      audios = result["data"]["results"]
-          .map<AudioModel>((element) => AudioModel.fromJson(element))
+      comment = result["data"]["results"]
+          .map<CommentModel>((element) => CommentModel.fromJson(element))
           .toList();
-      return audios;
+      return comment;
     } catch (e) {
       debugPrint("====error=====");
       print(e);
@@ -31,40 +32,17 @@ class AudioService {
     }
   }
 
-  Future<bool> createPlaylist(String playlistName) async {
+  Future<bool> postComment(String id, String comment) async {
     try {
-      String url = AppUrl.Playlist;
+      String url = AppUrl.postComment(id);
       print(url);
       http.Response response = await http.post(
         url,
         headers: appHttpHeaders(),
         body: {
-          "title":playlistName
+          "comment":comment
         }
       );
-      var result = json.decode(response.body);
-      print(result);
-     
-      return _networkConfig.isResponseSuccessBool(response: result);
-    } catch (e) {
-      debugPrint("====error=====");
-      print(e);
-      return false;
-    }
-  }
-
-
-  Future<bool>  deletePlaylist(String playlistId) async {
-    try {
-      String url = AppUrl.playlistWithId(playlistId);
-      
-      print("=====1");
-      http.Response response = await http.delete(
-        url,
-        headers: appHttpHeaders(),
-      
-      );
-      print("=====1");
       var result = json.decode(response.body);
       print(result);
      

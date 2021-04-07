@@ -8,7 +8,6 @@ class HiveDatabaseService {
   Box<ContentModel> audioDownloads;
 
   HiveDatabaseService() {
-    Hive.registerAdapter(ContentModelAdapter());
     Hive.registerAdapter(ArticleModelAdapter());
   }
 
@@ -35,8 +34,13 @@ class HiveDatabaseService {
     return _articleDownloads.values.toList();
   }
 
-  bool checkArticleDownloadStatus(ArticleModel article) {
+  bool checkArticleDownloadStatus(String id) {
     // if (_articleDownloads == null) return false;
-    return _articleDownloads.containsKey(article.id);
+    return _articleDownloads.containsKey(id);
+  }
+
+  String getArticleDownloadedContent(String id) {
+    // if (_articleDownloads == null) return false;
+    return _articleDownloads.get(id)==null?null:_articleDownloads.get(id).content;
   }
 }

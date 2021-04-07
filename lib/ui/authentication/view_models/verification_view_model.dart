@@ -49,14 +49,12 @@ class VerificationViewModel extends BaseViewModel {
     if (response == ApiResponse.Success) {
       PasswordType newPassword = PasswordType.NewPassword;
       PasswordType forgotPassword = PasswordType.ForgotPassword;
-      Future.delayed(Duration(seconds: 3), () {
         _navigationService.navigateToReplace(
           PasswordViewRoute,
           argument: _verificationType == VerificationType.NewUser
               ? newPassword
               : forgotPassword,
         );
-      });
     } else {
       verificationController.clear();
       await _dialogService.showDialog(

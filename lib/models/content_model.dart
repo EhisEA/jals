@@ -1,18 +1,22 @@
 // To parse this JSON data, do
 //
-//     final VideoModel = VideoModelFromJson(jsonString);
+//     final contentModel = contentModelFromJson(jsonString);
 
 import 'dart:convert';
 
-import 'package:hive/hive.dart';
-part 'content_model.g.dart';
+import 'package:jals/models/article_model.dart';
+import 'package:jals/models/video_model.dart';
+import 'package:jals/services/hive_database_service.dart';
+import 'package:jals/utils/locator.dart';
 
-ContentModel videoModelFromJson(String str) =>
-    ContentModel.fromJson(json.decode(str));
+import 'audio_model.dart';
 
-String videoModelToJson(ContentModel data) => json.encode(data.toJson());
+enum ContentType { Article, Video, News, Audio }
+ContentModel contentModelFromJson(String str) =>
+    ContentModel().fromJson(json.decode(str));
 
-@HiveType(typeId: 1)
+String contentModelToJson(ContentModel data) => json.encode(data.toJson());
+
 class ContentModel {
   ContentModel({
     this.id,
@@ -25,40 +29,27 @@ class ContentModel {
     this.coverImage,
   });
 
-  @HiveField(0)
-  int id;
-
-  @HiveField(1)
+  String id;
   String title;
-
-  @HiveField(2)
   String author;
-
-  @HiveField(3)
   DateTime createdAt;
-
-  @HiveField(4)
-  int price;
-
-  @HiveField(5)
-  String postType;
-
-  @HiveField(6)
+  double price;
+  ContentType postType;
   String dataUrl;
-
-  @HiveField(7)
   String coverImage;
 
-  factory ContentModel.fromJson(Map<String, dynamic> json) => ContentModel(
-        id: json["id"],
-        title: json["title"],
-        author: json["author"],
-        createdAt: DateTime.parse(json["created_at"]),
-        price: json["price"],
-        postType: json["post_type"],
-        dataUrl: json["data_url"],
-        coverImage: json["cover_image"],
-      );
+  fromJson(Map json) {
+    return ContentModel(
+      id: json["id"],
+      title: json["title"],
+      author: json["author"],
+      createdAt: DateTime.parse(json["created_at"]),
+      price: double.parse(json["price"].toString()),
+      postType: getContentType(json["post_type"]),
+      dataUrl: json["data_url"],
+      coverImage: json["cover_image"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -66,8 +57,96 @@ class ContentModel {
         "author": author,
         "created_at": createdAt.toIso8601String(),
         "price": price,
-        "post_type": postType,
+        "post_type": getContentTypeString(postType),
         "data_url": dataUrl,
         "cover_image": coverImage,
       };
+
+  toArticle() {
+    HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
+   return ArticleModel(
+      author: author,
+      coverImage: coverImage,
+      createdAt: createdAt,
+      title: title,
+      id: id,
+      price: price,
+      postType: getContentTypeString(postType),
+      downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
+      content: _hiveDatabaseService.getArticleDownloadedContent(id),
+      isBookmarked: false,
+
+
+    );
+  }
+
+  toAudio() {
+    // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
+   return AudioModel(
+      author: author,
+      coverImage: coverImage,
+      createdAt: createdAt,
+      title: title,
+      id: id,
+      price: price,
+      postType: getContentTypeString(postType),
+      // downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
+      dataUrl: dataUrl,
+
+
+
+    );
+  }
+
+  tovideo() {
+    // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
+   return VideoModel(
+      author: author,
+      coverImage: coverImage,
+      createdAt: createdAt,
+      title: title,
+      id: id,
+      price: price,
+      postType: getContentTypeString(postType),
+      // downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
+      dataUrl: dataUrl,
+      isBookmarked: false,
+
+
+    );
+  }
+
+  ContentType getContentType(String postType) {
+    switch (postType.toUpperCase()) {
+      case "VI":
+        return ContentType.Video;
+      case "AU":
+        return ContentType.Audio;
+
+      case "AR":
+        return ContentType.Article;
+
+      case "NE":
+        return ContentType.News;
+      default:
+        return null;
+    }
+  }
+
+  String getContentTypeString(ContentType contentType) {
+    switch (contentType) {
+      case ContentType.Video:
+        return "VI";
+      case ContentType.Audio:
+        return "AU";
+
+      case ContentType.Article:
+        return "AR";
+
+      case ContentType.News:
+        return "NE";
+      default:
+        return null;
+    }
+  }
 }

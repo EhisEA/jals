@@ -29,6 +29,7 @@ class BaseViewModel extends ChangeNotifier {
 
   ViewState get state => _state;
   bool get isBusy => _state == ViewState.Busy;
+  bool get isDisposed => _disposed;
 
   ViewState _secondaryState = ViewState.Idle;
 

@@ -9,8 +9,8 @@ class ImageShimmerLoadingState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       direction: ShimmerDirection.ltr,
-      baseColor: Colors.grey.shade400,
-      highlightColor: kTextColor,
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
       child: Container(
         decoration: BoxDecoration(color: kScaffoldColor),
       ),

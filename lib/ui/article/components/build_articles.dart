@@ -6,7 +6,8 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:stacked/stacked.dart';
 
 class BuildArticle extends StatefulWidget {
-  const BuildArticle({Key key}) : super(key: key);
+  const BuildArticle({Key key, @required this.articleAllViewModel}) : super(key: key);
+  final ArticleAllViewModel articleAllViewModel;
   @override
   _BuildArticleState createState() => _BuildArticleState();
 }
@@ -17,7 +18,9 @@ class _BuildArticleState extends State<BuildArticle>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<ArticleAllViewModel>.reactive(
-      onModelReady: (model) => model.getArticles(),
+      // onModelReady: (model) => model.getArticles(),
+      viewModelBuilder: () => widget.articleAllViewModel,
+      disposeViewModel: false,
       builder: (context, model, _) {
         return model.isBusy
             ? SliverToBoxAdapter(
@@ -54,7 +57,6 @@ class _BuildArticleState extends State<BuildArticle>
                     ),
                   );
       },
-      viewModelBuilder: () => ArticleAllViewModel(),
     );
   }
 

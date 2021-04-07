@@ -7,16 +7,20 @@ import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
-import 'package:jals/widgets/comments_widget.dart';
+import 'package:jals/widgets/comment_widget.dart';
 import 'package:jals/widgets/image.dart';
+import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
 class AudioPlayerView extends StatelessWidget {
+ CommentWidgetViewModel _commentWidgetViewModel;
   final AudioModel audio;
 
-  const AudioPlayerView({Key key, this.audio}) : super(key: key);
+   AudioPlayerView({Key key, this.audio}) {
+    _commentWidgetViewModel=CommentWidgetViewModel(audio.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +149,7 @@ class AudioPlayerView extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     Divider(),
-                    CommentsWidget()
+                    CommentWidget( commentWidgetViewModel: _commentWidgetViewModel,)
                   ],
                 ),
               ),
