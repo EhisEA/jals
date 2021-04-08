@@ -1,4 +1,4 @@
-package com.example.jals
+package com.jal.jal
 
 import io.flutter.embedding.android.FlutterActivity
 
