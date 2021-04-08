@@ -7,7 +7,8 @@ Map<String, String> appHttpHeaders() {
   // locator<AuthenticationService>();
   return {
     /////////////////////////////
-    "Authorization": "Token "+locator<AuthenticationService>().currentUser.key,
+    "Authorization":
+        "Token " + locator<AuthenticationService>().currentUser.key,
   };
 }
 
@@ -85,8 +86,8 @@ class AppUrl {
   // ===================================
   static const AudioList = "$ServerBaseUrl/v1/posts/audio/";
   static const Playlist = "$ServerBaseUrl/v1/posts/playlists/";
-  static String playlistWithId (String id)=> "$ServerBaseUrl/v1/posts/playlists/"+id+"/";
-
+  static String playlistWithId(String id) =>
+      "$ServerBaseUrl/v1/posts/playlists/" + id + "/";
 
   // =============================================================
   // =============================================================
@@ -97,8 +98,8 @@ class AppUrl {
   // ===================================
 
   static const Comment = "$ServerBaseUrl/v1/posts/";
-  static String postComment (String id)=> Comment+id+"/add_comment/";
-  static String getComment (String id)=> Comment+id+"/get_post_comments/";
+  static String postComment(String id) => Comment + id + "/add_comment/";
+  static String getComment(String id) => Comment + id + "/get_post_comments/";
   // static const TrendingList = "$ServerBaseUrl/v1/posts/articles/";
   // static const ArticleBookmarkList =
   //     "$ServerBaseUrl/v1/posts/articles/get_bookmarks/";
@@ -106,5 +107,19 @@ class AppUrl {
   // static const NewsList = "$ServerBaseUrl/v1/posts/news/";
 
 // 3b79df4433f5aad10c8956e3bd0fb71e415790a7
+//
+  // =============================================================
+  // =============================================================
+  // =============================================================
+  // Shop Apis
+  // =============================================================
+  // =============================================================
+  // ===================================
+
+  static const String fetchNewestStoreItems =
+      "http://backendjals.herokuapp.com/v1/posts/store/";
+
+  static const getPurchasedItemsList =
+      "http://backendjals.herokuapp.com/v1/posts/store/purchased/";
 }
 // 3b79df4433f5aad/10c8956e3bd0fb71e415790a7

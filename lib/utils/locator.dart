@@ -3,6 +3,7 @@ import 'package:jals/services/authentication_service.dart';
 import 'package:jals/services/dialog_service.dart';
 import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/services/navigationService.dart';
+import 'package:jals/services/store_service.dart';
 import 'package:jals/ui/article/view_models/article_download_view_model.dart';
 import 'package:jals/ui/home/components/view_models/daily_read_view_model.dart';
 import 'package:jals/services/video_service.dart';
@@ -21,7 +22,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => VideoService());
   locator.registerLazySingleton(() => HiveDatabaseService());
   locator.registerLazySingleton(() => ArticleDownloadViewModel());
-
+  locator.registerLazySingleton(() => StoreService());
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());
 //! Factory

@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:jals/ui/home/home_view.dart';
 import 'package:jals/ui/home/library_view.dart';
 import 'package:jals/ui/home/settings_view.dart';
-import 'package:jals/ui/home/store_view.dart';
+import 'package:jals/ui/store/store_view.dart';
 import 'package:jals/ui/home/view_models/home_base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
