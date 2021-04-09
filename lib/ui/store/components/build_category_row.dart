@@ -73,6 +73,9 @@ class BuildCategoryRow extends StatelessWidget {
               BuildBottomRow(
                 index: model.selectedIndex,
               ),
+              SizedBox(
+                height: 10,
+              ),
             ],
           );
         },

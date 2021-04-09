@@ -41,11 +41,14 @@ class EmailLoginViewModel extends BaseViewModel {
       ApiResponse apiResponse = await _authenticationService.loginWithEmail(
           email: emailController.text, password: passwordController.text);
 
+      //Stop all action if user is not on screen
+      ////
+      if (isDisposed) return;
       if (apiResponse == ApiResponse.Success) {
         if (_authenticationService.currentUser.isDetailsComplete()) {
-          _navigationService.navigateToReplace(HomeViewRoute);
+          await _navigationService.navigateToReplace(HomeViewRoute);
         } else {
-          _navigationService.navigateToReplace(AccountInfoViewRoute);
+          await _navigationService.navigateToReplace(AccountInfoViewRoute);
         }
       } else {
         // ! show handle error.
@@ -58,7 +61,7 @@ class EmailLoginViewModel extends BaseViewModel {
       print(e);
       await _dialogService.showDialog(
           buttonTitle: "OK",
-          description: "Invalid Credentials",
+          description: "Check your internet connection",
           title: "Login Error");
     }
   }

@@ -9,6 +9,8 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/article_tile.dart';
 
+import 'components/library_for_you.dart';
+
 class LibraryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -66,22 +68,25 @@ class LibraryView extends StatelessWidget {
                 text: "Suggested For You",
               ),
             ),
-            ...List.generate(
-              11,
-              (index) => Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10,
-                ),
-                child: ProductTile(
-                  type: "AUDIO",
-                  image:
-                      "https://cdn.mos.cms.futurecdn.net/yL3oYd7H2FHDDXRXwjmbMf.jpg",
-                  title: "Almighty God",
-                  author: "Play Time 3 mins",
-                ),
-              ),
-            ),
+
+            LibraryForYou(),
+            //   ...List.generate(
+            //     11,
+            //     (index) => Padding(
+            //       padding: const EdgeInsets.symmetric(
+            //         horizontal: 20.0,
+            //         vertical: 10,
+            //       ),
+            //       child: ProductTile(
+            //         type: "AUDIO",
+            //         image:
+            //             "https://cdn.mos.cms.futurecdn.net/yL3oYd7H2FHDDXRXwjmbMf.jpg",
+            //         title: "Almighty God",
+            //         author: "Play Time 3 mins",
+            //       ),
+            //     ),
+            //   ),
+            //
           ],
         ),
       ),

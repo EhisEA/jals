@@ -1,4 +1,4 @@
-import 'package:jals/models/store_model.dart';
+import 'package:jals/models/content_model.dart';
 import 'package:jals/services/store_service.dart';
 import 'package:jals/ui/store/view_models/build_category_row_view_model.dart';
 import 'package:jals/utils/base_view_model.dart';
@@ -8,7 +8,7 @@ import 'package:jals/utils/network_utils.dart';
 class StoreViewModel extends BuildCategoryRowViewModel {
   NetworkConfig _networkConfig = new NetworkConfig();
   StoreService _storeService = locator<StoreService>();
-  List<StoreModel> newestItemList = [];
+  List<ContentModel> newestItemList;
   getNewestItems() async {
     try {
       setBusy(ViewState.Busy);
@@ -23,7 +23,7 @@ class StoreViewModel extends BuildCategoryRowViewModel {
 
   onNetworkFetchNewestItems() async {
     try {
-      List<StoreModel> result = await _storeService.getNewestStoreItems();
+      List<ContentModel> result = await _storeService.getNewestStoreItems();
       if (result.length >= 1) {
         newestItemList = result;
         notifyListeners();

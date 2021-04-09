@@ -47,7 +47,7 @@ class _StoreViewState extends State<StoreView> {
                 BuildCategoryRow(),
 
                 // NewestItemsView(),
-                navigateThrough(model.selectedIndex),
+                navigateThrough(model.selectedIndex, model),
                 // Expanded(
                 //   child: model.state == ViewState.Busy
                 //       ? SingleChildScrollView(
@@ -68,10 +68,10 @@ class _StoreViewState extends State<StoreView> {
     );
   }
 
-  Widget navigateThrough(int index) {
+  Widget navigateThrough(int index, StoreViewModel model) {
     switch (index) {
       case 0:
-        return NewestItemsView();
+        return NewestItemsView(content: model.newestItemList);
       case 1:
         return TimeLineItemsView();
 
@@ -80,7 +80,7 @@ class _StoreViewState extends State<StoreView> {
         break;
 
       default:
-        return NewestItemsView();
+        return NewestItemsView(content: model.newestItemList);
     }
   }
 

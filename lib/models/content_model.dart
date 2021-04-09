@@ -27,6 +27,8 @@ class ContentModel {
     this.postType,
     this.dataUrl,
     this.coverImage,
+    this.isPurchased,
+    this.sermonId,
   });
 
   String id;
@@ -37,6 +39,8 @@ class ContentModel {
   ContentType postType;
   String dataUrl;
   String coverImage;
+  String sermonId;
+  bool isPurchased;
 
   fromJson(Map json) {
     return ContentModel(
@@ -48,6 +52,8 @@ class ContentModel {
       postType: getContentType(json["post_type"]),
       dataUrl: json["data_url"],
       coverImage: json["cover_image"],
+      isPurchased: json["is_purchased"],
+      sermonId: json["sermon_id"],
     );
   }
 
@@ -60,11 +66,13 @@ class ContentModel {
         "post_type": getContentTypeString(postType),
         "data_url": dataUrl,
         "cover_image": coverImage,
+        "is_purchased": isPurchased,
+        "sermon_id": sermonId,
       };
 
   toArticle() {
-    HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
-   return ArticleModel(
+    HiveDatabaseService _hiveDatabaseService = locator<HiveDatabaseService>();
+    return ArticleModel(
       author: author,
       coverImage: coverImage,
       createdAt: createdAt,
@@ -75,14 +83,12 @@ class ContentModel {
       downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
       content: _hiveDatabaseService.getArticleDownloadedContent(id),
       isBookmarked: false,
-
-
     );
   }
 
   toAudio() {
     // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
-   return AudioModel(
+    return AudioModel(
       author: author,
       coverImage: coverImage,
       createdAt: createdAt,
@@ -92,15 +98,12 @@ class ContentModel {
       postType: getContentTypeString(postType),
       // downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
       dataUrl: dataUrl,
-
-
-
     );
   }
 
   tovideo() {
     // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
-   return VideoModel(
+    return VideoModel(
       author: author,
       coverImage: coverImage,
       createdAt: createdAt,
@@ -111,8 +114,6 @@ class ContentModel {
       // downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
       dataUrl: dataUrl,
       isBookmarked: false,
-
-
     );
   }
 
