@@ -161,11 +161,11 @@ class AuthenticationService {
           "password2": password,
         },
       );
-      var decodedData= json.decode(response.body);
+      var decodedData = json.decode(response.body);
       print(json.decode(response.body));
       if (response.statusCode >= 200 || response.statusCode < 299) {
         _populateCurrentUser(decodedData);
-        
+
         return ApiResponse.Success;
       } else {
         return ApiResponse.Error;
@@ -284,43 +284,46 @@ class AuthenticationService {
       if (response.statusCode >= 200 && response.statusCode < 299) {
         _updateCurrentUser(decodedData);
         return ApiResponse.Success;
+      } else if (response.statusCode == 400) {
+        return ApiResponse.Success;
       } else {
         _networkConfig.isResponseSuccess(
             response: decodedData, errorTitle: "Account Verification Error");
         return ApiResponse.Error;
       }
     } catch (e) {
-      print(e);
       return ApiResponse.Error;
     }
-
   }
 
-  
-
-
-  Future<ApiResponse> changePassword({String oldPassword,String newPassword}) async {
+  Future<ApiResponse> changePassword(
+      {String oldPassword, String newPassword}) async {
     try {
+      print(oldPassword);
+      print(newPassword);
       Response response = await _client.post(
-        "${AppUrl.SendForgotPasswordEmail}",
+        "${AppUrl.ChangePassword}",
         headers: appHttpHeaders(),
         body: {
-          "oldPassword": oldPassword,
-          "newPassword": newPassword,
+          "old_password": oldPassword,
+          "new_password": newPassword,
         },
       );
-      if (response.statusCode >= 200 || response.statusCode < 299) {
-        print("Success");
+      print(json.decode(response.body));
+      print(response.statusCode);
+      if (response.statusCode >= 200 && response.statusCode < 299) {
         return ApiResponse.Success;
-      } else {
+      } else if (response.statusCode == 400) {
         return ApiResponse.Error;
+      } else {
+        _networkConfig.isResponseSuccessToast(response: response);
+        return ApiResponse.Empty;
       }
     } catch (e) {
       print(e);
-      return ApiResponse.Error;
+      return ApiResponse.Empty;
     }
   }
-
 
   Future<ApiResponse> sendForgotPasswordEmail({String email}) async {
     try {
@@ -338,7 +341,7 @@ class AuthenticationService {
       );
       final decodedData = jsonDecode(response.body);
       print(decodedData);
-      if (response.statusCode >= 200 || response.statusCode < 299) {
+      if (response.statusCode >= 200 && response.statusCode < 299) {
         print("Success");
         return ApiResponse.Success;
       } else {
@@ -364,7 +367,7 @@ class AuthenticationService {
       );
       final decodedData = jsonDecode(response.body);
       print(decodedData);
-      if (response.statusCode >= 200 || response.statusCode < 299) {
+      if (response.statusCode >= 200 && response.statusCode < 299) {
         return ApiResponse.Success;
       } else {
         _networkConfig.isResponseSuccess(

@@ -22,7 +22,6 @@ class SettingsViewModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
 
-
   String get avatar => _authenticationService.currentUser.avatar;
   String get email => _authenticationService.currentUser.fullName;
   String get fullname => _authenticationService.currentUser.fullName;
@@ -42,7 +41,7 @@ class SettingsViewModel extends BaseViewModel {
         changBirthDate(context, model);
         break;
       case UserUpdateType.PASSWORD:
-        changePassword(context);
+        changePassword(context, model);
         break;
       default:
     }
@@ -53,10 +52,9 @@ class SettingsViewModel extends BaseViewModel {
 // ========================== Change Image=====================
 // ============================================================
 
-
   final picker = ImagePicker();
   Future updateProfileImage() async {
-  File image;
+    File image;
     setSecondaryBusy(ViewState.Busy);
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -91,7 +89,7 @@ class SettingsViewModel extends BaseViewModel {
       context, UserUpdateType updateType, SettingsViewModel settingModel) {
     bool isName = updateType == UserUpdateType.FULLNAME;
     TextEditingController _controller =
-        TextEditingController(text: isName ? fullname??"" : phone??"");
+        TextEditingController(text: isName ? fullname ?? "" : phone ?? "");
 
     return showDialog(
       useSafeArea: true,
@@ -212,119 +210,156 @@ class SettingsViewModel extends BaseViewModel {
 // ============================================================
 // ============================================================
 
-  changePassword(context) {
+  changePassword(context, SettingsViewModel settingModel) {
     final TextEditingController oldPasswordController = TextEditingController();
     final TextEditingController newPasswordController = TextEditingController();
 
     return showDialog(
-      useSafeArea: true,
-      context: context,
-      builder: (context) => AlertDialog(
-          backgroundColor: Colors.transparent,
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return buildCard2(
-                children: [
-                  Text(
-                    "Edit Password",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: getProportionatefontSize(16)),
-                  ).p(30),
-                  SizedBox(height: 10),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Old Password",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  EditTextField(
-                    borderType: EditTextFieldBorderType.roundLine,
-                    borderRadius: 0,
-                    isPassword: true,
-                    obscureText: true,
-                    maxLine: 1,
-                    controller: oldPasswordController,
-                    // isPassword: true,
-                    borderColor: Colors.grey.shade300,
-                    onChanged: (value) => setState(() {}),
-                    clear: false,
-                    fillColor: Colors.white,
-                    prefixIcon: Icon(JalsIcons.password),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "New Password",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  EditTextField(
-                    borderType: EditTextFieldBorderType.roundLine,
-                    borderRadius: 0,
-                    isPassword: true,
-                    maxLine: 1,
-                    controller: newPasswordController,
-                    // isPassword: true,
-                    borderColor: Colors.grey.shade300,
-                    onChanged: (value) => setState(() {}),
-                    clear: false,
-                    fillColor: Colors.white,
-                    prefixIcon: Icon(JalsIcons.password),
-                  ),
-                  SizedBox(height: 30),
-                  Container(
-                    child: Center(
-                      child: Text(
-                        "Save Changes",
-                        style: TextStyle(
-                            color: oldPasswordController.text.length >= 8 &&
-                                    newPasswordController.text.length >= 8 &&
-                                    oldPasswordController.text ==
-                                        newPasswordController.text
-                                ? Colors.white
-                                : kTextColor),
-                      ),
-                    ),
-                  ).p20().backgroundColor(
-                      oldPasswordController.text.length >= 8 &&
-                              newPasswordController.text.length >= 8 &&
-                              oldPasswordController.text ==
-                                  newPasswordController.text
-                          ? kPrimaryColor
-                          : Colors.grey.shade100),
-                  // SizedBox(height: 10),
-                  Text("Cancel").p20().onTap(() {
-                    Navigator.of(context).pop();
-                  })
-                ],
-              );
-            },
-          )),
-    );
+        useSafeArea: true,
+        context: context,
+        builder: (context) =>
+            viewmodel.ViewModelBuilder<SettingsViewModel>.reactive(
+              viewModelBuilder: () => settingModel,
+              disposeViewModel: false,
+              builder: (context, model, _) => AlertDialog(
+                  backgroundColor: Colors.transparent,
+                  content: StatefulBuilder(
+                    builder: (context, setState) {
+                      return model.isBusy
+                          ? buildCard2(
+                              children: [
+                                Center(child: CircularProgressIndicator())
+                              ],
+                            )
+                          : buildCard2(
+                              children: [
+                                Text(
+                                  "Edit Password",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: getProportionatefontSize(16)),
+                                ).p(30),
+                                SizedBox(height: 10),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Old Password",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ),
+                                EditTextField(
+                                  borderType: EditTextFieldBorderType.roundLine,
+                                  borderRadius: 0,
+                                  isPassword: true,
+                                  obscureText: true,
+                                  maxLine: 1,
+                                  controller: oldPasswordController,
+                                  // isPassword: true,
+                                  borderColor: Colors.grey.shade300,
+                                  onChanged: (value) => setState(() {}),
+                                  clear: false,
+                                  fillColor: Colors.white,
+                                  prefixIcon: Icon(JalsIcons.password),
+                                ),
+                                SizedBox(height: 10),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "New Password",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ),
+                                EditTextField(
+                                  borderType: EditTextFieldBorderType.roundLine,
+                                  borderRadius: 0,
+                                  isPassword: true,
+                                  obscureText: true,
+                                  maxLine: 1,
+                                  controller: newPasswordController,
+                                  borderColor: Colors.grey.shade300,
+                                  onChanged: (value) => setState(() {}),
+                                  clear: false,
+                                  fillColor: Colors.white,
+                                  prefixIcon: Icon(JalsIcons.password),
+                                ),
+                                SizedBox(height: 30),
+                                Container(
+                                  child: Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (oldPasswordController.text.length >=
+                                                8 &&
+                                            newPasswordController.text.length >=
+                                                8)
+                                          _changePasswordNetworkCall(
+                                              oldPasswordController.text,
+                                              newPasswordController.text);
+                                      },
+                                      child: Text(
+                                        "Save Changes",
+                                        style: TextStyle(
+                                            color: oldPasswordController
+                                                            .text.length >=
+                                                        8 &&
+                                                    newPasswordController
+                                                            .text.length >=
+                                                        8
+                                                ? Colors.white
+                                                : kTextColor),
+                                      ),
+                                    ),
+                                  ),
+                                ).p20().backgroundColor(
+                                    oldPasswordController.text.length >= 8 &&
+                                            newPasswordController.text.length >=
+                                                8
+                                        ? kPrimaryColor
+                                        : Colors.grey.shade100),
+                                // SizedBox(height: 10),
+                                Text("Cancel").p20().onTap(() {
+                                  Navigator.of(context).pop();
+                                })
+                              ],
+                            );
+                    },
+                  )),
+            ));
   }
 
-  changePasswordNetworkCall(String oldPassword, String newPassword) async {
+  _changePasswordNetworkCall(String oldPassword, String newPassword) async {
     setBusy(ViewState.Busy);
     ApiResponse response = await _authenticationService.changePassword(
         oldPassword: oldPassword, newPassword: newPassword);
 
-    if (response == ApiResponse.Success) {
-      Fluttertoast.showToast(
-        msg: "Password updated",
-        backgroundColor: kPrimaryColor,
-        textColor: Colors.white,
-      );
-    } else {
-      Fluttertoast.showToast(
-        msg: "Password failed to updated",
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+    switch (response) {
+      case ApiResponse.Success:
+        Fluttertoast.showToast(
+          msg: "Password updated",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: kPrimaryColor,
+          textColor: Colors.white,
+        );
+
+        break;
+      case ApiResponse.Error:
+        Fluttertoast.showToast(
+          msg: "Incorrect old password",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+        );
+
+        break;
+      default:
+        Fluttertoast.showToast(
+          msg: "Password failed to updated",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+        );
     }
     setBusy(ViewState.Idle);
   }
@@ -406,9 +441,9 @@ class SettingsViewModel extends BaseViewModel {
                                   : null,
                               controller: _controller,
                               onTap: () async {
-                                tempPickedDate =
-                                    await pickDate(context, tempPickedDate??DateTime.now()) ??
-                                        tempPickedDate;
+                                tempPickedDate = await pickDate(context,
+                                        tempPickedDate ?? DateTime.now()) ??
+                                    tempPickedDate;
                                 setState(() {
                                   _changeControllerValue();
                                   _focusDateField.unfocus();
@@ -427,9 +462,9 @@ class SettingsViewModel extends BaseViewModel {
                           SizedBox(height: 30),
                           InkWell(
                             onTap: () {
-                              if(dateOfBirth != tempPickedDate)
-                                   changeDateNetworkCall(
-                                      "${tempPickedDate.year}-${tempPickedDate.month}-${tempPickedDate.day}");
+                              if (dateOfBirth != tempPickedDate)
+                                changeDateNetworkCall(
+                                    "${tempPickedDate.year}-${tempPickedDate.month}-${tempPickedDate.day}");
                             },
                             child: Center(
                               child: Text(

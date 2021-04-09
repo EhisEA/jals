@@ -41,6 +41,8 @@ class AppUrl {
       "$ServerBaseUrl/v1/users/forgot_password/";
   static const String SendForgotPassword =
       "$ServerBaseUrl/v1/users/forgot_password/";
+  static const String ChangePassword =
+      "$ServerBaseUrl/v1/users/change_password/";
 
   // =============================================================
   // =============================================================
