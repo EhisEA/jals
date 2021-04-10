@@ -80,7 +80,7 @@ class _AudioLibraryState extends State<AudioLibrary>
                     controller: _controller,
                     children: [
                       AudioAll(),
-                      AudioPlaylist(),
+                      AudioPlaylistSection(),
                       AudioDownload(),
                     ],
                   ),

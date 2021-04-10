@@ -10,7 +10,7 @@ import 'package:jals/ui/article/article_library_view.dart';
 import 'package:jals/ui/article/article_view.dart';
 import 'package:jals/ui/audio/audio_library_view.dart';
 import 'package:jals/ui/audio/audio_player_view.dart';
-import 'package:jals/ui/audio/audio_playlist_view.dart';
+import 'package:jals/ui/audio/playlist_view.dart';
 import 'package:jals/ui/authentication/account_info_view.dart';
 import 'package:jals/ui/authentication/email_login_view.dart';
 import 'package:jals/ui/authentication/forgot_password_view.dart';

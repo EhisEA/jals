@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jals/enums/api_response.dart';
+import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/dialog_models.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/services/audio_service.dart';
@@ -9,7 +11,7 @@ import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
 
-class AudioPlaylsitViewModel extends BaseViewModel {
+class AudioPlaylistSectionViewModel extends BaseViewModel {
   NetworkConfig _networkConfig = NetworkConfig();
   DialogService _dialogService = locator<DialogService>();
   AudioService _audioService = AudioService();
@@ -87,6 +89,53 @@ class AudioPlaylsitViewModel extends BaseViewModel {
         textColor: Colors.white,
         backgroundColor: Colors.black,
       );
+    }
+  }
+
+  removeToPlaylist(String playlistId, AudioModel audio) async {
+    setSecondaryBusy(ViewState.Busy);
+    await _addPlaylistNewtworkCall(playlistId, audio);
+    setSecondaryBusy(ViewState.Idle);
+  }
+
+  _addPlaylistNewtworkCall(String playlistId, AudioModel audio) async {
+    ApiResponse result =
+        await _audioService.addAudioToPlaylist(playlistId, audio.id);
+
+    switch (result) {
+      case ApiResponse.Success:
+        Fluttertoast.showToast(
+          msg: "Added to playlist",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: kPrimaryColor,
+          textColor: Colors.white,
+        );
+
+        playList = playList.map((PlayListModel element) {
+          if (element.id == playlistId) {
+            element.count++;
+          }
+          return element;
+        }).toList();
+        break;
+      case ApiResponse.Error:
+        Fluttertoast.showToast(
+          msg: "Failed to add to playlis",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+        );
+        break;
+      default:
+        Fluttertoast.showToast(
+          msg: "Failed to add to playlis",
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+        );
     }
   }
 }

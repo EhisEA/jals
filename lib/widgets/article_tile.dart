@@ -82,8 +82,12 @@ class ArticleTile extends StatelessWidget {
 
 class AudioTile extends StatelessWidget {
   final AudioModel audio;
+  final List<String> popOption;
+  final Function(dynamic) onOptionSelect;
   final _navigationService = locator<NavigationService>();
-  AudioTile({Key key, this.audio}) : super(key: key);
+  AudioTile(
+      {Key key, this.audio, this.popOption: const [], this.onOptionSelect})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +108,6 @@ class AudioTile extends StatelessWidget {
           ),
           Expanded(
             child: ListTile(
-              trailing: Icon(Icons.more_vert),
               title: TextTitle(
                 text: "${audio.title}",
                 maxLines: 2,
@@ -115,8 +118,26 @@ class AudioTile extends StatelessWidget {
                   text: "${audio.author}",
                 ),
               ),
+              trailing: PopupMenuButton(
+                padding: EdgeInsets.all(0),
+
+                icon: Icon(
+                  Icons.more_vert,
+                  // color: Colors.,
+                ),
+                // color: kScaffoldColor,
+                onSelected: (value) => onOptionSelect(value),
+                // onSelected: (value) => model.showReportDialog(context),
+                itemBuilder: (BuildContext context) => List.generate(
+                  popOption.length,
+                  (index) => PopupMenuItem(
+                    value: "${popOption[index]}",
+                    child: Text("${popOption[index]}"),
+                  ),
+                ),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

@@ -6,21 +6,20 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:stacked/stacked.dart';
 
-
-class AudioPlaylist extends StatefulWidget {
+class AudioPlaylistSection extends StatefulWidget {
   @override
-  _AudioPlaylistState createState() => _AudioPlaylistState();
+  _AudioPlaylistSectionState createState() => _AudioPlaylistSectionState();
 }
 
-class _AudioPlaylistState extends State<AudioPlaylist>
+class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
     SizeConfig().init(context);
-    return ViewModelBuilder<AudioPlaylsitViewModel>.reactive(
+    return ViewModelBuilder<AudioPlaylistSectionViewModel>.reactive(
         disposeViewModel: false,
-        viewModelBuilder: () => AudioPlaylsitViewModel(),
+        viewModelBuilder: () => AudioPlaylistSectionViewModel(),
         onModelReady: (model) => model.getPlaylist(),
         builder: (context, model, _) {
           return model.isBusy
@@ -77,12 +76,13 @@ class _AudioPlaylistState extends State<AudioPlaylist>
         });
   }
 
-  showBottomSheet(BuildContext context, AudioPlaylsitViewModel viewModel) {
+  showBottomSheet(
+      BuildContext context, AudioPlaylistSectionViewModel viewModel) {
     showModalBottomSheet(
       context: context,
       builder: (context) => Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ViewModelBuilder<AudioPlaylsitViewModel>.reactive(
+        child: ViewModelBuilder<AudioPlaylistSectionViewModel>.reactive(
             viewModelBuilder: () => viewModel,
             disposeViewModel: false,
             builder: (context, model, _) {

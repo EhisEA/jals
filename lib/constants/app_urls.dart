@@ -12,7 +12,24 @@ Map<String, String> appHttpHeaders() {
   };
 }
 
+Map<String, String> appJsonHttpHeaders() {
+  // locator<AuthenticationService>();
+  return {
+    /////////////////////////////
+    "Authorization":
+        "Token " + locator<AuthenticationService>().currentUser.key,
+    "Content-Type": "application/json"
+  };
+}
+
 class AppUrl {
+  static String addTo(String url, List<String> others) {
+    others.forEach((element) {
+      url = url + element;
+    });
+    return url;
+  }
+
   // =============================================================
   // =============================================================
   // =============================================================
