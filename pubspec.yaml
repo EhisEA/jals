@@ -58,6 +58,7 @@ dependencies:
   path_provider:
   audioplayers: ^0.17.4
   jiffy: ^3.0.1
+  just_audio: ^0.6.15+1
   
 
 dev_dependencies:
