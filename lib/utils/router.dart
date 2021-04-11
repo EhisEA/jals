@@ -89,20 +89,24 @@ class AppRouter {
         );
         break;
       case AudioPlayerViewRoute:
-        AudioModel audio = settings.arguments;
+        Map arguments = settings.arguments;
+        List<AudioModel> audios = arguments["audios"];
+        String playlistName = arguments["playlistName"];
+
         return MaterialPageRoute(
           builder: (context) => AudioPlayerView(
-            audio: audio,
+            audios: audios,
+            playlistName: playlistName,
           ),
         );
         break;
       case VideoPlayerViewRoute:
         VideoModel video = settings.arguments;
         return MaterialPageRoute(
-            builder: (BuildContext context) => VideoPlayerView(
-              video: video,
-            ),
-          );
+          builder: (BuildContext context) => VideoPlayerView(
+            video: video,
+          ),
+        );
         break;
       case AudioLibraryViewRoute:
         return MaterialPageRoute(builder: (context) => AudioLibrary());

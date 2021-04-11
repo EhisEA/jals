@@ -18,17 +18,19 @@ format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
 class AudioPlayerView extends StatelessWidget {
   CommentWidgetViewModel _commentWidgetViewModel;
-  final AudioModel audio;
+  final List<AudioModel> audios;
+  final String playlistName;
 
-  AudioPlayerView({Key key, this.audio}) {
-    _commentWidgetViewModel = CommentWidgetViewModel(audio.id);
+  AudioPlayerView({Key key, this.audios, this.playlistName}) {
+    // _commentWidgetViewModel = CommentWidgetViewModel(a.id);
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<AudioPlayerViewModel>.reactive(
-        onModelReady: (model) => model.initiliseAudio(audio.dataUrl),
+        onModelReady: (model) =>
+            model.initiliseAudio(audios, playlistName: playlistName),
         viewModelBuilder: () => locator<AudioPlayerViewModel>(),
         disposeViewModel: false,
         builder: (context, model, _) {
@@ -48,32 +50,38 @@ class AudioPlayerView extends StatelessWidget {
                       height: 180,
                       width: 180,
                       child: ShowNetworkImage(
-                        imageUrl: audio.coverImage,
+                        imageUrl: model.currentlyPlaying.coverImage,
                       ),
                     ),
                   ),
                   SizedBox(height: 20),
-                  // Container(
-                  //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  //   // alignment: Alignment.center,
-                  //   // height: 40,
-                  //   // width: 200,
-                  //   constraints: BoxConstraints(
-                  //     minHeight: 20,
-                  //     minWidth: 100,
-                  //     maxWidth: 200,
-                  //   ),
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(20),
-                  //     color: kGreen,
-                  //   ),
-                  //   child: TextCaptionWhite(text: "Feelings"),
-                  // ),
+                  if (model.playlistName != null)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      // alignment: Alignment.center,
+                      // height: 40,
+                      // width: 200,
+                      constraints: BoxConstraints(
+                        minHeight: 20,
+                        minWidth: 100,
+                        maxWidth: 200,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: kGreen,
+                      ),
+                      child: TextCaptionWhite(
+                        text: "${model.playlistName}",
+                        centered: true,
+                        maxLine: 3,
+                      ),
+                    ),
                   SizedBox(height: 20),
                   Container(
                     width: MediaQuery.of(context).size.width / 1.6,
                     child: TextHeader2(
-                      text: audio.title,
+                      text: model.currentlyPlaying.title,
 
                       //  "Lord, We Come to Worship",
                       center: true,
@@ -81,7 +89,7 @@ class AudioPlayerView extends StatelessWidget {
                   ),
                   SizedBox(height: 15),
                   TextCaption2(
-                    text: "By ${audio.author}",
+                    text: "By ${model.currentlyPlaying..author}",
                     center: true,
                   ),
                   SizedBox(height: 15),
@@ -155,9 +163,9 @@ class AudioPlayerView extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Divider(),
-                  CommentWidget(
-                    commentWidgetViewModel: _commentWidgetViewModel,
-                  )
+                  // CommentWidget(
+                  //   commentWidgetViewModel: _commentWidgetViewModel,
+                  // )
                 ],
               ),
             ),
@@ -229,8 +237,8 @@ class AudioPlayerView extends StatelessWidget {
                           itemBuilder: (context, index) {
                             PlayListModel playlist = model.playList[index];
                             return ListTile(
-                              onTap: () =>
-                                  model.addToPlaylist(playlist.id, audio),
+                              onTap: () => model.addToPlaylist(
+                                  playlist.id, model.currentlyPlaying),
                               title: Text(playlist.title),
                               subtitle:
                                   Text(playlist.count.toString() + " Songs"),

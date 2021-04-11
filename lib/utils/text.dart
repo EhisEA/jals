@@ -80,8 +80,15 @@ class TextCaptionWhite extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final int maxLine;
+  final bool centered;
 
-  const TextCaptionWhite({Key key, this.text, this.fontSize, this.fontWeight, this.maxLine})
+  const TextCaptionWhite(
+      {Key key,
+      this.text,
+      this.fontSize,
+      this.fontWeight,
+      this.maxLine,
+      this.centered: false})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -89,6 +96,7 @@ class TextCaptionWhite extends StatelessWidget {
     return Text(
       "$text",
       maxLines: maxLine,
+      textAlign: centered ? TextAlign.center : TextAlign.left,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontWeight: fontWeight ?? FontWeight.w600,

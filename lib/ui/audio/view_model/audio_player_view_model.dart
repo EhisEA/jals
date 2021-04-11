@@ -15,9 +15,13 @@ class AudioPlayerViewModel extends BaseViewModel {
   Duration streamPosition;
   AudioPlayerState _currentAudioState = AudioPlayerState.STOPPED;
   bool get canPlay => _currentAudioState != AudioPlayerState.PLAYING;
-  String url;
-  List<String> urls;
+  AudioModel currentlyPlaying;
+  int currentlyPlayingIndex;
+  List<AudioModel> audios;
   List<PlayListModel> playList;
+  String playlistName;
+  bool get hasNext => audios.length > currentlyPlayingIndex;
+  bool get hasPrev => currentlyPlayingIndex > 0;
 
   @override
   dispose() {
@@ -26,9 +30,11 @@ class AudioPlayerViewModel extends BaseViewModel {
     super.dispose();
   }
 
-  initiliseAudio(List<String> urls) async {
-    this.urls = urls;
-    this.url = urls[0];
+  initiliseAudio(List<AudioModel> audios, {String playlistName}) async {
+    this.audios = audios;
+    this.currentlyPlayingIndex = 0;
+    this.currentlyPlaying = audios[currentlyPlayingIndex];
+    this.playlistName = playlistName;
     audioPlayer.onDurationChanged.listen((Duration duration) {
       totalDuration = duration;
       setBusy(ViewState.Idle);
@@ -36,14 +42,30 @@ class AudioPlayerViewModel extends BaseViewModel {
 
     audioPlayer.onAudioPositionChanged.listen((Duration duration) {
       streamPosition = duration;
+      audioPlayer.onPlayerCompletion.listen((event) {
+        print("Comple");
+      });
+      if (streamPosition == totalDuration) {
+        print(333);
+        // audioPlayer.
+      }
       setBusy(ViewState.Idle);
     });
 
     audioPlayer.onPlayerStateChanged.listen((AudioPlayerState state) {
       print(state);
       _currentAudioState = state;
-      if (state == AudioPlayerState.COMPLETED)
-        streamPosition = Duration(seconds: 0);
+      if (state == AudioPlayerState.COMPLETED) {
+        if (hasNext) {
+          audioPlayer.release();
+          streamPosition = Duration(seconds: 0);
+          this.currentlyPlayingIndex = currentlyPlayingIndex++;
+          this.currentlyPlaying = audios[currentlyPlayingIndex];
+          play();
+        } else {
+          streamPosition = Duration(seconds: 0);
+        }
+      }
       setBusy(ViewState.Idle);
     });
 // audioPlayer.
@@ -67,7 +89,9 @@ class AudioPlayerViewModel extends BaseViewModel {
   }
 
   play() {
-    audioPlayer.play(url);
+    print(audios);
+    print(currentlyPlaying.dataUrl);
+    audioPlayer.play(currentlyPlaying.dataUrl);
   }
 
   pause() async {

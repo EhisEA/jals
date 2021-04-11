@@ -94,7 +94,10 @@ class AudioTile extends StatelessWidget {
     SizeConfig().init(context);
     return InkWell(
       onTap: () {
-        _navigationService.navigateTo(AudioPlayerViewRoute, argument: audio);
+        _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
+          "audios": [audio],
+          "playlistName": null
+        });
       },
       child: Row(
         children: [

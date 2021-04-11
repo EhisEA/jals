@@ -10,6 +10,7 @@ import '../../../route_paths.dart';
 
 class PlayListWidget extends StatelessWidget {
   final PlayListModel playList;
+  final NavigationService _navigationService = locator<NavigationService>();
   final Function onDelete;
   final _navigationSrevice = locator<NavigationService>();
   PlayListWidget(this.playList, {Key key, this.onDelete}) : super(key: key);
@@ -22,7 +23,7 @@ class PlayListWidget extends StatelessWidget {
       },
       child: Container(
         color: kPrimaryColor,
-        padding: const EdgeInsets.fromLTRB(20.0,20,0,20),
+        padding: const EdgeInsets.fromLTRB(20.0, 20, 0, 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -39,26 +40,44 @@ class PlayListWidget extends StatelessWidget {
                 ),
                 PopupMenuButton(
                   padding: EdgeInsets.all(0),
-                  
+
                   icon: Icon(
                     Icons.more_vert,
                     color: Colors.white,
                   ),
                   // color: kScaffoldColor,
-                  onSelected: (value)=>onDelete(),
+                  onSelected: (value) {
+                    switch (value.toString().toLowerCase()) {
+                      case "delete":
+                        onDelete();
+                        break;
+                      case "play":
+                        _navigationService.navigateTo(AudioPlayerViewRoute,
+                            argument: {
+                              "audios": playList.tracks,
+                              "playlistName": playList.title
+                            });
+                        break;
+                      default:
+                    }
+                  },
                   // onSelected: (value) => model.showReportDialog(context),
                   itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    if (playList.count >= 1)
+                      PopupMenuItem(
+                        value: "Play",
+                        child: Text("Play"),
+                      ),
                     const PopupMenuItem(
-                      
-                      value: "Delete Playlist",
+                      value: "Delete",
                       child: Text("Delete Playlist"),
                     ),
                   ],
                 ),
-              //   Icon(
-              //     Icons.more_vert,
-              //     color: Colors.white,
-              //   ),
+                //   Icon(
+                //     Icons.more_vert,
+                //     color: Colors.white,
+                //   ),
               ],
             ),
             SizedBox(
