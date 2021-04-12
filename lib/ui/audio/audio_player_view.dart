@@ -9,7 +9,6 @@ import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
-import 'package:jals/widgets/comment_widget.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
@@ -94,7 +93,7 @@ class AudioPlayerView extends StatelessWidget {
                   ),
                   SizedBox(height: 15),
                   TextCaption2(
-                    text: "By ${model.currentlyPlaying.author}",
+                    text: "By ${model.currentlyPlaying..author}",
                     center: true,
                   ),
                   SizedBox(height: 15),
