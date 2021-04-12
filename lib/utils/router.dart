@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jals/enums/password_type.dart';
 import 'package:jals/enums/verification_type.dart';
 import 'package:jals/models/article_model.dart';
 import 'package:jals/models/audio_model.dart';
+import 'package:jals/models/content_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/models/video_model.dart';
 import 'package:jals/route_paths.dart';
@@ -21,6 +23,7 @@ import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
 import 'package:jals/ui/home/home_base.dart';
+import 'package:jals/ui/store/store_item_view.dart';
 import 'package:jals/ui/video/video_library_view.dart';
 import 'package:jals/ui/video/video_player.dart';
 
@@ -110,6 +113,15 @@ class AppRouter {
         break;
       case AudioLibraryViewRoute:
         return MaterialPageRoute(builder: (context) => AudioLibrary());
+        break;
+      case StoreItemViewRoute:
+        ContentModel content = settings.arguments;
+        assert(content != null);
+        return CupertinoPageRoute(
+          builder: (context) => StoreItemView(
+            content: content,
+          ),
+        );
         break;
       // case :
       //   return MaterialPageRoute(

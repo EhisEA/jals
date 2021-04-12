@@ -17,7 +17,7 @@ class NewestItemsView extends StatelessWidget {
             )
           : ListView.builder(
               itemCount: content.length,
-              itemBuilder: (context, index) => ContentTile(
+              itemBuilder: (context, index) => StoreTile(
                 content: content[index],
               ),
             ),

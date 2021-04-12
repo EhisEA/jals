@@ -18,3 +18,4 @@ const String AudioLibraryViewRoute = "AudioLibraryViewRoute";
 const String AudioPlaylistViewRoute = "AudioPlaylistViewRoute";
 const String AudioPlayerViewRoute = "AudioPlayerViewRoute";
 const String VideoPlayerViewRoute = "VideoPlayerViewRoute";
+const String StoreItemViewRoute = "StoreItemViewRoute";

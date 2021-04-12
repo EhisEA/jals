@@ -203,7 +203,7 @@ class TextHeader3 extends StatelessWidget {
       textAlign: center ? TextAlign.center : TextAlign.left,
       style: TextStyle(
         fontWeight: fontWeight ?? FontWeight.w600,
-
+        color: color ?? Colors.black,
         fontSize: fontSize ?? getProportionatefontSize(18),
         // letterSpacing: 0.1,
       ),
