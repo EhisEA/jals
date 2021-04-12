@@ -12,6 +12,7 @@ import 'package:jals/widgets/back_icon.dart';
 import 'package:jals/widgets/comment_widget.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:stacked/stacked.dart';
 
 format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
@@ -27,12 +28,16 @@ class AudioPlayerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SliderThemeData _sliderThemeData = SliderTheme.of(context).copyWith(
+      trackHeight: 2.0,
+    );
     SizeConfig().init(context);
     return ViewModelBuilder<AudioPlayerViewModel>.reactive(
         onModelReady: (model) =>
             model.initiliseAudio(audios, playlistName: playlistName),
-        viewModelBuilder: () => locator<AudioPlayerViewModel>(),
-        disposeViewModel: false,
+        viewModelBuilder: () =>
+            AudioPlayerViewModel(), // locator<AudioPlayerViewModel>(),
+        // disposeViewModel: false,
         builder: (context, model, _) {
           return Scaffold(
             appBar: AppBar(
@@ -89,20 +94,48 @@ class AudioPlayerView extends StatelessWidget {
                   ),
                   SizedBox(height: 15),
                   TextCaption2(
-                    text: "By ${model.currentlyPlaying..author}",
+                    text: "By ${model.currentlyPlaying.author}",
                     center: true,
                   ),
                   SizedBox(height: 15),
-                  Slider(
-                    max: model.totalDuration == null
-                        ? 20
-                        : model.totalDuration.inMilliseconds.toDouble(),
-                    value: model.streamPosition == null
-                        ? 0
-                        : model.streamPosition.inMilliseconds.toDouble(),
-                    onChanged: (value) {
-                      model.seek(value);
-                    },
+                  Stack(
+                    children: [
+                      Center(
+                        child: SliderTheme(
+                          data: _sliderThemeData.copyWith(
+                            thumbShape: HiddenThumbComponentShape(),
+                            activeTrackColor: Colors.blue.shade100,
+                            inactiveTrackColor: Colors.grey.shade300,
+                          ),
+                          child: ExcludeSemantics(
+                            child: Slider(
+                              max: model.totalDuration == null
+                                  ? 20
+                                  : model.totalDuration.inMilliseconds
+                                      .toDouble(),
+                              value: model.bufferedPosition == null
+                                  ? 0
+                                  : model.bufferedPosition.inMilliseconds
+                                      .toDouble(),
+                              onChanged: (value) {},
+                              inactiveColor: Colors.grey.shade300,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Slider(
+                        max: model.totalDuration == null
+                            ? 20
+                            : model.totalDuration.inMilliseconds.toDouble(),
+                        value: model.streamPosition == null
+                            ? 0
+                            : model.streamPosition.inMilliseconds.toDouble(),
+                        onChanged: (value) {
+                          model.seek(value);
+                        },
+                        inactiveColor: Colors.transparent,
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -130,6 +163,7 @@ class AudioPlayerView extends StatelessWidget {
                         color: Color(0xffD9D9D9),
                       ),
                       SizedBox(width: 20),
+                      ControlButtons(model.audioPlayer),
                       InkWell(
                         onTap: model.play_pause,
                         child: CircleAvatar(
@@ -256,4 +290,90 @@ class AudioPlayerView extends StatelessWidget {
       ),
     );
   }
+}
+
+class ControlButtons extends StatelessWidget {
+  final AudioPlayer player;
+
+  ControlButtons(this.player);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        StreamBuilder<SequenceState>(
+          stream: player.sequenceStateStream,
+          builder: (context, snapshot) => IconButton(
+            icon: Icon(Icons.skip_previous),
+            onPressed: player.hasPrevious ? player.seekToPrevious : null,
+          ),
+        ),
+        StreamBuilder<PlayerState>(
+          stream: player.playerStateStream,
+          builder: (context, snapshot) {
+            final playerState = snapshot.data;
+            final processingState = playerState?.processingState;
+            final playing = playerState?.playing;
+            if (processingState == ProcessingState.loading ||
+                processingState == ProcessingState.buffering) {
+              return Container(
+                margin: EdgeInsets.all(8.0),
+                width: 64.0,
+                height: 64.0,
+                child: CircularProgressIndicator(),
+              );
+            } else if (playing != true) {
+              return IconButton(
+                icon: Icon(Icons.play_arrow),
+                iconSize: 64.0,
+                onPressed: player.play,
+              );
+            } else if (processingState != ProcessingState.completed) {
+              return IconButton(
+                icon: Icon(Icons.pause),
+                iconSize: 64.0,
+                onPressed: player.pause,
+              );
+            } else {
+              return IconButton(
+                icon: Icon(Icons.replay),
+                iconSize: 64.0,
+                onPressed: () => player.seek(Duration.zero,
+                    index: player.effectiveIndices.first),
+              );
+            }
+          },
+        ),
+        StreamBuilder<SequenceState>(
+          stream: player.sequenceStateStream,
+          builder: (context, snapshot) => IconButton(
+            icon: Icon(Icons.skip_next),
+            onPressed: player.hasNext ? player.seekToNext : null,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class HiddenThumbComponentShape extends SliderComponentShape {
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => Size.zero;
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    Animation<double> activationAnimation,
+    Animation<double> enableAnimation,
+    bool isDiscrete,
+    TextPainter labelPainter,
+    RenderBox parentBox,
+    SliderThemeData sliderTheme,
+    TextDirection textDirection,
+    double value,
+    double textScaleFactor,
+    Size sizeWithOverflow,
+  }) {}
 }
