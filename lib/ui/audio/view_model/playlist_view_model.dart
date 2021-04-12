@@ -6,6 +6,7 @@ import 'package:jals/models/playlist_model.dart';
 import 'package:jals/services/audio_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:share/share.dart';
 
 class PlaylistViewModel extends BaseViewModel {
   AudioService _audioService = AudioService();
@@ -19,6 +20,7 @@ class PlaylistViewModel extends BaseViewModel {
         _removeFromPlaylist(playList.id, audio);
         break;
       case "share":
+        Share.share('check out my website https://example.com');
         break;
       default:
     }

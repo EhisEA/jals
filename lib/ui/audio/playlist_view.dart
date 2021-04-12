@@ -63,12 +63,7 @@ class AudioPlaylistView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20),
                       child: AudioTile(
-                        audio: AudioModel(
-                            coverImage: _audio.coverImage,
-                            title: _audio.title,
-                            author: "${_audio.author}"
-                            //  "Lecrae - Restoration",
-                            ),
+                        audio: _audio,
                         popOption: ["remove", "share"],
                         onOptionSelect: (value) =>
                             model.onOptionSelect(value, _audio),
