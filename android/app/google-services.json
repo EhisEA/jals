@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "196219555953",
+    "project_id": "jals-21ff4",
+    "storage_bucket": "jals-21ff4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196219555953:android:7159ac0e99c7b665d70bd0",
+        "android_client_info": {
+          "package_name": "com.jal.jal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196219555953-hp4lmd5df1q023m2f0ktoltvpebpb54s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jal.jal",
+            "certificate_hash": "9637909a0f6a030829223ac36555471b071db2a9"
+          }
+        },
+        {
+          "client_id": "196219555953-kp67o5oajfutl41kedg1pog0ifnn9idv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHibjgKxskb5v4xGFv7ffbYN7w9uGmBic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196219555953-kp67o5oajfutl41kedg1pog0ifnn9idv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
