@@ -23,49 +23,38 @@ class _VideoAllState extends State<VideoAll>
       disposeViewModel: false,
       viewModelBuilder: () => locator<VideoAllViewModel>(),
       builder: (context, model, child) {
-        return Stack(
-          children: [
-            model.state == ViewState.Busy
-                ? Center(
-                    child: CircularProgressIndicator(),
+        return model.state == ViewState.Busy
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : model.allVideoList == null
+                ? Retry(
+                    onRetry: model.getAllVideos,
                   )
-                : model.allVideoList == null
-                    ? Retry(
-                        onRetry: model.getAllVideos,
+                : model.allVideoList.isEmpty
+                    ? Empty(
+                        title: "No video here",
                       )
-                    : model.allVideoList.isEmpty
-                        ? Empty(
-                            title: "No video here",
-                          )
-                        : ListView(
-                            children: List.generate(
-                              model.allVideoList.length,
-                              (index) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
-                                child: VideoTile(
-                                  videoModel: model.allVideoList[index],
-                                  popOption: ["Share"],
-                                  onOptionSelect: (value) =>
-                                      model.onOptionSelect(
-                                    value,
-                                    model.allVideoList[index],
-                                  ),
+                    : RefreshIndicator(
+                        onRefresh: model.getAllVideos,
+                        child: ListView(
+                          children: List.generate(
+                            model.allVideoList.length,
+                            (index) => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: VideoTile(
+                                videoModel: model.allVideoList[index],
+                                popOption: ["Share"],
+                                onOptionSelect: (value) => model.onOptionSelect(
+                                  value,
+                                  model.allVideoList[index],
                                 ),
                               ),
                             ),
                           ),
-            model.hasError
-                ? Align(
-                    alignment: Alignment.center,
-                    child: DefaultButton(
-                      color: Colors.blue,
-                      onPressed: () => model.getAllVideos(),
-                    ),
-                  )
-                : Container(),
-          ],
-        );
+                        ),
+                      );
       },
     );
   }

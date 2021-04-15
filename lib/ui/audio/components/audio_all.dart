@@ -27,17 +27,20 @@ class _AudioAllState extends State<AudioAll>
                 ? Retry(
                     onRetry: model.getAudio,
                   )
-                : ListView(
-                    children: List.generate(
-                      model.audioList.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: AudioTile(
-                          audio: model.audioList[index],
-                          popOption: ["Share"],
-                          onOptionSelect: (value) => model.onOptionSelect(
-                            value,
-                            model.audioList[index],
+                : RefreshIndicator(
+                    onRefresh: model.getAudio,
+                    child: ListView(
+                      children: List.generate(
+                        model.audioList.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: AudioTile(
+                            audio: model.audioList[index],
+                            popOption: ["Share"],
+                            onOptionSelect: (value) => model.onOptionSelect(
+                              value,
+                              model.audioList[index],
+                            ),
                           ),
                         ),
                       ),

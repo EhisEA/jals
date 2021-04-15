@@ -15,13 +15,13 @@ class AudioAllViewModel extends BaseViewModel {
   AudioAllViewModel() {
     getAudio();
   }
-  getAudio() async {
+  Future<void> getAudio() async {
     setBusy(ViewState.Busy);
-    await getArticlesNewtworkCall();
+    await _getAudioNewtworkCall();
     setBusy(ViewState.Idle);
   }
 
-  getArticlesNewtworkCall() async {
+  _getAudioNewtworkCall() async {
     audioList = await _audioService.getAudioList();
   }
 

@@ -33,7 +33,7 @@ class AudioPlaylistSectionViewModel extends BaseViewModel {
     setBusy(ViewState.Idle);
   }
 
-  getPlaylist() async {
+  Future<void> getPlaylist() async {
     setBusy(ViewState.Busy);
     await _getPlaylistNewtworkCall();
     setBusy(ViewState.Idle);

@@ -15,7 +15,7 @@ class VideoAllViewModel extends BaseViewModel {
   VideoAllViewModel() {
     getAllVideos();
   }
-  getAllVideos() async {
+  Future<void> getAllVideos() async {
     setBusy(ViewState.Busy);
     await onNetwork();
     setBusy(ViewState.Idle);

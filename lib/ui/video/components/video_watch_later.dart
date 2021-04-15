@@ -33,19 +33,23 @@ class _VideoWatchLaterState extends State<VideoWatchLater>
                     ? Empty(
                         title: "No video here",
                       )
-                    : ListView(
-                        children: List.generate(
-                          model.videoWatchLaterList.length,
-                          (index) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: VideoTile(
-                              videoModel: model.videoWatchLaterList[index],
-                              popOption: ["Share"],
-                              onOptionSelect: (value) => model.onOptionSelect(
-                                value,
-                                model.videoWatchLaterList[index],
+                    : RefreshIndicator(
+                        onRefresh: model.getAllVideos,
+                        child: ListView(
+                          children: List.generate(
+                            model.videoWatchLaterList.length,
+                            (index) => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: VideoTile(
+                                videoModel: model.videoWatchLaterList[index],
+                                popOption: ["Share"],
+                                onOptionSelect: (value) => model.onOptionSelect(
+                                  value,
+                                  model.videoWatchLaterList[index],
+                                ),
+                                showPrimaryButton: false,
                               ),
-                              showPrimaryButton: false,
                             ),
                           ),
                         ),

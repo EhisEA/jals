@@ -60,21 +60,24 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
                                 title: "You are yet to create a playlist",
                               )
                             : Expanded(
-                                child: GridView.count(
-                                  padding: EdgeInsets.symmetric(vertical: 20),
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20,
-                                  childAspectRatio: 156 / 112,
-                                  shrinkWrap: true,
-                                  crossAxisCount:
-                                      MediaQuery.of(context).size.width > 550
-                                          ? 3
-                                          : 2,
-                                  children: List.generate(
-                                    model.playList.length,
-                                    (index) => PlayListWidget(
-                                      model.playList[index],
-                                      onDelete: () => model.onDelete(index),
+                                child: RefreshIndicator(
+                                  onRefresh: model.getPlaylist,
+                                  child: GridView.count(
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20,
+                                    childAspectRatio: 156 / 112,
+                                    shrinkWrap: true,
+                                    crossAxisCount:
+                                        MediaQuery.of(context).size.width > 550
+                                            ? 3
+                                            : 2,
+                                    children: List.generate(
+                                      model.playList.length,
+                                      (index) => PlayListWidget(
+                                        model.playList[index],
+                                        onDelete: () => model.onDelete(index),
+                                      ),
                                     ),
                                   ),
                                 ),
