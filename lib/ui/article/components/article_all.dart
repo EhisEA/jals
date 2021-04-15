@@ -4,7 +4,7 @@ import 'package:jals/ui/article/components/build_news.dart';
 import 'package:jals/ui/article/view_models/article_all_view_model.dart';
 import 'package:jals/ui/article/view_models/article_news_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
-import 'package:jals/utils/size_config.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -18,14 +18,6 @@ class _ArticleAllState extends State<ArticleAll> {
   ArticleAllViewModel _articleAllViewModel = ArticleAllViewModel();
   ArticleNewsViewModel _articleNewsViewModel = ArticleNewsViewModel();
   ArticleAllViewModel _trendingAllViewModel = ArticleAllViewModel();
-
-  @override
-  dispose() {
-    _articleAllViewModel.dispose();
-    _articleNewsViewModel.dispose();
-    _trendingAllViewModel.dispose();
-    super.dispose();
-  }
 
   int selected = 0;
   changeSelected(int index) {
@@ -49,79 +41,90 @@ class _ArticleAllState extends State<ArticleAll> {
     Size defaultSize = MediaQuery.of(context).size;
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    print(defaultSize.width);
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: AnimatedContainer(
-            color: Colors.red,
-            curve: Curves.easeOut,
-
-            //Todo:  calculate the size value
-            height: !show
-                ? 0
-                : (defaultSize.width / 160) * (isPortrait ? 118 : 101), //300,
-            duration: Duration(milliseconds: 1500),
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 3000),
-              child: !show
-                  ? SizedBox(
-                      key: Key("44"),
-                    )
-                  : Column(
-                      key: Key("77"),
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AspectRatio(
-                          aspectRatio: 336 / 160,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)),
-                            clipBehavior: Clip.hardEdge,
-                            child: ShowNetworkImage(
-                              imageUrl:
-                                  "https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2019/07/Man-Silhouette.jpg",
+    return RefreshIndicator(
+      onRefresh: () async {
+        _articleAllViewModel.getArticles();
+        _articleNewsViewModel.getNews();
+        _trendingAllViewModel.getArticles();
+        show = false;
+        setState(() {});
+        Future.delayed(
+            Duration(seconds: 3),
+            () => setState(() {
+                  show = true;
+                }));
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: AnimatedContainer(
+              curve: Curves.easeOut,
+              //Todo:  calculate the size value
+              height: !show
+                  ? 0
+                  : (defaultSize.width / 160) * (isPortrait ? 118 : 101), //300,
+              duration: Duration(milliseconds: 1500),
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 3000),
+                child: !show
+                    ? SizedBox(
+                        key: Key("44"),
+                      )
+                    : Column(
+                        key: Key("77"),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 336 / 160,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10)),
+                              clipBehavior: Clip.hardEdge,
+                              child: ShowNetworkImage(
+                                imageUrl:
+                                    "https://www.shutterstock.com/blog/wp-content/uploads/sites/5/2019/07/Man-Silhouette.jpg",
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        TextCaption(
-                          text: "3 day ago",
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextHeader(
-                          maxLines: 2,
-                          text:
-                              "How to read, understand and deciphernderstand and deciphernderstand and deciphernderstand and decipher the teachings of Christ",
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-            ),
-          ),
-        ),
-        MultiSliver(
-          children: [
-            SliverPinnedHeader(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Row(
-                  children: [
-                    category(title: "Article", index: 0),
-                    category(title: "News", index: 1),
-                    category(title: "Trending", index: 2),
-                  ],
-                ),
+                          SizedBox(height: 20),
+                          TextCaption(
+                            text: "3 day ago",
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextHeader(
+                            maxLines: 2,
+                            text:
+                                "How to read, understand and deciphernderstand and deciphernderstand and deciphernderstand and decipher the teachings of Christ",
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
               ),
             ),
-            buildArticles(),
-          ],
-        )
-      ],
+          ),
+          MultiSliver(
+            children: [
+              SliverPinnedHeader(
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                    children: [
+                      category(title: "Article", index: 0),
+                      category(title: "News", index: 1),
+                      category(title: "Trending", index: 2),
+                    ],
+                  ),
+                ),
+              ),
+              buildArticles(),
+            ],
+          )
+        ],
+      ),
     );
   }
 
@@ -130,26 +133,26 @@ class _ArticleAllState extends State<ArticleAll> {
       case 0:
         return BuildArticle(
           key: Key("0"),
-          articleAllViewModel: _articleAllViewModel,
+          articleAllViewModel: locator<ArticleAllViewModel>(),
         );
       case 1:
         return BuildNews(
           key: Key("1"),
-          articleNewsViewModel: _articleNewsViewModel,
+          articleNewsViewModel: locator<ArticleNewsViewModel>(),
         );
 
         break;
       case 2:
         return BuildArticle(
           key: Key("2"),
-          articleAllViewModel: _trendingAllViewModel,
+          articleAllViewModel: locator<ArticleAllViewModel>(),
         );
 
         break;
       default:
         return BuildArticle(
           key: Key("3"),
-          articleAllViewModel: _articleAllViewModel,
+          articleAllViewModel: locator<ArticleAllViewModel>(),
         );
     }
   }

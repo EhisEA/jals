@@ -5,7 +5,7 @@ import 'package:jals/utils/base_view_model.dart';
 class ArticleBookMarkedViewModel extends BaseViewModel {
   ArticleService _articleService = ArticleService();
   List<ArticleModel> articles;
-  getArticles() async {
+  Future<void> getArticles() async {
     setBusy(ViewState.Busy);
     await getArticlesNewtworkCall();
     setBusy(ViewState.Idle);
