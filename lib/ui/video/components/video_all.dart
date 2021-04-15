@@ -19,7 +19,7 @@ class _VideoAllState extends State<VideoAll>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<VideoAllViewModel>.reactive(
-      onModelReady: (model) => model.getAllVideos(),
+      // onModelReady: (model) => model.getAllVideos(),
       disposeViewModel: false,
       viewModelBuilder: () => locator<VideoAllViewModel>(),
       builder: (context, model, child) {

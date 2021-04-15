@@ -24,6 +24,10 @@ class AudioPlaylistSectionViewModel extends BaseViewModel {
 
   TextEditingController playlistNameController = TextEditingController();
 
+  AudioPlaylistSectionViewModel() {
+    getPlaylist();
+  }
+
   changeMoodColorIndex(int index) {
     moodColorIndex = index;
     setBusy(ViewState.Idle);

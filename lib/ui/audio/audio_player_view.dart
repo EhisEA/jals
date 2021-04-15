@@ -8,7 +8,6 @@ import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
-import 'package:jals/widgets/comment_widget.dart';
 import 'package:jals/widgets/extended_text_field.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
@@ -181,9 +180,9 @@ class AudioPlayerView extends StatelessWidget {
                   SizedBox(height: 20),
                   Divider(),
                   StreamBuilder(
-                    stream: model.audioPlayer.sequenceStream,
+                    stream: model.audioPlayer.currentIndexStream,
                     builder: (context, snapshot) {
-                      print("here");
+                      print('${snapshot.data} ====');
                       // AudioModel currentlyPlaying =
                       //     snapshot.data.currentSource.tag as AudioModel;
                       // commentWidgetViewModel =

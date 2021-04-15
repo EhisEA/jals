@@ -27,6 +27,7 @@ class AudioPlayerViewModel extends BaseViewModel {
   // int currentlyPlayingIndex;
   List<AudioModel> audios;
   List<PlayListModel> playList;
+  List<CommentWidgetViewModel> commentWidgetViewModels;
   ConcatenatingAudioSource _songs;
   String playlistName;
   String _dynamicLink;
@@ -41,6 +42,10 @@ class AudioPlayerViewModel extends BaseViewModel {
   }
 
   initiliseAudio(List<AudioModel> audios, {String playlistName}) async {
+    commentWidgetViewModels = audios
+        .map<CommentWidgetViewModel>(
+            (audio) => CommentWidgetViewModel(audio.id))
+        .toList();
     _songs = ConcatenatingAudioSource(
       children: List.generate(
         audios.length,

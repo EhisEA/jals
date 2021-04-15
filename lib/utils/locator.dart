@@ -36,13 +36,13 @@ void setupLocator() {
   locator.registerLazySingleton(() => VideoWatchLaterViewModel());
   locator.registerLazySingleton(() => AudioAllViewModel());
   locator.registerLazySingleton(() => AudioPlaylistSectionViewModel());
-  locator.registerLazySingleton(() => DynamicLinkService());
+  // locator.registerLazySingleton(() => DynamicLinkService());
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());
 //! Factory
-  locator.registerFactory(() => VideoDownloadViewModel());
-  locator.registerFactory(() => VideoAllViewModel());
-  locator.registerFactory(() => VideoPlayerViewViewModel());
-  locator.registerFactory(() => VideoWatchLaterViewModel());
-  locator.registerFactory(() => NewestItemsViewModel());
+  // locator.registerFactory(() => VideoDownloadViewModel());
+  // locator.registerFactory(() => VideoAllViewModel());
+  // locator.registerFactory(() => VideoPlayerViewViewModel());
+  // locator.registerFactory(() => VideoWatchLaterViewModel());
+  // locator.registerFactory(() => NewestItemsViewModel());
 }

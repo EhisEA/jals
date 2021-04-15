@@ -17,8 +17,9 @@ class _AudioAllState extends State<AudioAll>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<AudioAllViewModel>.reactive(
-      onModelReady: (model) => model.getAudio(),
+      // onModelReady: (model) => model.getAudio(),
       viewModelBuilder: () => locator<AudioAllViewModel>(),
+      disposeViewModel: false,
       builder: (context, model, _) {
         return model.isBusy
             ? Center(child: CircularProgressIndicator())

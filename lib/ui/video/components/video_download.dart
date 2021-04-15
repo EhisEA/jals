@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/video/view_models/video_downloads_view_model.dart';
-import 'package:jals/utils/base_view_model.dart';
-import 'package:jals/widgets/article_tile.dart';
 import 'package:stacked/stacked.dart';
 
 class VideoDownload extends StatefulWidget {

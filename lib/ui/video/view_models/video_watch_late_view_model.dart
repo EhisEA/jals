@@ -15,6 +15,9 @@ class VideoWatchLaterViewModel extends BaseViewModel {
   List<VideoModel> _videoWatchLaterList;
   List<VideoModel> get videoWatchLaterList => _videoWatchLaterList;
 
+  VideoWatchLaterViewModel() {
+    getAllVideos();
+  }
   getAllVideos() async {
     setBusy(ViewState.Busy);
     await onNetwork();

@@ -11,6 +11,10 @@ class AudioAllViewModel extends BaseViewModel {
   AudioService _audioService = AudioService();
   DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
   List<AudioModel> audioList;
+
+  AudioAllViewModel() {
+    getAudio();
+  }
   getAudio() async {
     setBusy(ViewState.Busy);
     await getArticlesNewtworkCall();

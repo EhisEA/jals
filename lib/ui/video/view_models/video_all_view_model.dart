@@ -11,6 +11,10 @@ class VideoAllViewModel extends BaseViewModel {
   List<VideoModel> _allVideoList;
   List<VideoModel> get allVideoList => _allVideoList;
   bool hasError = false;
+
+  VideoAllViewModel() {
+    getAllVideos();
+  }
   getAllVideos() async {
     setBusy(ViewState.Busy);
     await onNetwork();
