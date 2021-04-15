@@ -12,6 +12,24 @@ class VideoService extends ChangeNotifier {
   final Client _client = new Client();
 
 // =====================***Functions***==============
+  Future<VideoModel> getVideo(String videoId) async {
+    try {
+      String url = AppUrl.VideosList + videoId;
+      Response response = await get(
+        url,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      print(result);
+
+      return VideoModel.fromJson(result["data"]);
+    } catch (e) {
+      debugPrint("====error=====");
+      print(e);
+      return null;
+    }
+  }
+
   Future<List<VideoModel>> getVideoList() async {
     try {
       Response response = await _client.get(
@@ -26,11 +44,11 @@ class VideoService extends ChangeNotifier {
       } else {
         // Handle Error
         print("Error Occured");
-        return [];
+        return null;
       }
     } catch (e) {
       print("The Errror was $e");
-      return [];
+      return null;
     }
   }
 
@@ -48,11 +66,11 @@ class VideoService extends ChangeNotifier {
       } else {
         print("Error");
         // Handle Error
-        return [];
+        return null;
       }
     } catch (e) {
       print("The Errror was $e");
-      return [];
+      return null;
     }
   }
 

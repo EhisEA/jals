@@ -29,6 +29,7 @@ class _HomeBaseViewState extends State<HomeBaseView> {
                 PersistentTabView(
                     backgroundColor: Colors.white,
                     navBarHeight: 50,
+                    onItemSelected: (index) => model.changeTab(index),
                     customWidget: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
                       decoration: BoxDecoration(

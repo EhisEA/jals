@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:jals/ui/article/view_models/article_download_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/widgets/article_tile.dart';
-import 'package:jals/widgets/button.dart';
+import 'package:jals/widgets/empty.dart';
+import 'package:jals/widgets/retry.dart';
 import 'package:stacked/stacked.dart';
 
-class ArticleDownload extends StatelessWidget {
+class ArticleDownload extends StatefulWidget {
+  @override
+  _ArticleDownloadState createState() => _ArticleDownloadState();
+}
+
+class _ArticleDownloadState extends State<ArticleDownload>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ArticleDownloadViewModel>.reactive(
@@ -16,22 +23,27 @@ class ArticleDownload extends StatelessWidget {
         return model.isBusy
             ? Center(child: CircularProgressIndicator())
             : model.articles == null
-                ? Center(
-                    child: DefaultButton(
-                      onPressed: model.getArticles,
-                      title: "Retry",
-                    ),
+                ? Retry(
+                    onRetry: model.getArticles,
                   )
-                : ListView(
-                    children: List.generate(
-                      model.articles.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: ArticleTile(article: model.articles[index]),
-                      ),
-                    ),
-                  );
+                : model.articles.isEmpty
+                    ? Empty(
+                        title: "No Downloaded Article",
+                      )
+                    : ListView(
+                        children: List.generate(
+                          model.articles.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: ArticleTile(article: model.articles[index]),
+                          ),
+                        ),
+                      );
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

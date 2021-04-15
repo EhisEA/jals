@@ -1,20 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/models/article_model.dart';
 import 'package:jals/services/article_services.dart';
+import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
+import 'package:share/share.dart';
 
 import 'article_download_view_model.dart';
 
 class ArticleViewViewModel extends BaseViewModel {
   final _hiveDatabaseService = locator<HiveDatabaseService>();
+  final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
   final _articleDownloadViewModel = locator<ArticleDownloadViewModel>();
   ArticleService _articleService = ArticleService();
   NetworkConfig _networkConfig = NetworkConfig();
   ArticleModel article;
   bool downloaded;
   double downloadPosition = 4;
+  String _articleDynamicLink;
 
   getArticleDetails(ArticleModel articleToView) async {
     setBusy(ViewState.Busy);
@@ -24,6 +30,9 @@ class ArticleViewViewModel extends BaseViewModel {
       await _networkConfig.onNetworkAvailabilityDialog(
           () => getArticleDetailsNetworkCall(articleToView.id));
     }
+    _articleDynamicLink =
+        await _dynamicLinkService.createEventLink(article.toContent());
+
     setBusy(ViewState.Idle);
   }
 
@@ -32,6 +41,23 @@ class ArticleViewViewModel extends BaseViewModel {
     if (article != null) {
       downloaded = _hiveDatabaseService.checkArticleDownloadStatus(article.id);
     }
+  }
+
+// sharing
+
+  share() async {
+    if (_articleDynamicLink == null || _articleDynamicLink == "") {
+      _articleDynamicLink =
+          await _dynamicLinkService.createEventLink(article.toContent());
+    }
+
+    if (_articleDynamicLink == null || _articleDynamicLink == "") {
+      Fluttertoast.showToast(
+          msg: "No internet",
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+    }
+    Share.share(_articleDynamicLink);
   }
 
   toggleBookmark() {

@@ -8,6 +8,22 @@ import 'package:jals/utils/network_utils.dart';
 
 class ArticleService {
   final NetworkConfig _networkConfig = NetworkConfig();
+  Future<ArticleModel> getArticle(String id) async {
+    try {
+      String url = AppUrl.ArticleList + id;
+      http.Response response = await http.get(
+        url,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      return ArticleModel.fromJson(result["data"]);
+    } catch (e) {
+      debugPrint("====error=====");
+      print(e);
+      return null;
+    }
+  }
+
   Future<List<ArticleModel>> getArticles() async {
     try {
       List<ArticleModel> articles;

@@ -9,15 +9,17 @@ import 'package:jals/services/authentication_service.dart';
 import 'package:jals/ui/home/components/edit_text_field.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/image_select.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
+import 'package:jals/widgets/button.dart';
 import 'package:stacked/stacked.dart' as viewmodel;
 import 'package:velocity_x/velocity_x.dart';
 
 enum UserUpdateType { FULLNAME, PHONE, DATEOFBIRTH, PASSWORD }
 
-class SettingsViewModel extends BaseViewModel {
+class SettingsViewModel extends BaseViewModel with ImageSelect {
   FocusNode _focusDateField = FocusNode();
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
@@ -53,12 +55,21 @@ class SettingsViewModel extends BaseViewModel {
 // ============================================================
 
   final picker = ImagePicker();
-  Future updateProfileImage() async {
+  Future _updateProfileImage(ImageSource imageSource) async {
     File image;
     setSecondaryBusy(ViewState.Busy);
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    // final pickedFile = await select(context);
+    final pickedFile = await picker.getImage(source: imageSource);
+    if (pickedFile == null) {
+      print('empty');
+      setSecondaryBusy(ViewState.Idle);
+      return;
+    }
+
     if (pickedFile != null) {
       image = File(pickedFile.path);
+
       ApiResponse response =
           await _authenticationService.createUserAccountInfo(avatar: image);
       if (response == ApiResponse.Success) {
@@ -78,6 +89,39 @@ class SettingsViewModel extends BaseViewModel {
       }
     }
     setSecondaryBusy(ViewState.Idle);
+  }
+
+  showImageSelectionDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: kScaffoldColor,
+          title: Text("Select photo from"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                DefaultButtonBorderedIcon(
+                    icon: Icons.perm_media,
+                    press: () {
+                      _updateProfileImage(ImageSource.gallery);
+                      Navigator.pop(context);
+                    },
+                    text: "Gallery"),
+                Padding(padding: EdgeInsets.all(8.0)),
+                DefaultButtonBorderedIcon(
+                    icon: Icons.camera_alt,
+                    press: () {
+                      _updateProfileImage(ImageSource.camera);
+                      Navigator.pop(context);
+                    },
+                    text: "Camera"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
 // ============================================================

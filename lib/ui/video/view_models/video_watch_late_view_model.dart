@@ -1,40 +1,42 @@
 import 'package:jals/models/video_model.dart';
 import 'package:jals/services/dialog_service.dart';
+import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/services/video_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
+import 'package:share/share.dart';
 
 class VideoWatchLaterViewModel extends BaseViewModel {
   VideoService _videoService = locator<VideoService>();
   NetworkConfig _networkConfig = new NetworkConfig();
+  DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
   DialogService _dialogService = locator<DialogService>();
-  List<VideoModel> _videoWatchLaterList = [];
-  List<VideoModel> get videoWatchLaterList => [..._videoWatchLaterList];
+  List<VideoModel> _videoWatchLaterList;
+  List<VideoModel> get videoWatchLaterList => _videoWatchLaterList;
 
   getAllVideos() async {
     setBusy(ViewState.Busy);
-    await _networkConfig.onNetworkAvailabilityDialog(onNetwork);
+    await onNetwork();
     setBusy(ViewState.Idle);
   }
 
   onNetwork() async {
     try {
-      List<VideoModel> videos = await _videoService.getBookmarkedVideoList();
-      if (videos.length >= 1) {
-        _videoWatchLaterList = videos;
-        notifyListeners();
-      } else {
-        _videoWatchLaterList = [];
-        notifyListeners();
-        await _dialogService.showDialog(
-            title: "Fetching Videos Error",
-            buttonTitle: "OK",
-            description:
-                "An Error Occured while trying to fetch your video list, Please try again.");
-      }
+      _videoWatchLaterList = await _videoService.getBookmarkedVideoList();
     } catch (e) {
       print(e);
+    }
+  }
+
+  onOptionSelect(value, VideoModel audio) async {
+    final String link =
+        await _dynamicLinkService.createEventLink(audio.toContent());
+    switch (value.toString().toLowerCase()) {
+      case "share":
+        Share.share(link);
+        break;
+      default:
     }
   }
 }

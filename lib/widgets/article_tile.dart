@@ -150,6 +150,8 @@ class AudioTile extends StatelessWidget {
 class VideoTile extends StatelessWidget {
   final VideoModel videoModel;
   final bool showPrimaryButton, showSecondaryButton;
+  final List<String> popOption;
+  final Function(dynamic) onOptionSelect;
   final _navigationService = locator<NavigationService>();
 
   VideoTile({
@@ -157,6 +159,8 @@ class VideoTile extends StatelessWidget {
     @required this.videoModel,
     this.showPrimaryButton = true,
     this.showSecondaryButton = true,
+    this.popOption,
+    this.onOptionSelect,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -196,7 +200,29 @@ class VideoTile extends StatelessWidget {
                           text: "${videoModel.title}",
                         ),
                       ),
-                      Icon(Icons.more_vert),
+                      Container(
+                        height: 50,
+                        width: 20,
+                        // color: Colors.red,
+                        child: PopupMenuButton(
+                          padding: EdgeInsets.all(0),
+
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.black,
+                          ),
+                          // color: kScaffoldColor,
+                          onSelected: (value) => onOptionSelect(value),
+                          // onSelected: (value) => model.showReportDialog(context),
+                          itemBuilder: (BuildContext context) => List.generate(
+                            popOption.length,
+                            (index) => PopupMenuItem(
+                              value: "${popOption[index]}",
+                              child: Text("${popOption[index]}"),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -209,43 +235,51 @@ class VideoTile extends StatelessWidget {
                     height: getProportionatefontSize(5),
                   ),
                   Spacer(),
-                  Row(
-                    children: [
-                      showSecondaryButton
-                          ? ClipOval(
-                              child: Container(
-                                color: kGreen.withOpacity(0.15),
-                                child: Icon(
-                                  Icons.play_arrow,
-                                  color: kGreen,
-                                  size: getProportionatefontSize(15),
-                                ),
-                              ),
-                            )
-                          : SizedBox(),
-                      Spacer(),
-                      showPrimaryButton
-                          ? Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: kGreen,
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: getProportionatefontSize(20),
-                                vertical: getProportionatefontSize(2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Buy",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: getProportionatefontSize(12)),
-                                ),
-                              ),
-                            )
-                          : SizedBox(),
-                    ],
-                  ),
+                  // Row to be disappear if item has been purchased
+                  videoModel.isPurchased
+                      ? Container()
+                      : Row(
+                          children: [
+                            showSecondaryButton
+                                ? ClipOval(
+                                    child: Container(
+                                      color: kGreen.withOpacity(0.15),
+                                      child: Icon(
+                                        Icons.play_arrow,
+                                        color: videoModel.price <= 0
+                                            ? Colors.blue
+                                            : kGreen,
+                                        size: getProportionatefontSize(15),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            Spacer(),
+                            showPrimaryButton
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: videoModel.price <= 0
+                                          ? Colors.blue
+                                          : kGreen,
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: getProportionatefontSize(20),
+                                      vertical: getProportionatefontSize(2),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        videoModel.price <= 0 ? "Free" : "Buy",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                getProportionatefontSize(12)),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
                   SizedBox(
                     height: getProportionatefontSize(5),
                   ),

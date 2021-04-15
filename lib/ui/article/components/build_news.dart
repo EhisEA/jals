@@ -7,7 +7,8 @@ import 'package:stacked/stacked.dart';
 
 class BuildNews extends StatefulWidget {
   final ArticleNewsViewModel articleNewsViewModel;
-  const BuildNews({Key key, @required this.articleNewsViewModel}) : super(key: key);
+  const BuildNews({Key key, @required this.articleNewsViewModel})
+      : super(key: key);
   @override
   _BuildNewsState createState() => _BuildNewsState();
 }
@@ -37,6 +38,7 @@ class _BuildNewsState extends State<BuildNews>
                       children: [
                         SizedBox(height: 20),
                         DefaultButton(
+                          color: Colors.grey.shade400,
                           onPressed: model.getNews,
                           title: "Retry",
                         ),

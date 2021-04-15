@@ -35,19 +35,19 @@ class _SettingsViewState extends State<SettingsView> {
                             fontWeight: FontWeight.w700),
                       ).p(30),
                     ),
-                   InkWell(
-                          onTap: (){
-                            if(!model.isSecondaryBusy){
-                              model.updateProfileImage();
-                            }
-                          },
-                          child:  model.avatar == null
-                        ? CircleAvatar(
-                            radius: 70,
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.person, size:60),
-                          ).p(20)
-                        : Container(
+                    InkWell(
+                      onTap: () {
+                        if (!model.isSecondaryBusy) {
+                          model.showImageSelectionDialog(context);
+                        }
+                      },
+                      child: model.avatar == null
+                          ? CircleAvatar(
+                              radius: 70,
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.person, size: 60),
+                            ).p(20)
+                          : Container(
                               width: 140,
                               height: 140,
                               child: Stack(
@@ -56,31 +56,40 @@ class _SettingsViewState extends State<SettingsView> {
                                     child: Container(
                                       width: 140,
                                       height: 140,
-                                      child:
-                                      
-                                      model.avatar!=null? ShowNetworkImage(
-                                        imageUrl: model.avatar,
-                                      ):
-                                      Center(child: Icon(Icons.person,color: kPrimaryColor,size: 50,)),
+                                      child: model.avatar != null
+                                          ? ShowNetworkImage(
+                                              imageUrl: model.avatar,
+                                            )
+                                          : Center(
+                                              child: Icon(
+                                              Icons.person,
+                                              color: kPrimaryColor,
+                                              size: 50,
+                                            )),
                                     ),
                                   ),
                                   // show loader to indicate that image is uploading
-                                  model.isSecondaryBusy?
-                                  ClipOval(
-                                    child: Container(
-                                      width: 140,
-                                      height: 140,
-                                      color: Colors.black38,
-                                      child: Center(child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation(Colors.white),
-                                      ))),
-                                  ):SizedBox(),
+                                  model.isSecondaryBusy
+                                      ? ClipOval(
+                                          child: Container(
+                                              width: 140,
+                                              height: 140,
+                                              color: Colors.black38,
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                        Colors.white),
+                                              ))),
+                                        )
+                                      : SizedBox(),
                                 ],
                               ),
                             ),
-                        ),
+                    ),
                     Text(
-                      model.fullname??"",
+                      model.fullname ?? "",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -116,7 +125,10 @@ class _SettingsViewState extends State<SettingsView> {
                                 context, UserUpdateType.PHONE, model)),
                         buildUserInfo(
                             "Birthday",
-                           model.dateOfBirth==null?"": DateFormat("dd-MMM-yyyy").format(model.dateOfBirth),
+                            model.dateOfBirth == null
+                                ? ""
+                                : DateFormat("dd-MMM-yyyy")
+                                    .format(model.dateOfBirth),
                             () => model.update(
                                 context, UserUpdateType.DATEOFBIRTH, model)),
                         buildUserInfo(

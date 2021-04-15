@@ -31,7 +31,7 @@ class AudioPlaylistSectionViewModel extends BaseViewModel {
 
   getPlaylist() async {
     setBusy(ViewState.Busy);
-    await _networkConfig.onNetworkAvailabilityDialog(_getPlaylistNewtworkCall);
+    await _getPlaylistNewtworkCall();
     setBusy(ViewState.Idle);
   }
 

@@ -4,6 +4,8 @@ import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
+import 'package:jals/widgets/empty.dart';
+import 'package:jals/widgets/retry.dart';
 import 'package:stacked/stacked.dart';
 
 class AudioPlaylistSection extends StatefulWidget {
@@ -25,10 +27,9 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
           return model.isBusy
               ? Center(child: CircularProgressIndicator())
               : model.playList == null
-                  ? Center(
-                      child: IconButton(
-                          icon: Icon(Icons.refresh),
-                          onPressed: model.getPlaylist))
+                  ? Retry(
+                      onRetry: model.getPlaylist,
+                    )
                   : Column(
                       children: [
                         Row(
@@ -53,24 +54,30 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
                           ],
                         ),
                         SizedBox(height: 10),
-                        Expanded(
-                          child: GridView.count(
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 156 / 112,
-                            shrinkWrap: true,
-                            crossAxisCount:
-                                MediaQuery.of(context).size.width > 550 ? 3 : 2,
-                            children: List.generate(
-                              model.playList.length,
-                              (index) => PlayListWidget(
-                                model.playList[index],
-                                onDelete: () => model.onDelete(index),
+                        model.playList.isEmpty
+                            ? Empty(
+                                title: "You are yet to create a playlist",
+                              )
+                            : Expanded(
+                                child: GridView.count(
+                                  padding: EdgeInsets.symmetric(vertical: 20),
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                  childAspectRatio: 156 / 112,
+                                  shrinkWrap: true,
+                                  crossAxisCount:
+                                      MediaQuery.of(context).size.width > 550
+                                          ? 3
+                                          : 2,
+                                  children: List.generate(
+                                    model.playList.length,
+                                    (index) => PlayListWidget(
+                                      model.playList[index],
+                                      onDelete: () => model.onDelete(index),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
                       ],
                     );
         });

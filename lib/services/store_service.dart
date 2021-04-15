@@ -24,29 +24,33 @@ class StoreService {
         });
         return listOfItems;
       } else {
-        print("Will return an empty List");
-        List<ContentModel> emptyList = [];
-        return emptyList;
+        print("Will return null");
+        return null;
       }
     } catch (e) {
       print("The error  fetching the newest items from store was $e");
-      List<ContentModel> emptyList = [];
-      return emptyList;
+      return null;
     }
   }
 
   // =======Get Purchased Store Items==========
-  Future getPurchasedItemsList() async {
+  Future<List<ContentModel>> getPurchasedItemsList() async {
     try {
       Response response = await _client.get(AppUrl.getPurchasedItemsList);
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       if (decodedData["status"] == "successful") {
-        // Perfom action...
+        List<ContentModel> listOfItems = [];
+
+        decodedData["data"]["results"].forEach((e) {
+          listOfItems.add(ContentModel().fromJson(e));
+        });
+        return listOfItems;
       } else {
-        // Perfom another action...
+        return null;
       }
     } catch (e) {
-      print("The Error geottn from fetching the list of purchased Items==$e");
+      print("The Error geotten from fetching the list of purchased Items==$e");
+      return null;
     }
   }
 }

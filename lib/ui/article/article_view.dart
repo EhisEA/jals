@@ -93,13 +93,17 @@ class ArticleView extends StatelessWidget {
                           ),
                         ),
                       ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Icon(
-                    Icons.share_outlined,
-                    color: Colors.black,
+                if (!model.isBusy)
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: InkWell(
+                      onTap: model.share,
+                      child: Icon(
+                        Icons.share_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
-                ),
                 model.article == null
                     ? SizedBox()
                     : model.article.downloaded

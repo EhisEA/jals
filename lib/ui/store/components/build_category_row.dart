@@ -8,7 +8,9 @@ import 'package:stacked/stacked.dart';
 
 class BuildCategoryRow extends StatelessWidget {
   final int index;
-  const BuildCategoryRow({Key key, this.index}) : super(key: key);
+  final Function(int) onChanged;
+  const BuildCategoryRow({Key key, this.index, this.onChanged})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -34,6 +36,7 @@ class BuildCategoryRow extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           model.changeIndex(index);
+                          onChanged(index);
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
@@ -70,12 +73,12 @@ class BuildCategoryRow extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              BuildBottomRow(
-                index: model.selectedIndex,
-              ),
-              SizedBox(
-                height: 10,
-              ),
+              // BuildBottomRow(
+              //   index: model.selectedIndex,
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
             ],
           );
         },

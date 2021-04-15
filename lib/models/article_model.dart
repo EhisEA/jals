@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+import 'package:jals/models/content_model.dart';
 part 'article_model.g.dart';
 
 ArticleModel videoModelFromJson(String str) =>
@@ -94,4 +95,19 @@ class ArticleModel {
         "downloaded": downloaded,
         "downloadDate": downloadDate,
       };
+
+  toContent() {
+    // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
+    return ContentModel(
+      author: author,
+      coverImage: coverImage,
+      createdAt: createdAt,
+      title: title,
+      id: id,
+      price: price,
+      postType: ContentModel().getContentType(postType),
+      // downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
+      dataUrl: dataUrl,
+    );
+  }
 }

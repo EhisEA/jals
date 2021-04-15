@@ -10,6 +10,24 @@ import 'package:jals/utils/network_utils.dart';
 
 class AudioService {
   final NetworkConfig _networkConfig = NetworkConfig();
+  Future<AudioModel> getAudio(String audioId) async {
+    try {
+      String url = AppUrl.AudioList + audioId;
+      http.Response response = await http.get(
+        url,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      print(result);
+
+      return AudioModel.fromJson(result["data"]);
+    } catch (e) {
+      debugPrint("====error=====");
+      print(e);
+      return null;
+    }
+  }
+
   Future<List<AudioModel>> getAudioList() async {
     try {
       List<AudioModel> audios;

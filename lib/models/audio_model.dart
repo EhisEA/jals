@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
+import 'package:jals/models/content_model.dart';
 // part 'article_model.g.dart';
 
 AudioModel videoModelFromJson(String str) =>
@@ -25,6 +26,8 @@ class AudioModel {
     this.coverImage,
     this.downloaded,
     this.downloadDate,
+    this.isBookmarked,
+    this.isPurchased,
   });
 
   @HiveField(0)
@@ -57,6 +60,12 @@ class AudioModel {
   @HiveField(9)
   DateTime downloadDate;
 
+  @HiveField(10)
+  bool isBookmarked;
+
+  @HiveField(11)
+  bool isPurchased;
+
   factory AudioModel.fromJson(Map<String, dynamic> json) => AudioModel(
         id: json["id"],
         title: json["title"],
@@ -68,6 +77,8 @@ class AudioModel {
         coverImage: json["cover_image"],
         downloaded: json["downloaded"] ?? false,
         downloadDate: null,
+        isBookmarked: json["is_bookmarked"],
+        isPurchased: json["is_purchased"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -81,5 +92,23 @@ class AudioModel {
         "cover_image": coverImage,
         "downloaded": downloaded,
         "downloadDate": downloadDate,
+        "is_purchased": isPurchased,
+        "is_bookmarked": isBookmarked,
       };
+
+  toContent() {
+    // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
+    return ContentModel(
+      author: author,
+      coverImage: coverImage,
+      createdAt: createdAt,
+      title: title,
+      id: id,
+      price: price,
+      postType: ContentModel().getContentType(postType),
+      isPurchased: isPurchased,
+      // downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
+      dataUrl: dataUrl,
+    );
+  }
 }

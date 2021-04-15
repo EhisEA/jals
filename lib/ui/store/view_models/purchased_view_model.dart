@@ -2,22 +2,15 @@ import 'package:jals/models/content_model.dart';
 import 'package:jals/services/store_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
-import 'package:jals/utils/network_utils.dart';
 
-class NewestItemsViewModel extends BaseViewModel {
+class PurchasedItemsViewModel extends BaseViewModel {
   bool isLoading = false;
-  NetworkConfig _networkConfig = new NetworkConfig();
   StoreService _storeService = locator<StoreService>();
-  List<ContentModel> newestItemList = [];
+  List<ContentModel> purchaseItemList = [];
   getNewestItems() async {
     try {
       setBusy(ViewState.Busy);
-      // isLoading = true;
-      // await _networkConfig
-      //     .onNetworkAvailabilityToast(onNetworkFetchNewestItems);
       await onNetworkFetchNewestItems();
-      // setBusy(ViewState.Idle);
-      // isLoading = false;
       notifyListeners();
     } catch (e) {
       print(e);
@@ -26,10 +19,13 @@ class NewestItemsViewModel extends BaseViewModel {
   }
 
   onNetworkFetchNewestItems() async {
+    //null means there was a network or server error
+    //empty means no item
+    //when data is availble it  display
     try {
-      newestItemList = await _storeService.getNewestStoreItems();
+      purchaseItemList = await _storeService.getPurchasedItemsList();
     } catch (e) {
-      newestItemList = null;
+      purchaseItemList = null;
     }
   }
 }

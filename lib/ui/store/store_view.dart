@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jals/ui/shop/components/store_card.dart';
 import 'package:jals/ui/store/components/build_category_row.dart';
-import 'package:jals/ui/store/newest_items_view.dart';
 import 'package:jals/ui/store/purchased_items_view.dart';
 import 'package:jals/ui/store/timeline_items_view.dart';
 import 'package:jals/ui/store/view_models/store_view_model.dart';
@@ -11,18 +9,21 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:stacked/stacked.dart';
 
+import 'newest_items_view.dart';
+
 class StoreView extends StatefulWidget {
   @override
   _StoreViewState createState() => _StoreViewState();
 }
 
 class _StoreViewState extends State<StoreView> {
+  final PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<StoreViewModel>.reactive(
       onModelReady: (model) {
-        model.getNewestItems();
+        // model.getNewestItems();
       },
       builder: (context, model, child) {
         return SafeArea(
@@ -43,24 +44,31 @@ class _StoreViewState extends State<StoreView> {
             ),
             body: Column(
               children: [
-                SizedBox(height: 20),
-                BuildCategoryRow(),
-
-                // NewestItemsView(),
-                navigateThrough(model.selectedIndex, model),
-                // Expanded(
-                //   child: model.state == ViewState.Busy
-                //       ? SingleChildScrollView(
-                //           child: Column(
-                //             children: List.generate(15, (index) => StoreCard()),
-                //           ),
-                //         )
-                //       : Center(
-                //           child: CircularProgressIndicator(),
-                //         ),
-                // )
+                BuildCategoryRow(
+                  index: model.selectedIndex,
+                  onChanged: (index) => _pageController.jumpToPage(index),
+                ),
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    children: [
+                      NewestItemsView(),
+                      TimeLineItemsView(),
+                      PurchasedItemsView()
+                    ],
+                  ),
+                ),
               ],
             ),
+
+            //  Column(
+            //   children: [
+            //     SizedBox(height: 20),
+            //     BuildCategoryRow(),
+            //     // NewestItemsView(),
+            //     navigateThroughTabs(model.selectedIndex, model),
+            //   ],
+            // ),
           ),
         );
       },
@@ -68,20 +76,47 @@ class _StoreViewState extends State<StoreView> {
     );
   }
 
-  Widget navigateThrough(int index, StoreViewModel model) {
-    switch (index) {
-      case 0:
-        return NewestItemsView(content: model.newestItemList);
-      case 1:
-        return TimeLineItemsView();
-
-      case 2:
-        return PurchasedItemsView();
-        break;
-
-      default:
-        return NewestItemsView(content: model.newestItemList);
+  Widget navigateThroughTabs(int index, StoreViewModel model) {
+    if (index == 0) {
+      print("The Index is ============$index");
+      return CircularProgressIndicator(
+        backgroundColor: Colors.red,
+      );
+    } else if (index == 1) {
+      print("The Index is ============$index");
+      return CircularProgressIndicator(
+        backgroundColor: Colors.blue,
+      );
+    } else if (index == 2) {
+      print("The Index is ============$index");
+      return CircularProgressIndicator(
+        backgroundColor: Colors.orange,
+      );
+    } else {
+      print("The Index is ============$index");
+      return CircularProgressIndicator(
+        backgroundColor: Colors.pink,
+      );
     }
+    // switch (index) {
+    //   case 0:
+    //     return CircularProgressIndicator(
+    //       backgroundColor: Colors.red,
+    //     );
+    //   case 1:
+    //     return CircularProgressIndicator(
+    //       backgroundColor: Colors.blue,
+    //     );
+
+    //   case 2:
+    //     return PurchasedItemsView();
+    //     break;
+
+    //   default:
+    //     return CircularProgressIndicator(
+    //       backgroundColor: Colors.red,
+    //     );
+    // }
   }
 
   Widget builRoundButton() {

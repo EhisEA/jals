@@ -6,7 +6,8 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:stacked/stacked.dart';
 
 class BuildArticle extends StatefulWidget {
-  const BuildArticle({Key key, @required this.articleAllViewModel}) : super(key: key);
+  const BuildArticle({Key key, @required this.articleAllViewModel})
+      : super(key: key);
   final ArticleAllViewModel articleAllViewModel;
   @override
   _BuildArticleState createState() => _BuildArticleState();
@@ -37,6 +38,7 @@ class _BuildArticleState extends State<BuildArticle>
                       children: [
                         SizedBox(height: 20),
                         DefaultButton(
+                          color: Colors.grey.shade400,
                           onPressed: model.getArticles,
                           title: "Retry",
                         ),
@@ -45,15 +47,17 @@ class _BuildArticleState extends State<BuildArticle>
                   )
                 : SliverClip(
                     child: SliverList(
-                      delegate: SliverChildListDelegate(List.generate(
-                        model.articles.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: ArticleTile(
-                            article: model.articles[index],
+                      delegate: SliverChildListDelegate(
+                        List.generate(
+                          model.articles.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: ArticleTile(
+                              article: model.articles[index],
+                            ),
                           ),
                         ),
-                      )),
+                      ),
                     ),
                   );
       },

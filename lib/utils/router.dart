@@ -22,6 +22,7 @@ import 'package:jals/ui/authentication/sign_up_view.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
+import 'package:jals/ui/dynamic_link_entry_view.dart';
 import 'package:jals/ui/home/home_base.dart';
 import 'package:jals/ui/store/store_item_view.dart';
 import 'package:jals/ui/video/video_library_view.dart';
@@ -123,10 +124,15 @@ class AppRouter {
           ),
         );
         break;
-      // case :
-      //   return MaterialPageRoute(
-      //       builder: (context) => VerificationForgotPasswordView());
-      //   break;
+      case DynamicLinkEntryViewRoute:
+        Map arguments = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => DynamicLinkEntryView(
+            contentId: arguments["contentId"],
+            contentType: arguments["contentType"],
+          ),
+        );
+        break;
       // case RoutePaths.createSignUpPasswordView:
       //   return MaterialPageRoute(
       //       builder: (context) => CreateSignUpPasswordView());
