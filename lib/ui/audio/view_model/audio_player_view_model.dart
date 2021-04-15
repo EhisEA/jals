@@ -5,6 +5,7 @@ import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/services/audio_service.dart';
 import 'package:jals/services/dynamic_link_service.dart';
+import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
@@ -234,6 +235,8 @@ class AudioPlayerViewModel extends BaseViewModel {
           }
           return element;
         }).toList();
+
+        locator<AudioPlaylistSectionViewModel>().addAudio(playlistId, audio);
         break;
       case ApiResponse.Error:
         Fluttertoast.showToast(

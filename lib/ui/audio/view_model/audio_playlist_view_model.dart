@@ -48,6 +48,26 @@ class AudioPlaylistSectionViewModel extends BaseViewModel {
         .onNetworkAvailabilityDialog(_createPlaylistNetworkCall);
   }
 
+  addAudio(String playlistId, AudioModel audio) {
+    playList = playList.map((value) {
+      //if playlist found
+      if (value.id == playlistId) {
+        //check if audio exist in playlist track
+        bool exist = false;
+        value.tracks.forEach((element) {
+          if (element.id == audio.id) exist = true;
+        });
+        // if audio does not exist in playlist track
+        //add audio to track
+        if (!exist) {
+          value.tracks.add(audio);
+          value.count++;
+        }
+      }
+      return value;
+    }).toList();
+  }
+
   _createPlaylistNetworkCall() async {
     if (playlistNameController.text.length >= 1) {
       setSecondaryBusy(ViewState.Busy);
