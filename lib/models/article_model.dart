@@ -5,7 +5,8 @@
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
-import 'package:jals/models/content_model.dart';
+
+import 'content_model.dart';
 part 'article_model.g.dart';
 
 ArticleModel videoModelFromJson(String str) =>
@@ -28,6 +29,7 @@ class ArticleModel {
     this.content,
     this.downloaded,
     this.downloadDate,
+    this.isNews,
   });
 
   @HiveField(0)
@@ -66,6 +68,9 @@ class ArticleModel {
   @HiveField(11)
   DateTime downloadDate;
 
+  @HiveField(12)
+  bool isNews;
+
   factory ArticleModel.fromJson(Map<String, dynamic> json) => ArticleModel(
         id: json["id"],
         title: json["title"],
@@ -79,6 +84,7 @@ class ArticleModel {
         content: json["content"],
         downloaded: json["downloaded"] ?? false,
         downloadDate: null,
+        isNews: json["post_type"] == "NE",
       );
 
   Map<String, dynamic> toJson() => {

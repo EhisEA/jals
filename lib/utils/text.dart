@@ -138,13 +138,17 @@ class TextDailyRead extends StatelessWidget {
 class TextHeader extends StatelessWidget {
   final String text;
   final Color color;
+  final int maxLines;
 
-  const TextHeader({Key key, this.text, this.color}) : super(key: key);
+  const TextHeader({Key key, this.text, this.color, this.maxLines})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Text(
       "$text",
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: color ?? kTextColor,
         fontWeight: FontWeight.w600,

@@ -4,6 +4,7 @@ import 'package:jals/ui/article/components/build_news.dart';
 import 'package:jals/ui/article/view_models/article_all_view_model.dart';
 import 'package:jals/ui/article/view_models/article_news_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -45,14 +46,21 @@ class _ArticleAllState extends State<ArticleAll> {
 
   @override
   Widget build(BuildContext context) {
+    Size defaultSize = MediaQuery.of(context).size;
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    print(defaultSize.width);
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
           child: AnimatedContainer(
+            color: Colors.red,
             curve: Curves.easeOut,
 
             //Todo:  calculate the size value
-            height: !show ? 0 : 300,
+            height: !show
+                ? 0
+                : (defaultSize.width / 160) * (isPortrait ? 118 : 101), //300,
             duration: Duration(milliseconds: 1500),
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 3000),
@@ -84,8 +92,9 @@ class _ArticleAllState extends State<ArticleAll> {
                           height: 10,
                         ),
                         TextHeader(
+                          maxLines: 2,
                           text:
-                              "How to read, understand and decipher the teachings of Christ",
+                              "How to read, understand and deciphernderstand and deciphernderstand and deciphernderstand and decipher the teachings of Christ",
                         ),
                         SizedBox(
                           height: 10,

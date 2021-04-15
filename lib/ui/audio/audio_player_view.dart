@@ -49,15 +49,16 @@ class AudioPlayerView extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: 30),
-                  ClipOval(
-                    child: Container(
-                      height: 180,
-                      width: 180,
-                      child: ShowNetworkImage(
-                        imageUrl: model.currentlyPlaying.coverImage,
+                  if (model.currentlyPlaying != null)
+                    ClipOval(
+                      child: Container(
+                        height: 180,
+                        width: 180,
+                        child: ShowNetworkImage(
+                          imageUrl: model.currentlyPlaying.coverImage,
+                        ),
                       ),
                     ),
-                  ),
                   SizedBox(height: 20),
                   if (model.playlistName != null)
                     Container(
@@ -82,20 +83,22 @@ class AudioPlayerView extends StatelessWidget {
                       ),
                     ),
                   SizedBox(height: 20),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1.6,
-                    child: TextHeader2(
-                      text: model.currentlyPlaying.title,
+                  if (model.currentlyPlaying != null)
+                    Container(
+                      width: MediaQuery.of(context).size.width / 1.6,
+                      child: TextHeader2(
+                        text: model.currentlyPlaying.title,
 
-                      //  "Lord, We Come to Worship",
+                        //  "Lord, We Come to Worship",
+                        center: true,
+                      ),
+                    ),
+                  SizedBox(height: 15),
+                  if (model.currentlyPlaying != null)
+                    TextCaption2(
+                      text: "By ${model.currentlyPlaying..author}",
                       center: true,
                     ),
-                  ),
-                  SizedBox(height: 15),
-                  TextCaption2(
-                    text: "By ${model.currentlyPlaying..author}",
-                    center: true,
-                  ),
                   SizedBox(height: 15),
                   Stack(
                     children: [

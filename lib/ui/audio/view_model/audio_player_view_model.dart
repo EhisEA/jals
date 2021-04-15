@@ -88,7 +88,8 @@ class AudioPlayerViewModel extends BaseViewModel {
     // });
     //
     audioPlayer.sequenceStateStream.listen((SequenceState sequenceState) {
-      currentlyPlaying = sequenceState.currentSource.tag as AudioModel;
+      if (sequenceState != null)
+        currentlyPlaying = sequenceState.currentSource.tag as AudioModel;
     });
 
     audioPlayer.playerStateStream.listen((PlayerState state) {

@@ -6,6 +6,7 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/image_loader.dart';
+import 'package:jals/widgets/retry.dart';
 import 'package:stacked/stacked.dart';
 
 class LibraryForYou extends StatelessWidget {
@@ -24,12 +25,8 @@ class LibraryForYou extends StatelessWidget {
               ? Center(child: CircularProgressIndicator())
               // loadingContent()
               : model.contents == null
-                  ? Center(
-                      child: InkWell(
-                        onTap: model.getContents,
-                        child: TextCaption2(
-                            text: "Retry", fontSize: 16, color: kTextColor),
-                      ),
+                  ? Retry(
+                      onRetry: model.getContents,
                     )
                   : showContent(model),
         );

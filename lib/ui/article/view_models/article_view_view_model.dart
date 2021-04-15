@@ -27,17 +27,20 @@ class ArticleViewViewModel extends BaseViewModel {
     if (articleToView.downloaded) {
       article = articleToView;
     } else {
-      await _networkConfig.onNetworkAvailabilityDialog(
-          () => getArticleDetailsNetworkCall(articleToView.id));
+      await _networkConfig.onNetworkAvailabilityDialog(() =>
+          getArticleDetailsNetworkCall(articleToView.id, articleToView.isNews));
     }
-    _articleDynamicLink =
-        await _dynamicLinkService.createEventLink(article.toContent());
+    if (article == null)
+      _articleDynamicLink =
+          await _dynamicLinkService.createEventLink(article.toContent());
 
     setBusy(ViewState.Idle);
   }
 
-  getArticleDetailsNetworkCall(String id) async {
-    article = await _articleService.getArticleDetails(id);
+  getArticleDetailsNetworkCall(String id, bool isNews) async {
+    article = isNews
+        ? await _articleService.getNewsDetails(id)
+        : await _articleService.getArticleDetails(id);
     if (article != null) {
       downloaded = _hiveDatabaseService.checkArticleDownloadStatus(article.id);
     }
@@ -46,6 +49,8 @@ class ArticleViewViewModel extends BaseViewModel {
 // sharing
 
   share() async {
+    if (article == null) return;
+
     if (_articleDynamicLink == null || _articleDynamicLink == "") {
       _articleDynamicLink =
           await _dynamicLinkService.createEventLink(article.toContent());

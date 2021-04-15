@@ -80,13 +80,14 @@ class ContentModel {
       id: id,
       price: price,
       postType: getContentTypeString(postType),
+      isNews: postType == ContentType.News,
       downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
       content: _hiveDatabaseService.getArticleDownloadedContent(id),
       isBookmarked: false,
     );
   }
 
-  toAudio() {
+  AudioModel toAudio() {
     // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
     return AudioModel(
       author: author,

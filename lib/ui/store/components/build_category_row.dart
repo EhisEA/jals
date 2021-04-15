@@ -22,8 +22,9 @@ class BuildCategoryRow extends StatelessWidget {
                 height: getProportionatefontSize(50),
                 width: double.infinity,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  // mainAxisSize: MainAxisAlignment.spaceAround,
                   children: List.generate(
                     model.items.length,
                     (index) => AnimatedContainer(

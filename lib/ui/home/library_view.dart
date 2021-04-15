@@ -7,8 +7,7 @@ import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/article_tile.dart';
-
+import 'package:jals/widgets/day_display.dart';
 import 'components/library_for_you.dart';
 
 class LibraryView extends StatelessWidget {
@@ -20,20 +19,7 @@ class LibraryView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(
-              aspectRatio: 375 / 261,
-              child: Container(
-                // height: 100,
-                // width: 100,
-                alignment: Alignment.centerLeft,
-                color: Color(0xff1F2230),
-                child: Stack(
-                  children: [
-                    SvgPicture.asset("assets/svgs/night1.svg"),
-                  ],
-                ),
-              ),
-            ),
+            DayDisplay(),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: TextHeader(
@@ -68,25 +54,8 @@ class LibraryView extends StatelessWidget {
                 text: "Suggested For You",
               ),
             ),
-
             LibraryForYou(),
-            //   ...List.generate(
-            //     11,
-            //     (index) => Padding(
-            //       padding: const EdgeInsets.symmetric(
-            //         horizontal: 20.0,
-            //         vertical: 10,
-            //       ),
-            //       child: ProductTile(
-            //         type: "AUDIO",
-            //         image:
-            //             "https://cdn.mos.cms.futurecdn.net/yL3oYd7H2FHDDXRXwjmbMf.jpg",
-            //         title: "Almighty God",
-            //         author: "Play Time 3 mins",
-            //       ),
-            //     ),
-            //   ),
-            //
+            SizedBox(height: 20)
           ],
         ),
       ),

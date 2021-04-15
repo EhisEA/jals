@@ -67,6 +67,26 @@ class ArticleService {
     }
   }
 
+  Future<ArticleModel> getNewsDetails(String id) async {
+    try {
+      ArticleModel article;
+      String url = AppUrl.NewsList + id;
+      http.Response response = await http.get(
+        url,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      print(result);
+      article = ArticleModel.fromJson(result["data"]);
+      print(article.isBookmarked);
+      return article;
+    } catch (e) {
+      debugPrint("====error=====");
+      print(e);
+      return null;
+    }
+  }
+
   Future<ArticleModel> getArticleDetails(String id) async {
     try {
       ArticleModel article;

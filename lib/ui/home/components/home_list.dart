@@ -44,29 +44,29 @@ class HomeContentDisplay extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  Text(
-                    "VIEW ALL ",
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: getProportionatefontSize(14),
-                      fontWeight: FontWeight.w600,
+
+                  InkWell(
+                    onTap: model.getContents,
+                    child: Text(
+                      "Refresh",
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontSize: getProportionatefontSize(14),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  Text(
-                    ">",
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                  // Text(
+                  //   ">",
+                  //   style: TextStyle(color: Colors.grey),
+                  // ),
                 ],
               ),
             ),
             Container(
-              height: 250,
-              // width: 300,
-              //getProportionatefontSize(230),
-              
+              height: getProportionatefontSize(230),
               child: model.isBusy
-                  ? 
-                  Center(child: CircularProgressIndicator())
+                  ? Center(child: CircularProgressIndicator())
                   // loadingContent()
                   : model.contents == null
                       ? Center(
@@ -76,7 +76,7 @@ class HomeContentDisplay extends StatelessWidget {
                                 text: "Retry", fontSize: 16, color: kTextColor),
                           ),
                         )
-                      : showContent( model),
+                      : showContent(model),
             )
           ],
         );
@@ -121,8 +121,8 @@ class HomeContentDisplay extends StatelessWidget {
     );
   }
 
-  showContent( HomeContentDisplayViewModel model) {
-    List<ContentModel> contents= model.contents;
+  showContent(HomeContentDisplayViewModel model) {
+    List<ContentModel> contents = model.contents;
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
@@ -131,7 +131,7 @@ class HomeContentDisplay extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(15.0),
           child: InkWell(
-            onTap: ()=>model.openContent(index),
+            onTap: () => model.openContent(index),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

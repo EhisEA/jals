@@ -21,20 +21,29 @@ class HomeContentDisplayViewModel extends BaseViewModel {
     NavigationService _navigationService = locator<NavigationService>();
     switch (_content.postType) {
       case ContentType.Article:
-
-          _navigationService.navigateTo(ArticleViewRoute, argument: _content.toArticle());
+        _navigationService.navigateTo(ArticleViewRoute,
+            argument: _content.toArticle());
         break;
       case ContentType.News:
-
-          _navigationService.navigateTo(ArticleViewRoute, argument: _content.toArticle());
+        _navigationService.navigateTo(ArticleViewRoute,
+            argument: _content.toArticle());
         break;
       case ContentType.Audio:
+        //check if content is free or purchased
+        //if not send to store
+        if (_content.isPurchased == false && _content.price > 0) {
+          _navigationService.navigateTo(StoreItemViewRoute, argument: _content);
+          return;
+        }
 
-          _navigationService.navigateTo(AudioPlayerViewRoute, argument: _content.toAudio());
+        _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
+          "audios": [_content.toAudio()],
+          "playlistName": null
+        });
         break;
       case ContentType.Video:
-
-          _navigationService.navigateTo(VideoPlayerViewRoute, argument: _content.tovideo());
+        _navigationService.navigateTo(VideoPlayerViewRoute,
+            argument: _content.tovideo());
         break;
       default:
     }

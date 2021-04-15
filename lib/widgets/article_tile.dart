@@ -7,7 +7,6 @@ import 'package:jals/models/content_model.dart';
 import 'package:jals/models/video_model.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
-import 'package:jals/ui/video/video_player.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
@@ -165,10 +164,15 @@ class VideoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        _navigationService.navigateTo(VideoPlayerViewRoute,
-            argument: videoModel);
+        if (videoModel.price > 0) {
+          _navigationService.navigateTo(StoreItemViewRoute,
+              argument: videoModel.toContent());
+        } else {
+          _navigationService.navigateTo(VideoPlayerViewRoute,
+              argument: videoModel);
+        }
       },
       child: Row(
         children: [
@@ -187,7 +191,7 @@ class VideoTile extends StatelessWidget {
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 2),
-              height: getProportionatefontSize(100),
+              height: getProportionatefontSize(110),
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,9 +234,6 @@ class VideoTile extends StatelessWidget {
                   ),
                   TextCaption(
                     text: "${videoModel.author}",
-                  ),
-                  SizedBox(
-                    height: getProportionatefontSize(5),
                   ),
                   Spacer(),
                   // Row to be disappear if item has been purchased

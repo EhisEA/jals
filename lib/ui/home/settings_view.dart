@@ -285,11 +285,13 @@ class _SettingsViewState extends State<SettingsView> {
     return Row(
       children: [
         Text("$title").py(20),
+        SizedBox(width: 20),
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(
               subtitle ?? "......   ",
+              textAlign: TextAlign.end,
               style: TextStyle(color: Colors.grey),
             ),
           ),

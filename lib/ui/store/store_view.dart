@@ -58,6 +58,9 @@ class _StoreViewState extends State<StoreView> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 70,
+                )
               ],
             ),
 

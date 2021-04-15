@@ -23,7 +23,7 @@ class PlayListWidget extends StatelessWidget {
       },
       child: Container(
         color: kPrimaryColor,
-        padding: const EdgeInsets.fromLTRB(20.0, 20, 0, 20),
+        padding: const EdgeInsets.fromLTRB(20.0, 20, 0, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -74,15 +74,9 @@ class PlayListWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                //   Icon(
-                //     Icons.more_vert,
-                //     color: Colors.white,
-                //   ),
               ],
             ),
-            SizedBox(
-              height: getProportionatefontSize(10),
-            ),
+            Spacer(),
             TextCaptionWhite(
               text: "${playList.count} Songs",
               fontSize: 12,

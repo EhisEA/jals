@@ -31,7 +31,7 @@ class DynamicLinkEntryViewModel extends BaseViewModel {
         audio(contentId);
         break;
       case ContentType.News:
-        article(contentId);
+        news(contentId);
         break;
       case ContentType.Video:
         video(contentId);
@@ -91,9 +91,9 @@ class DynamicLinkEntryViewModel extends BaseViewModel {
   }
 
   article(String contentId) async {
-    final ArticleModel vedio = await _articleService.getArticle(contentId);
+    final ArticleModel article = await _articleService.getArticle(contentId);
     Navigator.of(_navigationService.navigatorKey.currentContext).pop();
-    if (vedio == null) {
+    if (article == null) {
       Fluttertoast.showToast(
         msg: "Failed To get content",
         backgroundColor: Colors.black,
@@ -103,10 +103,22 @@ class DynamicLinkEntryViewModel extends BaseViewModel {
     }
     _navigationService.navigateTo(
       ArticleViewRoute,
-      argument: {
-        "audios": [audio],
-        "playlistName": null
-      },
+      argument: article,
     );
+  }
+
+  news(String contentId) async {
+    final ArticleModel article =
+        await _articleService.getNewsDetails(contentId);
+    Navigator.of(_navigationService.navigatorKey.currentContext).pop();
+    if (article == null) {
+      Fluttertoast.showToast(
+        msg: "Failed To get content",
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+      return;
+    }
+    _navigationService.navigateTo(ArticleViewRoute, argument: article);
   }
 }

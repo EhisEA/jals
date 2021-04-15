@@ -4,6 +4,7 @@ import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
+import 'package:jals/widgets/day_display.dart';
 import 'package:stacked/stacked.dart';
 
 import 'components/view_models/daily_read_view_model.dart';
@@ -16,12 +17,7 @@ class HomeView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AspectRatio(
-              aspectRatio: 375 / 261,
-              child: Container(
-                color: Color(0xff1F2230),
-              ),
-            ),
+            DayDisplay(),
             Container(
               margin: EdgeInsets.all(20),
               color: kPrimaryColor,
@@ -56,19 +52,20 @@ class HomeView extends StatelessWidget {
               child: buildReadMore(),
             ),
             Container(
-              height: 300,
+              height: getProportionatefontSize(260),
               child: HomeContentDisplay(
                 svgimage: "assets/svgs/hearts.svg",
                 listTitle: "For You",
               ),
             ),
             Container(
-              height: 300,
+              height: getProportionatefontSize(260),
               child: HomeContentDisplay(
                 svgimage: "assets/svgs/badge_new.svg",
                 listTitle: "Explore",
               ),
-            )
+            ),
+            SizedBox(height: 40)
           ],
         ),
       ),
