@@ -131,8 +131,7 @@ class _SettingsViewState extends State<SettingsView> {
                                     .format(model.dateOfBirth),
                             () => model.update(
                                 context, UserUpdateType.DATEOFBIRTH, model)),
-                        buildUserInfo(
-                            "email", "emmanueleayemere@gmail.com", null),
+                        buildUserInfo("email", model.email, null),
                         buildUserInfo(
                             "password",
                             "******",

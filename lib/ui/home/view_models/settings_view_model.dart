@@ -25,7 +25,7 @@ class SettingsViewModel extends BaseViewModel with ImageSelect {
       locator<AuthenticationService>();
 
   String get avatar => _authenticationService.currentUser.avatar;
-  String get email => _authenticationService.currentUser.fullName;
+  String get email => _authenticationService.currentUser.email;
   String get fullname => _authenticationService.currentUser.fullName;
   String get phone => _authenticationService.currentUser.phoneNumber;
   DateTime get dateOfBirth => _authenticationService.currentUser.dateOfBirth;

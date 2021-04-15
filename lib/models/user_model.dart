@@ -6,6 +6,7 @@ class UserModel {
     this.dateOfBirth,
     this.verified,
     this.avatar,
+    this.email,
     this.key,
   });
 
@@ -17,6 +18,7 @@ class UserModel {
   bool verified;
   String key;
   String avatar;
+  String email;
 
   factory UserModel.fromMap(Map<String, dynamic> mapData) {
     return UserModel(
@@ -29,6 +31,7 @@ class UserModel {
           : DateTime.parse(mapData["date_of_birth"]),
       verified: mapData["verified"],
       avatar: mapData["avatar"],
+      email: mapData["email"],
     );
   }
 
@@ -40,6 +43,7 @@ class UserModel {
         id: json["data"]["user"]["id"],
         fullName: json["data"]["user"]["full_name"],
         phoneNumber: json["data"]["user"]["phone_number"],
+        email: json["data"]["user"]["email"],
         dateOfBirth: json["data"]["user"]["date_of_birth"] == null
             ? null
             : DateTime.parse(json["data"]["user"]["date_of_birth"]),
@@ -60,6 +64,7 @@ class UserModel {
         id: json["id"],
         fullName: json["full_name"],
         phoneNumber: json["phone_number"],
+        email: json["email"],
         dateOfBirth: json["date_of_birth"] == null
             ? null
             : DateTime.parse(json["date_of_birth"]),
@@ -77,6 +82,7 @@ class UserModel {
         "id": id,
         "full_name": fullName,
         "phone_number": phoneNumber,
+        "email": email,
         "date_of_birth": dateOfBirth == null ? null : dateOfBirth.toString(),
         // "${dateOfBirth.year.toString().padLeft(4, '0')}-${dateOfBirth.month.toString().padLeft(2, '0')}-${dateOfBirth.day.toString().padLeft(2, '0')}",
         "verified": verified,
