@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/ui/store/components/build_category_row.dart';
 import 'package:jals/ui/store/purchased_items_view.dart';
 import 'package:jals/ui/store/timeline_items_view.dart';
+import 'package:jals/ui/store/view_models/build_category_row_view_model.dart';
 import 'package:jals/ui/store/view_models/store_view_model.dart';
 
 import 'package:jals/utils/size_config.dart';
@@ -18,6 +19,14 @@ class StoreView extends StatefulWidget {
 
 class _StoreViewState extends State<StoreView> {
   final PageController _pageController = PageController();
+  final BuildCategoryRowViewModel _buildCategoryRowViewModel =
+      BuildCategoryRowViewModel();
+  @override
+  void initState() {
+    // _pageController.
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -45,12 +54,17 @@ class _StoreViewState extends State<StoreView> {
             body: Column(
               children: [
                 BuildCategoryRow(
+                  buildCategoryRowViewModel: _buildCategoryRowViewModel,
                   index: model.selectedIndex,
                   onChanged: (index) => _pageController.jumpToPage(index),
                 ),
                 Expanded(
                   child: PageView(
                     controller: _pageController,
+                    onPageChanged: (index) {
+                      _buildCategoryRowViewModel.changeIndex(index);
+                      model.changeIndex(index);
+                    },
                     children: [
                       NewestItemsView(),
                       TimeLineItemsView(),

@@ -7,7 +7,7 @@ class PurchasedItemsViewModel extends BaseViewModel {
   bool isLoading = false;
   StoreService _storeService = locator<StoreService>();
   List<ContentModel> purchaseItemList = [];
-  getNewestItems() async {
+  Future<void> getNewestItems() async {
     try {
       setBusy(ViewState.Busy);
       await onNetworkFetchNewestItems();

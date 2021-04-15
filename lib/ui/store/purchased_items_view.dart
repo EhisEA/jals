@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jals/ui/store/view_models/newest_items_view_model.dart';
 import 'package:jals/ui/store/view_models/purchased_view_model.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/empty.dart';
@@ -33,10 +32,13 @@ class _PurchasedItemsViewState extends State<PurchasedItemsView>
                     ? Empty(
                         title: "No Items",
                       )
-                    : ListView.builder(
-                        itemCount: model.purchaseItemList.length,
-                        itemBuilder: (context, index) => StoreTile(
-                          content: model.purchaseItemList[index],
+                    : RefreshIndicator(
+                        onRefresh: model.getNewestItems,
+                        child: ListView.builder(
+                          itemCount: model.purchaseItemList.length,
+                          itemBuilder: (context, index) => StoreTile(
+                            content: model.purchaseItemList[index],
+                          ),
                         ),
                       );
       },

@@ -32,10 +32,13 @@ class _TimeLineItemsViewState extends State<TimeLineItemsView>
                     ? Empty(
                         title: "No Items",
                       )
-                    : ListView.builder(
-                        itemCount: model.newestItemList.length,
-                        itemBuilder: (context, index) => StoreTile(
-                          content: model.newestItemList[index],
+                    : RefreshIndicator(
+                        onRefresh: model.getNewestItems,
+                        child: ListView.builder(
+                          itemCount: model.newestItemList.length,
+                          itemBuilder: (context, index) => StoreTile(
+                            content: model.newestItemList[index],
+                          ),
                         ),
                       );
       },

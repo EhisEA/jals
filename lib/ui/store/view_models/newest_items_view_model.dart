@@ -9,7 +9,7 @@ class NewestItemsViewModel extends BaseViewModel {
   NetworkConfig _networkConfig = new NetworkConfig();
   StoreService _storeService = locator<StoreService>();
   List<ContentModel> newestItemList = [];
-  getNewestItems() async {
+  Future<void> getNewestItems() async {
     try {
       setBusy(ViewState.Busy);
       // isLoading = true;

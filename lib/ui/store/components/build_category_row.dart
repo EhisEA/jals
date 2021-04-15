@@ -9,7 +9,12 @@ import 'package:stacked/stacked.dart';
 class BuildCategoryRow extends StatelessWidget {
   final int index;
   final Function(int) onChanged;
-  const BuildCategoryRow({Key key, this.index, this.onChanged})
+  final BuildCategoryRowViewModel buildCategoryRowViewModel;
+  const BuildCategoryRow(
+      {Key key,
+      this.index,
+      this.onChanged,
+      @required this.buildCategoryRowViewModel})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -83,6 +88,6 @@ class BuildCategoryRow extends StatelessWidget {
             ],
           );
         },
-        viewModelBuilder: () => BuildCategoryRowViewModel());
+        viewModelBuilder: () => buildCategoryRowViewModel);
   }
 }
