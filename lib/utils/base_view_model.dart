@@ -12,6 +12,7 @@ class BaseViewModel extends ChangeNotifier {
   // UserModel get currentUser => _authenticationService.currentUser;
 
   bool _disposed = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -24,8 +25,10 @@ class BaseViewModel extends ChangeNotifier {
   SmallViewState get smallViewState => _smallViewState;
   setSmallViewState(SmallViewState state) {
     _smallViewState = state;
-    notifyListeners();
+    if (!_disposed) notifyListeners();
   }
+
+  bool get isSmallViewStateBusy => _smallViewState == SmallViewState.Occuppied;
 
   ViewState get state => _state;
   bool get isBusy => _state == ViewState.Busy;

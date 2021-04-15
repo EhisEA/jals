@@ -30,6 +30,13 @@ class VideoPlayerViewViewModel extends BaseViewModel {
     return convertedValue;
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    videoPlayerController.pause();
+    videoPlayerController.dispose();
+  }
+
   String convertTotal() {
     return totalDuration == null ? "00:00" : formart(totalDuration);
   }
@@ -126,9 +133,11 @@ class VideoPlayerViewViewModel extends BaseViewModel {
         msg: 'Removed from  watch later list.',
         fontSize: 16.0,
       );
+      video.isBookmarked = false;
     } else {
       await Fluttertoast.showToast(
           msg: 'Cannot remove video from watch later list.', fontSize: 16.0);
+      video.isBookmarked = true;
     }
   }
 

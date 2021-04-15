@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/video/view_models/video_watch_late_view_model.dart';
-import 'package:jals/utils/base_view_model.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/empty.dart';
 import 'package:jals/widgets/retry.dart';
@@ -19,7 +19,7 @@ class _VideoWatchLaterState extends State<VideoWatchLater>
     return ViewModelBuilder<VideoWatchLaterViewModel>.reactive(
       onModelReady: (model) => model.getAllVideos(),
       disposeViewModel: false,
-      viewModelBuilder: () => VideoWatchLaterViewModel(),
+      viewModelBuilder: () => locator<VideoWatchLaterViewModel>(),
       builder: (context, model, child) {
         return model.isBusy
             ? Center(

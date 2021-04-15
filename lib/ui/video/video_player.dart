@@ -9,7 +9,6 @@ import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
 import 'package:jals/widgets/comment_widget.dart';
-import 'package:jals/widgets/extended_text_field.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:stacked/stacked.dart';
 import 'package:video_player/video_player.dart';
@@ -164,9 +163,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        model.video.isBookmarked
-                            ? model.removeFromBookmarks(widget.video.id)
-                            : model.addToBookmarks(widget.video.id);
+                        if (!model.isSmallViewStateBusy)
+                          model.video.isBookmarked
+                              ? model.removeFromBookmarks(widget.video.id)
+                              : model.addToBookmarks(widget.video.id);
                       },
                       child: buildIcon(
                         model.smallViewState == SmallViewState.Occuppied
@@ -182,9 +182,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                     ),
                     buildIcon(JalsIcons.download, "Download"),
                     InkWell(
-                      onTap: () {
-                        showBottomSheet(context, _commentWidgetViewModel);
-                      },
+                      onTap: () =>
+                          _commentWidgetViewModel.writeComment(context),
                       child: buildIcon(JalsIcons.comment, "Comment"),
                     ),
                     pop(JalsIcons.more, "more", model.share),
@@ -200,61 +199,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
           ),
         );
       },
-    );
-  }
-
-  showBottomSheet(
-      BuildContext context, CommentWidgetViewModel commentWidgetViewModel) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => ViewModelBuilder<CommentWidgetViewModel>.reactive(
-          viewModelBuilder: () => commentWidgetViewModel,
-          disposeViewModel: false,
-          builder: (context, model, _) {
-            return Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: model.isSecondaryBusy
-                  ? Center(child: CircularProgressIndicator())
-                  : SingleChildScrollView(
-                      child: Form(
-                        key: model.formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Center(child: TextHeader(text: "Comment")),
-                            SizedBox(height: 20),
-                            TextCaption(text: "Comment"),
-                            SizedBox(height: 10),
-                            ExtendedTextField(
-                              title: "Comment",
-                              controller: model.commentController,
-                              multiline: true,
-                            ),
-                            SizedBox(height: 30),
-                            InkWell(
-                              onTap: model.sendComment,
-                              child: Center(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: kPrimaryColor,
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 50,
-                                    vertical: 10,
-                                  ),
-                                  child: TextCaptionWhite(
-                                    text: "Post Comment",
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-            );
-          }),
     );
   }
 

@@ -4,11 +4,17 @@ import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/services/audio_service.dart';
+import 'package:jals/services/dynamic_link_service.dart';
+import 'package:jals/utils/locator.dart';
+import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:share/share.dart';
 
 class AudioPlayerViewModel extends BaseViewModel {
+  final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
+  CommentWidgetViewModel commentWidgetViewModel;
   AudioPlayer audioPlayer = AudioPlayer();
   AudioService _audioService = AudioService();
   Duration totalDuration;
@@ -23,6 +29,7 @@ class AudioPlayerViewModel extends BaseViewModel {
   List<PlayListModel> playList;
   ConcatenatingAudioSource _songs;
   String playlistName;
+  String _dynamicLink;
   // bool get hasNext => audios.length > currentlyPlayingIndex;
   // bool get hasPrev => currentlyPlayingIndex > 0;
 
@@ -88,8 +95,13 @@ class AudioPlayerViewModel extends BaseViewModel {
     // });
     //
     audioPlayer.sequenceStateStream.listen((SequenceState sequenceState) {
-      if (sequenceState != null)
+      print("change");
+      if (sequenceState != null) {
         currentlyPlaying = sequenceState.currentSource.tag as AudioModel;
+        commentWidgetViewModel = CommentWidgetViewModel(currentlyPlaying.id);
+        commentWidgetViewModel.getComments();
+        setSecondaryBusy(ViewState.Idle);
+      }
     });
 
     audioPlayer.playerStateStream.listen((PlayerState state) {
@@ -145,9 +157,18 @@ class AudioPlayerViewModel extends BaseViewModel {
 
     try {
       await audioPlayer.setAudioSource(_songs);
+
+      if (currentlyPlaying != null)
+        _dynamicLink = await _dynamicLinkService
+            .createEventLink(currentlyPlaying.toContent());
     } catch (e) {
       // Catch load errors: 404, invalid url ...
       print("Error loading playlist: $e");
+      Fluttertoast.showToast(
+        msg: "Failed to load audio",
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
     }
     // play();
     // audioPlayer.
@@ -227,5 +248,24 @@ class AudioPlayerViewModel extends BaseViewModel {
           textColor: Colors.white,
         );
     }
+  }
+
+// sharing
+
+  share() async {
+    if (currentlyPlaying == null) return;
+
+    if (_dynamicLink == null || _dynamicLink == "") {
+      _dynamicLink = await _dynamicLinkService
+          .createEventLink(currentlyPlaying.toContent());
+    }
+
+    if (_dynamicLink == null || _dynamicLink == "") {
+      Fluttertoast.showToast(
+          msg: "No internet",
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+    }
+    Share.share(_dynamicLink);
   }
 }

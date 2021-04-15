@@ -7,6 +7,9 @@ import 'package:jals/services/comment_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/locator.dart';
+import 'package:jals/utils/text.dart';
+
+import '../extended_text_field.dart';
 
 class CommentWidgetViewModel extends BaseViewModel {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -27,7 +30,7 @@ class CommentWidgetViewModel extends BaseViewModel {
     setBusy(ViewState.Idle);
   }
 
-  void sendComment() async {
+  Future<void> sendComment() async {
     setSecondaryBusy(ViewState.Busy);
     bool response =
         await _commentService.postComment(contentId, commentController.text);
@@ -50,6 +53,7 @@ class CommentWidgetViewModel extends BaseViewModel {
         ),
       );
       commentController.clear();
+      print(recentComments.length);
     } else {
       Fluttertoast.showToast(
         msg: "Your Comment was not posted: try again",
@@ -58,5 +62,64 @@ class CommentWidgetViewModel extends BaseViewModel {
       );
     }
     setSecondaryBusy(ViewState.Idle);
+  }
+
+  writeComment(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+        return Container(
+          height: MediaQuery.of(context).size.height / 2 +
+              MediaQuery.of(context).viewInsets.bottom,
+          padding: const EdgeInsets.all(20.0),
+          child: isSecondaryBusy
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Center(child: TextHeader(text: "Comment")),
+                        SizedBox(height: 20),
+                        TextCaption(text: "Comment"),
+                        SizedBox(height: 10),
+                        ExtendedTextField(
+                          title: "Comment",
+                          controller: commentController,
+                          multiline: true,
+                        ),
+                        SizedBox(height: 30),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              sendComment().then((value) {
+                                setState(() {});
+                              });
+                            });
+                          },
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: kPrimaryColor,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 50,
+                                vertical: 10,
+                              ),
+                              child: TextCaptionWhite(
+                                text: "Post Comment",
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+        );
+      }),
+    );
   }
 }

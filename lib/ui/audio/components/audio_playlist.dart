@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jals/ui/audio/components/playlist_widget.dart';
 import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/empty.dart';
@@ -21,7 +22,7 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
     SizeConfig().init(context);
     return ViewModelBuilder<AudioPlaylistSectionViewModel>.reactive(
         disposeViewModel: false,
-        viewModelBuilder: () => AudioPlaylistSectionViewModel(),
+        viewModelBuilder: () => locator<AudioPlaylistSectionViewModel>(),
         onModelReady: (model) => model.getPlaylist(),
         builder: (context, model, _) {
           return model.isBusy

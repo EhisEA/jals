@@ -8,6 +8,8 @@ import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
+import 'package:jals/widgets/comment_widget.dart';
+import 'package:jals/widgets/extended_text_field.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
@@ -16,13 +18,11 @@ import 'package:stacked/stacked.dart';
 format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
 class AudioPlayerView extends StatelessWidget {
-  CommentWidgetViewModel _commentWidgetViewModel;
   final List<AudioModel> audios;
   final String playlistName;
 
-  AudioPlayerView({Key key, this.audios, this.playlistName}) {
-    // _commentWidgetViewModel = CommentWidgetViewModel(a.id);
-  }
+  CommentWidgetViewModel commentWidgetViewModel;
+  AudioPlayerView({Key key, this.audios, this.playlistName}) {}
 
   @override
   Widget build(BuildContext context) {
@@ -156,51 +156,47 @@ class AudioPlayerView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.fast_rewind,
-                        color: Color(0xffD9D9D9),
-                      ),
-                      SizedBox(width: 20),
-                      ControlButtons(model.audioPlayer),
-                      InkWell(
-                        onTap: model.play_pause,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: kPrimaryColor,
-                          child: Icon(
-                            model.canPlay ? Icons.play_arrow : Icons.pause,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Icon(
-                        Icons.fast_forward,
-                        color: Color(0xffD9D9D9),
-                      ),
-                    ],
-                  ),
+                  ControlButtons(model.audioPlayer),
                   SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       buildIcon(JalsIcons.favorite, "Listen Later", () {}),
                       buildIcon(JalsIcons.download, "Download", () {}),
-                      buildIcon(JalsIcons.comment, "Comment", () {}),
-                      buildIcon(JalsIcons.more, "more", () {
-                        displayPlayListOption(context, model);
+                      buildIcon(JalsIcons.comment, "Comment",
+                          () => writeComment(context, commentWidgetViewModel)),
+                      pop(JalsIcons.more, "more", (value) {
+                        switch (value.toLowerCase()) {
+                          case "playlist":
+                            displayPlayListOption(context, model);
+                            break;
+                          case "share":
+                            model.share();
+                            break;
+                          default:
+                        }
                       }),
                     ],
                   ),
                   SizedBox(height: 20),
                   Divider(),
-                  // CommentWidget(
-                  //   commentWidgetViewModel: _commentWidgetViewModel,
-                  // )
+                  StreamBuilder(
+                    stream: model.audioPlayer.sequenceStream,
+                    builder: (context, snapshot) {
+                      print("here");
+                      // AudioModel currentlyPlaying =
+                      //     snapshot.data.currentSource.tag as AudioModel;
+                      // commentWidgetViewModel =
+                      //     CommentWidgetViewModel(currentlyPlaying.id);
+                      // if (commentWidgetViewModel != null) {
+                      //   print("here");
+                      //   return CommentWidget(
+                      //     commentWidgetViewModel: commentWidgetViewModel,
+                      //   );
+                      // } else
+                      return SizedBox();
+                    },
+                  )
                 ],
               ),
             ),
@@ -208,89 +204,191 @@ class AudioPlayerView extends StatelessWidget {
         });
   }
 
-  Widget buildIcon(icon, text, Function action) {
-    return InkWell(
-      onTap: action,
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: Color(0xff979797),
-          ),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: getProportionatefontSize(12),
-              fontWeight: FontWeight.w400,
-              color: Color(0xff999CAD),
-            ),
-          )
-        ],
-      ),
-    );
+  sendComment(BuildContext context) {
+    if (commentWidgetViewModel != null)
+      commentWidgetViewModel.writeComment(context);
   }
 
-  Widget displayPlayListOption(
-      BuildContext context, AudioPlayerViewModel viewModel) {
+  writeComment(
+      BuildContext context, CommentWidgetViewModel _commentWidgetViewModel) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ViewModelBuilder<AudioPlayerViewModel>.reactive(
-          viewModelBuilder: () => viewModel,
+      builder: (context) => ViewModelBuilder<CommentWidgetViewModel>.reactive(
+          viewModelBuilder: () => _commentWidgetViewModel,
           disposeViewModel: false,
           builder: (context, model, _) {
-            if (!model.isSecondaryBusy && model.playList == null) {
-              model.getPlaylist();
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //heading==========
-                Row(
-                  children: [
-                    TextArticle(text: "Playlist"),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-
-                SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: model.isSecondaryBusy
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          itemCount: model.playList.length,
-                          itemBuilder: (context, index) {
-                            PlayListModel playlist = model.playList[index];
-                            return ListTile(
-                              onTap: () => model.addToPlaylist(
-                                  playlist.id, model.currentlyPlaying),
-                              title: Text(playlist.title),
-                              subtitle:
-                                  Text(playlist.count.toString() + " Songs"),
-                              trailing: Icon(Icons.add),
-
-                              // subtitle: Text(),
-                            );
-                          },
+            return Container(
+              height: MediaQuery.of(context).size.height / 2 +
+                  MediaQuery.of(context).viewInsets.bottom,
+              padding: const EdgeInsets.all(20.0),
+              child: model.isSecondaryBusy
+                  ? Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      child: Form(
+                        key: model.formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Center(child: TextHeader(text: "Comment")),
+                            SizedBox(height: 20),
+                            TextCaption(text: "Comment"),
+                            SizedBox(height: 10),
+                            ExtendedTextField(
+                              title: "Comment",
+                              controller: model.commentController,
+                              multiline: true,
+                            ),
+                            SizedBox(height: 30),
+                            InkWell(
+                              onTap: () {
+                                model.sendComment();
+                              },
+                              child: Center(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: kPrimaryColor,
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 50,
+                                    vertical: 10,
+                                  ),
+                                  child: TextCaptionWhite(
+                                    text: "Post Comment",
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                )
-              ],
+                      ),
+                    ),
             );
-          },
-        ),
-      ),
+          }),
     );
   }
+}
+
+Widget buildIcon(icon, text, Function action) {
+  return InkWell(
+    onTap: action,
+    child: Column(
+      children: [
+        Icon(
+          icon,
+          color: Color(0xff979797),
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: getProportionatefontSize(12),
+            fontWeight: FontWeight.w400,
+            color: Color(0xff999CAD),
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+displayPlayListOption(BuildContext context, AudioPlayerViewModel viewModel) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) => Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: ViewModelBuilder<AudioPlayerViewModel>.reactive(
+        viewModelBuilder: () => viewModel,
+        disposeViewModel: false,
+        builder: (context, model, _) {
+          if (!model.isSecondaryBusy && model.playList == null) {
+            model.getPlaylist();
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //heading==========
+              Row(
+                children: [
+                  TextArticle(text: "Playlist"),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+
+              SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: model.isSecondaryBusy
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemCount: model.playList.length,
+                        itemBuilder: (context, index) {
+                          PlayListModel playlist = model.playList[index];
+                          return ListTile(
+                            onTap: () => model.addToPlaylist(
+                                playlist.id, model.currentlyPlaying),
+                            title: Text(playlist.title),
+                            subtitle:
+                                Text(playlist.count.toString() + " Songs"),
+                            trailing: Icon(Icons.add),
+
+                            // subtitle: Text(),
+                          );
+                        },
+                      ),
+              )
+            ],
+          );
+        },
+      ),
+    ),
+  );
+}
+
+Widget pop(IconData icon, text, Function(String) onselect, {Color color}) {
+  return Column(
+    children: [
+      Container(
+        height: 25,
+        child: PopupMenuButton(
+          padding: EdgeInsets.all(0),
+
+          icon: Icon(
+            icon,
+            color: color ?? Colors.black87,
+          ),
+          // color: kScaffoldColor,
+          onSelected: (value) => onselect(value),
+          // onSelected: (value) => model.showReportDialog(context),
+          itemBuilder: (BuildContext context) => [
+            PopupMenuItem(
+              value: "playlist",
+              child: Text("Add to platlist"),
+            ),
+            PopupMenuItem(
+              value: "share",
+              child: Text("Share"),
+            )
+          ],
+        ),
+      ),
+      Text(
+        text,
+        style: TextStyle(
+          fontSize: getProportionatefontSize(12),
+          fontWeight: FontWeight.w400,
+          color: Color(0xff999CAD),
+        ),
+      )
+    ],
+  );
 }
 
 class ControlButtons extends StatelessWidget {
@@ -310,6 +408,7 @@ class ControlButtons extends StatelessWidget {
             onPressed: player.hasPrevious ? player.seekToPrevious : null,
           ),
         ),
+        SizedBox(width: 20),
         StreamBuilder<PlayerState>(
           stream: player.playerStateStream,
           builder: (context, snapshot) {
@@ -325,27 +424,55 @@ class ControlButtons extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (playing != true) {
-              return IconButton(
-                icon: Icon(Icons.play_arrow),
-                iconSize: 64.0,
-                onPressed: player.play,
+              return InkWell(
+                onTap: player.play,
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: kPrimaryColor,
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
               );
             } else if (processingState != ProcessingState.completed) {
-              return IconButton(
-                icon: Icon(Icons.pause),
-                iconSize: 64.0,
-                onPressed: player.pause,
+              return InkWell(
+                onTap: player.pause,
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: kPrimaryColor,
+                  child: Icon(
+                    Icons.pause,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
               );
+
+              //  IconButton(
+              //   icon: Icon(Icons.pause),
+              //   iconSize: 64.0,
+              //   onPressed: player.pause,
+              // );
             } else {
-              return IconButton(
-                icon: Icon(Icons.replay),
-                iconSize: 64.0,
-                onPressed: () => player.seek(Duration.zero,
+              return InkWell(
+                onTap: () => player.seek(Duration.zero,
                     index: player.effectiveIndices.first),
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: kPrimaryColor,
+                  child: Icon(
+                    Icons.replay,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
               );
             }
           },
         ),
+        SizedBox(width: 20),
         StreamBuilder<SequenceState>(
           stream: player.sequenceStateStream,
           builder: (context, snapshot) => IconButton(
@@ -353,6 +480,41 @@ class ControlButtons extends StatelessWidget {
             onPressed: player.hasNext ? player.seekToNext : null,
           ),
         ),
+      ],
+    );
+  }
+
+  Widget more(IconData icon, text, Function onselect, {Color color}) {
+    return Column(
+      children: [
+        Container(
+          height: 25,
+          child: PopupMenuButton(
+            padding: EdgeInsets.all(0),
+
+            icon: Icon(
+              icon,
+              color: color ?? Colors.black87,
+            ),
+            // color: kScaffoldColor,
+            onSelected: (value) => onselect(),
+            // onSelected: (value) => model.showReportDialog(context),
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                value: "Share",
+                child: Text("Share"),
+              )
+            ],
+          ),
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: getProportionatefontSize(12),
+            fontWeight: FontWeight.w400,
+            color: Color(0xff999CAD),
+          ),
+        )
       ],
     );
   }

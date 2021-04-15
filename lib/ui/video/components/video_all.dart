@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/video/view_models/video_all_view_model.dart';
 import 'package:jals/utils/base_view_model.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/button.dart';
 import 'package:jals/widgets/empty.dart';
@@ -20,7 +21,7 @@ class _VideoAllState extends State<VideoAll>
     return ViewModelBuilder<VideoAllViewModel>.reactive(
       onModelReady: (model) => model.getAllVideos(),
       disposeViewModel: false,
-      viewModelBuilder: () => VideoAllViewModel(),
+      viewModelBuilder: () => locator<VideoAllViewModel>(),
       builder: (context, model, child) {
         return Stack(
           children: [
