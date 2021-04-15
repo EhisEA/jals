@@ -7,6 +7,7 @@ import 'package:jals/services/audio_service.dart';
 import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
 import 'package:jals/utils/locator.dart';
+import 'package:jals/widgets/comment_widget.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:jals/utils/base_view_model.dart';
@@ -21,6 +22,7 @@ class AudioPlayerViewModel extends BaseViewModel {
   Duration totalDuration;
   Duration streamPosition;
   Duration bufferedPosition;
+  int playinIndex = 0;
   // AudioPlayerState _currentAudioState = AudioPlayerState.STOPPED;
   // bool get canPlay => _currentAudioState != AudioPlayerState.PLAYING;
   bool get canPlay => audioPlayer.playerState?.playing ?? false;
@@ -29,6 +31,7 @@ class AudioPlayerViewModel extends BaseViewModel {
   List<AudioModel> audios;
   List<PlayListModel> playList;
   List<CommentWidgetViewModel> commentWidgetViewModels;
+  List<CommentWidget> commentWidgets;
   ConcatenatingAudioSource _songs;
   String playlistName;
   String _dynamicLink;
@@ -43,10 +46,14 @@ class AudioPlayerViewModel extends BaseViewModel {
   }
 
   initiliseAudio(List<AudioModel> audios, {String playlistName}) async {
-    commentWidgetViewModels = audios
-        .map<CommentWidgetViewModel>(
-            (audio) => CommentWidgetViewModel(audio.id))
+    commentWidgetViewModels = audios.map<CommentWidgetViewModel>((audio) {
+      return CommentWidgetViewModel(audio.id);
+    }).toList();
+    commentWidgets = commentWidgetViewModels
+        .map<CommentWidget>(
+            (commentVM) => CommentWidget(commentWidgetViewModel: commentVM))
         .toList();
+
     _songs = ConcatenatingAudioSource(
       children: List.generate(
         audios.length,
@@ -106,6 +113,11 @@ class AudioPlayerViewModel extends BaseViewModel {
         currentlyPlaying = sequenceState.currentSource.tag as AudioModel;
         commentWidgetViewModel = CommentWidgetViewModel(currentlyPlaying.id);
         commentWidgetViewModel.getComments();
+        playinIndex = -1;
+        Future.delayed(Duration(milliseconds: 500), () {
+          playinIndex = sequenceState.currentIndex;
+          setSecondaryBusy(ViewState.Idle);
+        });
         setSecondaryBusy(ViewState.Idle);
       }
     });

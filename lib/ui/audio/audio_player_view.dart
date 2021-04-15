@@ -8,6 +8,7 @@ import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
+import 'package:jals/widgets/comment_widget.dart';
 import 'package:jals/widgets/extended_text_field.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
@@ -16,12 +17,18 @@ import 'package:stacked/stacked.dart';
 
 format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
-class AudioPlayerView extends StatelessWidget {
+class AudioPlayerView extends StatefulWidget {
   final List<AudioModel> audios;
   final String playlistName;
 
-  CommentWidgetViewModel commentWidgetViewModel;
   AudioPlayerView({Key key, this.audios, this.playlistName}) {}
+
+  @override
+  _AudioPlayerViewState createState() => _AudioPlayerViewState();
+}
+
+class _AudioPlayerViewState extends State<AudioPlayerView> {
+  CommentWidgetViewModel commentWidgetViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +37,8 @@ class AudioPlayerView extends StatelessWidget {
     );
     SizeConfig().init(context);
     return ViewModelBuilder<AudioPlayerViewModel>.reactive(
-        onModelReady: (model) =>
-            model.initiliseAudio(audios, playlistName: playlistName),
+        onModelReady: (model) => model.initiliseAudio(widget.audios,
+            playlistName: widget.playlistName),
         viewModelBuilder: () =>
             AudioPlayerViewModel(), // locator<AudioPlayerViewModel>(),
         // disposeViewModel: false,
@@ -162,8 +169,16 @@ class AudioPlayerView extends StatelessWidget {
                     children: [
                       buildIcon(JalsIcons.favorite, "Listen Later", () {}),
                       buildIcon(JalsIcons.download, "Download", () {}),
-                      buildIcon(JalsIcons.comment, "Comment",
-                          () => writeComment(context, commentWidgetViewModel)),
+                      buildIcon(
+                        JalsIcons.comment,
+                        "Comment",
+                        () {
+                          if (model.audioPlayer.currentIndex != null)
+                            model.commentWidgetViewModels[
+                                    model.audioPlayer.currentIndex]
+                                .writeComment(context);
+                        },
+                      ),
                       pop(JalsIcons.more, "more", (value) {
                         switch (value.toLowerCase()) {
                           case "playlist":
@@ -179,23 +194,9 @@ class AudioPlayerView extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Divider(),
-                  StreamBuilder(
-                    stream: model.audioPlayer.currentIndexStream,
-                    builder: (context, snapshot) {
-                      print('${snapshot.data} ====');
-                      // AudioModel currentlyPlaying =
-                      //     snapshot.data.currentSource.tag as AudioModel;
-                      // commentWidgetViewModel =
-                      //     CommentWidgetViewModel(currentlyPlaying.id);
-                      // if (commentWidgetViewModel != null) {
-                      //   print("here");
-                      //   return CommentWidget(
-                      //     commentWidgetViewModel: commentWidgetViewModel,
-                      //   );
-                      // } else
-                      return SizedBox();
-                    },
-                  )
+                  if (model.playinIndex >= 0 &&
+                      model.playinIndex <= model.commentWidgets.length)
+                    model.commentWidgets[model.playinIndex],
                 ],
               ),
             ),
