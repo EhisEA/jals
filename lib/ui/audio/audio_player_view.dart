@@ -5,7 +5,6 @@ import 'package:jals/models/playlist_model.dart';
 import 'package:jals/ui/audio/view_model/audio_player_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
-import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';

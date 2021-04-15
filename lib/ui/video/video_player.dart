@@ -164,7 +164,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                   children: [
                     GestureDetector(
                       onTap: () {
-
                         model.video.isBookmarked
                             ? model.removeFromBookmarks(widget.video.id)
                             : model.addToBookmarks(widget.video.id);
@@ -176,9 +175,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                 ? Icons.favorite
                                 : JalsIcons.favorite,
                         "Listen Later",
-                        color: 
-                        model.video.isBookmarked
-                            ? kPrimaryColor//Colors.red
+                        color: model.video.isBookmarked
+                            ? kPrimaryColor //Colors.red
                             : null,
                       ),
                     ),
@@ -189,7 +187,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                       },
                       child: buildIcon(JalsIcons.comment, "Comment"),
                     ),
-                    buildIcon(JalsIcons.more, "more"),
+                    pop(JalsIcons.more, "more", model.share),
                   ],
                 ),
                 SizedBox(height: 25),
@@ -263,7 +261,45 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   Widget buildIcon(IconData icon, text, {Color color}) {
     return Column(
       children: [
-        Icon(icon,color: color??Colors.black87,),
+        Icon(
+          icon,
+          color: color ?? Colors.black87,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: getProportionatefontSize(12),
+            fontWeight: FontWeight.w400,
+            color: Color(0xff999CAD),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget pop(IconData icon, text, Function onselect, {Color color}) {
+    return Column(
+      children: [
+        Container(
+          height: 25,
+          child: PopupMenuButton(
+            padding: EdgeInsets.all(0),
+
+            icon: Icon(
+              icon,
+              color: color ?? Colors.black87,
+            ),
+            // color: kScaffoldColor,
+            onSelected: (value) => onselect(),
+            // onSelected: (value) => model.showReportDialog(context),
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                value: "Share",
+                child: Text("Share"),
+              )
+            ],
+          ),
+        ),
         Text(
           text,
           style: TextStyle(

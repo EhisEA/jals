@@ -30,7 +30,7 @@ class ArticleViewViewModel extends BaseViewModel {
       await _networkConfig.onNetworkAvailabilityDialog(() =>
           getArticleDetailsNetworkCall(articleToView.id, articleToView.isNews));
     }
-    if (article == null)
+    if (article != null)
       _articleDynamicLink =
           await _dynamicLinkService.createEventLink(article.toContent());
 

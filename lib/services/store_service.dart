@@ -36,11 +36,14 @@ class StoreService {
   // =======Get Purchased Store Items==========
   Future<List<ContentModel>> getPurchasedItemsList() async {
     try {
-      Response response = await _client.get(AppUrl.getPurchasedItemsList);
+      Response response = await _client.get(
+        AppUrl.getPurchasedItemsList,
+        headers: appHttpHeaders(),
+      );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       if (decodedData["status"] == "successful") {
         List<ContentModel> listOfItems = [];
-
+        print(decodedData);
         decodedData["data"]["results"].forEach((e) {
           listOfItems.add(ContentModel().fromJson(e));
         });

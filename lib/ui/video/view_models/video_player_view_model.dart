@@ -3,16 +3,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/enums/small_viewstate.dart';
 import 'package:jals/models/video_model.dart';
-import 'package:jals/services/comment_service.dart';
+import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/services/video_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
+import 'package:share/share.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerViewViewModel extends BaseViewModel {
   format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
+  final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
   VideoPlayerController videoPlayerController;
   VideoModel video;
   NetworkConfig _networkConfig = new NetworkConfig();
@@ -21,6 +23,7 @@ class VideoPlayerViewViewModel extends BaseViewModel {
   int totalTime = 0;
   Duration totalDuration;
   Duration currentDuration;
+  String _dynamicLink;
   String convertTime(int time) {
     int minutes = (time / 60).truncate();
     String convertedValue = (minutes % 60).toString().padLeft(2, '0');
@@ -71,16 +74,20 @@ class VideoPlayerViewViewModel extends BaseViewModel {
     print('========INITIALIZING THE VIDEO LAYER');
     setBusy(ViewState.Busy);
     videoPlayerController = VideoPlayerController.network(videoModel.dataUrl)
-      ..initialize().then((value) {
-        if (videoPlayerController.value.initialized) {
-          setBusy(ViewState.Idle);
-          onModelReady();
-          print('done =========================');
-        } else {
-          print("Not yet initialized");
+      ..initialize().then(
+        (value) async {
+          if (videoPlayerController.value.initialized) {
+            onModelReady();
+            print('done =========================');
+          } else {
+            print("Not yet initialized");
+          }
+          if (videoModel != null)
+            _dynamicLink = await _dynamicLinkService
+                .createEventLink(videoModel.toContent());
           setBusy(ViewState.Busy);
-        }
-      });
+        },
+      );
   }
 
   void addToBookmarks(String uid) async {
@@ -123,5 +130,24 @@ class VideoPlayerViewViewModel extends BaseViewModel {
       await Fluttertoast.showToast(
           msg: 'Cannot remove video from watch later list.', fontSize: 16.0);
     }
+  }
+
+// sharing
+
+  share() async {
+    if (video == null) return;
+
+    if (_dynamicLink == null || _dynamicLink == "") {
+      _dynamicLink =
+          await _dynamicLinkService.createEventLink(video.toContent());
+    }
+
+    if (_dynamicLink == null || _dynamicLink == "") {
+      Fluttertoast.showToast(
+          msg: "No internet",
+          backgroundColor: Colors.black,
+          textColor: Colors.white);
+    }
+    Share.share(_dynamicLink);
   }
 }
