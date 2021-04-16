@@ -1,11 +1,12 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:jals/constants/app_urls.dart';
+import 'package:jals/constants/keys.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/login_status.dart';
 import 'package:jals/models/user_model.dart';
@@ -17,12 +18,6 @@ import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationService {
-  String abu = 'hold';
-  List<int> g = [
-    2,
-    4,
-    5,
-  ];
   final Client _client = Client();
   NavigationService _navigationService = locator<NavigationService>();
   final NetworkConfig _networkConfig = NetworkConfig();
@@ -196,6 +191,37 @@ class AuthenticationService {
         _populateCurrentUser(decodedData);
 
         debugPrint("Saved The User Object to the SharedPreferences....");
+
+        return ApiResponse.Success;
+      } else {
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      debugPrint(" The error was $e");
+      return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> loginWithGoogle() async {
+    try {
+      GoogleSignIn _googleSignIn = GoogleSignIn(
+        // Optional clientId
+        clientId: Keys.googleClientId,
+      );
+      GoogleSignInAccount user = await _googleSignIn.signIn();
+      GoogleSignInAuthentication authData = await user.authentication;
+      if (authData.accessToken == null) return ApiResponse.Error;
+      Response response = await _client.post(
+        "${AppUrl.GoogleLogin}",
+        body: {
+          "access_token": authData.accessToken,
+        },
+      );
+      final Map<String, dynamic> decodedData = jsonDecode(response.body);
+
+      _googleSignIn.disconnect();
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        _populateCurrentUser(decodedData);
 
         return ApiResponse.Success;
       } else {

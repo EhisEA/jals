@@ -37,6 +37,7 @@ class AppUrl {
   // =============================================================////////////////////////////////////////////////////////////////////////////////////////
   // =============================================================
   // =============================================================
+  static const String GoogleLogin = "$ServerBaseUrl/v1/rest-auth/google/";
   static const String Login = "$ServerBaseUrl/v1/rest-auth/login/";
   static const String VerifyEmail = "$ServerBaseUrl/v1/users/check_email/";
   static const String RegisterUser =

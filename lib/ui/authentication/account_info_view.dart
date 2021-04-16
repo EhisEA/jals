@@ -27,123 +27,127 @@ class _AccountInfoViewState extends State<AccountInfoView> {
         viewModelBuilder: () => AccountInfoViewModel(),
         builder: (context, model, _) {
           _focusDateField.unfocus();
-          return LoaderPageRipple(
-            busy: model.isSecondaryBusy,
-            child: SafeArea(
-              child: Center(
-                child: Scaffold(
-                  backgroundColor: Colors.white,
-                  body: GestureDetector(
-                    onTap: () => FocusScope.of(context).unfocus(),
-                    child: Container(
-                      margin: UIHelper.kSidePadding,
-                      child: SingleChildScrollView(
-                        child: Form(
-                          key: model.formKey,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: getProportionateScreenHeight(10),
-                              ),
-                              Row(
-                                children: [
-                                  Spacer(),
-                                  model.isBusy
-                                      ? SizedBox(height: 20)
-                                      : InkWell(
-                                          // onTap: model.skip,
-                                          onTap: () {
-                                            model.skip();
-                                          },
-                                          child: Text(
-                                            "Skip",
-                                            style: GoogleFonts.sourceSansPro(
-                                              fontSize:
-                                                  getProportionatefontSize(16),
-                                              fontWeight: FontWeight.w700,
-                                              fontStyle: FontStyle.normal,
-                                              color: Color(0xff01CC97),
+          return LoaderPageBlank(
+            busy: model.isBusy,
+            child: LoaderPageRipple(
+              busy: model.isSecondaryBusy,
+              child: SafeArea(
+                child: Center(
+                  child: Scaffold(
+                    backgroundColor: Colors.white,
+                    body: GestureDetector(
+                      onTap: () => FocusScope.of(context).unfocus(),
+                      child: Container(
+                        margin: UIHelper.kSidePadding,
+                        child: SingleChildScrollView(
+                          child: Form(
+                            key: model.formKey,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: getProportionateScreenHeight(10),
+                                ),
+                                Row(
+                                  children: [
+                                    Spacer(),
+                                    model.isBusy
+                                        ? SizedBox(height: 20)
+                                        : InkWell(
+                                            // onTap: model.skip,
+                                            onTap: () {
+                                              model.skip();
+                                            },
+                                            child: Text(
+                                              "Skip",
+                                              style: GoogleFonts.sourceSansPro(
+                                                fontSize:
+                                                    getProportionatefontSize(
+                                                        16),
+                                                fontWeight: FontWeight.w700,
+                                                fontStyle: FontStyle.normal,
+                                                color: Color(0xff01CC97),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: getProportionateScreenHeight(30),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Account info",
-                                    style: GoogleFonts.sourceSansPro(
-                                      fontSize: getProportionatefontSize(30),
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FontStyle.normal,
-                                      color: Color(0xff1F2230),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(30),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Account info",
+                                      style: GoogleFonts.sourceSansPro(
+                                        fontSize: getProportionatefontSize(30),
+                                        fontWeight: FontWeight.w600,
+                                        fontStyle: FontStyle.normal,
+                                        color: Color(0xff1F2230),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: getProportionateScreenHeight(30),
-                              ),
-                              buildProfilePicture(model),
-                              SizedBox(
-                                height: getProportionateScreenHeight(30),
-                              ),
-                              AuthTextField(
-                                controller: model.nameController,
-                                fieldColor: Colors.white,
-                                keyboardType: TextInputType.multiline,
-                                hintText: "Usifo Murphy",
-                                prefixIcon: JalsIcons.account_circle,
-                                title: "Full Name",
-                              ),
-                              SizedBox(
-                                height: getProportionateScreenHeight(20),
-                              ),
-                              AuthTextField(
-                                keyboardType: TextInputType.multiline,
-                                controller: model.phoneNumberController,
-                                hintText: "+171615020202",
-                                fieldColor: Colors.white,
-                                prefixIcon: Icons.phone,
-                                title: "Phone Number",
-                              ),
-                              SizedBox(
-                                height: getProportionateScreenHeight(20),
-                              ),
-                              buildDateOfBirthField(
-                                context,
-                                callBack: () {
-                                  model.pickDate(context).then((v) {
-                                    model.dateController.text = model
-                                                .pickedDate ==
-                                            null
-                                        ? ""
-                                        : "${DateFormat('dd/MM/yyyy').format(model.pickedDate)}";
-                                    //remove focus from date textfield
-                                    _focusDateField.unfocus();
-                                  });
-                                },
-                                controller: model.dateController,
-                              ),
-                              SizedBox(
-                                height: getProportionateScreenHeight(20),
-                              ),
-                              model.state == ViewState.Busy
-                                  ? Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : DefaultButton(
-                                      color: Color(0xff3C8AF0),
-                                      onPressed: model.uploadDetails,
-                                      title: "Explore JALS",
-                                    ),
-                              SizedBox(
-                                height: getProportionateScreenHeight(20),
-                              ),
-                            ],
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(30),
+                                ),
+                                buildProfilePicture(model),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(30),
+                                ),
+                                AuthTextField(
+                                  controller: model.nameController,
+                                  fieldColor: Colors.white,
+                                  keyboardType: TextInputType.multiline,
+                                  hintText: "Usifo Murphy",
+                                  prefixIcon: JalsIcons.account_circle,
+                                  title: "Full Name",
+                                ),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(20),
+                                ),
+                                AuthTextField(
+                                  keyboardType: TextInputType.multiline,
+                                  controller: model.phoneNumberController,
+                                  hintText: "+171615020202",
+                                  fieldColor: Colors.white,
+                                  prefixIcon: Icons.phone,
+                                  title: "Phone Number",
+                                ),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(20),
+                                ),
+                                buildDateOfBirthField(
+                                  context,
+                                  callBack: () {
+                                    model.pickDate(context).then((v) {
+                                      model.dateController.text = model
+                                                  .pickedDate ==
+                                              null
+                                          ? ""
+                                          : "${DateFormat('dd/MM/yyyy').format(model.pickedDate)}";
+                                      //remove focus from date textfield
+                                      _focusDateField.unfocus();
+                                    });
+                                  },
+                                  controller: model.dateController,
+                                ),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(20),
+                                ),
+                                model.state == ViewState.Busy
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : DefaultButton(
+                                        color: Color(0xff3C8AF0),
+                                        onPressed: model.uploadDetails,
+                                        title: "Explore JALS",
+                                      ),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(20),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

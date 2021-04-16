@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/enums/verification_type.dart';
 import 'package:jals/services/authentication_service.dart';
@@ -53,7 +54,33 @@ class SignUpViewModel extends BaseViewModel {
     }
   }
 
-  googleSignIn() async {}
+  googleSignIn() async {
+    setBusy(ViewState.Busy);
+    try {
+      ApiResponse apiResponse = await _authenticationService.loginWithGoogle();
+      if (isDisposed) return;
+      if (apiResponse == ApiResponse.Success) {
+        if (_authenticationService.currentUser.isDetailsComplete()) {
+          await _navigationService.navigateToReplace(HomeViewRoute);
+        } else {
+          await _navigationService.navigateToReplace(AccountInfoViewRoute);
+        }
+      } else {
+        // ! show handle error.
+        await _dialogService.showDialog(
+            buttonTitle: "OK",
+            description: "Invalid Credentials",
+            title: "Login Error");
+      }
+    } catch (e) {
+      await _dialogService.showDialog(
+          buttonTitle: "OK",
+          description: "Check your internet connection",
+          title: "Login Error");
+    }
+    setBusy(ViewState.Idle);
+  }
+
   facebookSignIn() async {}
 
   toLogin() async {

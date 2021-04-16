@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:jals/constants/keys.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/services/dialog_service.dart';
@@ -66,7 +68,18 @@ class EmailLoginViewModel extends BaseViewModel {
     }
   }
 
-  googleSignIn() async {}
+  googleSignIn() async {
+    setBusy(ViewState.Busy);
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      // Optional clientId
+      clientId: Keys.googleClientId,
+    );
+    GoogleSignInAccount user = await _googleSignIn.signIn();
+    Map googleHeaders = await user.authHeaders;
+    print(googleHeaders);
+    setBusy(ViewState.Idle);
+  }
+
   facebookSignIn() async {}
 
   toSignUp() async {

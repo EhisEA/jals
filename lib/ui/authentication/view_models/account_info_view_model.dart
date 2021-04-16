@@ -36,7 +36,7 @@ class AccountInfoViewModel extends BaseViewModel {
   }
 
   AccountInfoViewModel() {
-    if(_authenticationService.currentUser==null){
+    if (_authenticationService.currentUser == null) {
       return;
     }
     currentAvatar = _authenticationService.currentUser.avatar;
@@ -110,8 +110,8 @@ class AccountInfoViewModel extends BaseViewModel {
     final pickedFile = await picker.getImage(source: source);
     if (pickedFile != null) {
       image = File(pickedFile.path);
-      setSecondaryBusy(ViewState.Idle);
     }
+    setSecondaryBusy(ViewState.Idle);
   }
 
   showImageSelectionDialog(BuildContext context) {

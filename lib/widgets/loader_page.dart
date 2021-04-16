@@ -45,6 +45,37 @@ class LoaderPage extends StatelessWidget {
   }
 }
 
+class LoaderPageBlank extends StatelessWidget {
+  final Widget child;
+  final bool busy;
+  const LoaderPageBlank({Key key, @required this.child, @required this.busy})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: child,
+          ),
+          busy
+              ? Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.black.withOpacity(0.5),
+                )
+              : SizedBox()
+        ],
+      ),
+    );
+  }
+}
+
 class LoaderPageWithTextIndicator extends StatelessWidget {
   final Widget child;
   final String textIndicator;

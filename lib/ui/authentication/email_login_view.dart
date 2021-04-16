@@ -8,6 +8,7 @@ import 'package:jals/ui/authentication/components/auth_textfield.dart';
 import 'package:jals/ui/authentication/view_models/email_login_view_model.dart';
 import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/button.dart';
+import 'package:jals/widgets/loader_page.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../utils/size_config.dart';
@@ -19,77 +20,80 @@ class EmailLoginView extends StatelessWidget {
     return ViewModelBuilder<EmailLoginViewModel>.reactive(
         viewModelBuilder: () => EmailLoginViewModel(),
         builder: (context, model, _) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                margin: UIHelper.kSidePadding,
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: model.formKey,
-                    child: Column(
-                      children: [
-                        AuthAppBar(
-                          subtitle: "Jesus A Lifestyle",
-                          title: "Login into JALS",
-                        ),
-                        // !email textfield
-                        AuthTextField(
-                          fieldColor: Colors.white,
-                          controller: model.emailController,
-                          hintText: "Johndoe@gmail.com",
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: JalsIcons.envelope,
-                          title: "Email",
-                          validator: (String value) {
-                            if (!emmailRegExp.hasMatch(value)) {
-                              return "Invaild Email";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(20),
-                        ),
-                        // ! password textfield
-                        AuthTextField(
-                          fieldColor: Colors.grey[200],
-                          title: "Password",
-                          isPassword: true,
-                          keyboardType: TextInputType.visiblePassword,
-                          prefixIcon: JalsIcons.password,
-                          controller: model.passwordController,
-                          hintText: "******",
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(20),
-                        ),
-                        buildRow(context, model),
-                        SizedBox(
-                          height: getProportionateScreenHeight(15),
-                        ),
-                        // button
-                        model.state == ViewState.Busy
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : DefaultButton(
-                                color: Color(0xff3C8AF0),
-                                onPressed: model.login,
-                                title: "Log in",
-                              ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(20),
-                        ),
-                        buildRichText(model),
-                        SizedBox(
-                          height: 50,
-                        ),
-                      ],
+          return LoaderPageBlank(
+            busy: model.isBusy,
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  margin: UIHelper.kSidePadding,
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: model.formKey,
+                      child: Column(
+                        children: [
+                          AuthAppBar(
+                            subtitle: "Jesus A Lifestyle",
+                            title: "Login into JALS",
+                          ),
+                          // !email textfield
+                          AuthTextField(
+                            fieldColor: Colors.white,
+                            controller: model.emailController,
+                            hintText: "Johndoe@gmail.com",
+                            keyboardType: TextInputType.emailAddress,
+                            prefixIcon: JalsIcons.envelope,
+                            title: "Email",
+                            validator: (String value) {
+                              if (!emmailRegExp.hasMatch(value)) {
+                                return "Invaild Email";
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(20),
+                          ),
+                          // ! password textfield
+                          AuthTextField(
+                            fieldColor: Colors.grey[200],
+                            title: "Password",
+                            isPassword: true,
+                            keyboardType: TextInputType.visiblePassword,
+                            prefixIcon: JalsIcons.password,
+                            controller: model.passwordController,
+                            hintText: "******",
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(20),
+                          ),
+                          buildRow(context, model),
+                          SizedBox(
+                            height: getProportionateScreenHeight(15),
+                          ),
+                          // button
+                          model.state == ViewState.Busy
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : DefaultButton(
+                                  color: Color(0xff3C8AF0),
+                                  onPressed: model.login,
+                                  title: "Log in",
+                                ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(20),
+                          ),
+                          buildRichText(model),
+                          SizedBox(
+                            height: 50,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
