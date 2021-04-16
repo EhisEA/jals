@@ -55,66 +55,73 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AspectRatio(
-                  aspectRatio: 1.33,
-                  child: Container(
-                    color: Colors.black,
-                    child: Stack(
-                      children: [
-                        VideoPlayer(
-                          model.videoPlayerController,
-                        ),
-                        model.isBusy
-                            ? Center(child: CircularProgressIndicator())
-                            : Container(),
-                        model.videoPlayerController.value.isBuffering
-                            ? Center(child: CircularProgressIndicator())
-                            : Container(),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    // model.videoPlayerController
-                                    //     .setPlaybackSpeed(5.0);
-                                  },
-                                  icon: Icon(
-                                    Icons.fast_rewind,
-                                    color: Color(0xffD9D9D9),
+                InkWell(
+                  onTap: model.toggleShowControl,
+                  child: AspectRatio(
+                    aspectRatio: 1.33,
+                    child: Container(
+                      color: Colors.black,
+                      child: Stack(
+                        children: [
+                          VideoPlayer(
+                            model.videoPlayerController,
+                          ),
+                          model.isBusy
+                              ? Center(child: CircularProgressIndicator())
+                              : Container(),
+                          model.videoPlayerController.value.isBuffering
+                              ? Center(child: CircularProgressIndicator())
+                              : Container(),
+                          AnimatedPositioned(
+                            curve: Curves.easeInOut,
+                            bottom: model.showControl ? 0 : -100,
+                            left: 0,
+                            right: 0,
+                            duration: Duration(seconds: 1),
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      // model.videoPlayerController
+                                      //     .setPlaybackSpeed(5.0);
+                                    },
+                                    icon: Icon(
+                                      Icons.fast_rewind,
+                                      color: Color(0xffD9D9D9),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 20),
-                                CircleAvatar(
-                                  radius: 25,
-                                  child: IconButton(
-                                    // move this function to viewmodel
-                                    onPressed: model.pauseOrPlay,
-                                    icon: model.videoPlayerController.value
-                                            .isPlaying
-                                        ? Icon(Icons.pause)
-                                        : Icon(Icons.play_arrow),
+                                  SizedBox(width: 20),
+                                  CircleAvatar(
+                                    radius: 25,
+                                    child: IconButton(
+                                      // move this function to viewmodel
+                                      onPressed: model.pauseOrPlay,
+                                      icon: model.videoPlayerController.value
+                                              .isPlaying
+                                          ? Icon(Icons.pause)
+                                          : Icon(Icons.play_arrow),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 20),
-                                IconButton(
-                                  onPressed: () {
-                                    // model.videoPlayerController
-                                    //     .seekTo(position);
-                                  },
-                                  icon: Icon(
-                                    Icons.fast_forward,
-                                    color: Color(0xffD9D9D9),
+                                  SizedBox(width: 20),
+                                  IconButton(
+                                    onPressed: () {
+                                      // model.videoPlayerController
+                                      //     .seekTo(position);
+                                    },
+                                    icon: Icon(
+                                      Icons.fast_forward,
+                                      color: Color(0xffD9D9D9),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

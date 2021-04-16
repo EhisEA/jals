@@ -24,6 +24,13 @@ class VideoPlayerViewViewModel extends BaseViewModel {
   Duration totalDuration;
   Duration currentDuration;
   String _dynamicLink;
+  bool showControl = false;
+
+  toggleShowControl() {
+    showControl = !showControl;
+    notifyListeners();
+  }
+
   String convertTime(int time) {
     int minutes = (time / 60).truncate();
     String convertedValue = (minutes % 60).toString().padLeft(2, '0');
@@ -92,7 +99,8 @@ class VideoPlayerViewViewModel extends BaseViewModel {
           if (videoModel != null)
             _dynamicLink = await _dynamicLinkService
                 .createEventLink(videoModel.toContent());
-          setBusy(ViewState.Busy);
+
+          setBusy(ViewState.Idle);
         },
       );
   }
