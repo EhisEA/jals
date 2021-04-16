@@ -8,16 +8,15 @@ class Empty extends StatelessWidget {
   const Empty({Key key, this.title: ""}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-            child: Column(
+    return Center(
+      child: Container(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset("assets/svgs/empty.svg"),
             TextHeader3(color: Colors.grey.shade600, text: "$title"),
           ],
-        )),
+        ),
       ),
     );
   }

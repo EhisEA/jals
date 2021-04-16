@@ -91,8 +91,16 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
       BuildContext context, AudioPlaylistSectionViewModel viewModel) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(20.0),
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      builder: (context) => Container(
+        // width: double.infinity,
+
+        ///this allows bottom sheet to display above the keyboard
+        height: MediaQuery.of(context).size.height / 2 +
+            MediaQuery.of(context).viewInsets.bottom,
+        padding: EdgeInsets.all(20.0),
         child: ViewModelBuilder<AudioPlaylistSectionViewModel>.reactive(
             viewModelBuilder: () => viewModel,
             disposeViewModel: false,

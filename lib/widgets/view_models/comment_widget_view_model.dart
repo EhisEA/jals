@@ -67,8 +67,14 @@ class CommentWidgetViewModel extends BaseViewModel {
   writeComment(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
       builder: (context) => StatefulBuilder(builder: (context, setState) {
         return Container(
+          // width: double.infinity,
+
+          ///this allows bottom sheet to display above the keyboard
           height: MediaQuery.of(context).size.height / 2 +
               MediaQuery.of(context).viewInsets.bottom,
           padding: const EdgeInsets.all(20.0),

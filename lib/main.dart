@@ -23,12 +23,13 @@ void main() async {
       await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   locator<HiveDatabaseService>().openBoxes();
-  return runApp(DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => MyApp(),
-  )
-      // MyApp(),
-      );
+  return runApp(
+    //DevicePreview(
+    //   enabled: !kReleaseMode,
+    //   builder: (context) => MyApp(),
+    // )
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -36,23 +37,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'JALS',
       builder: (context, child) {
         var dialogService = locator<DialogService>();
-        return DevicePreview.appBuilder(
-            context,
-            Navigator(
-              key: dialogService.dialogNavigationKey,
-              onGenerateRoute: (settings) => MaterialPageRoute(
-                  builder: (context) => DialogManager(child: child)),
-            ));
+        // return DevicePreview.appBuilder(
+        //     context,
+        //     Navigator(
+        //       key: dialogService.dialogNavigationKey,
+        //       onGenerateRoute: (settings) => MaterialPageRoute(
+        //           builder: (context) => DialogManager(child: child)),
+        //     ));
 
         /// wraping all widgets inside Navigator and diaglog
-        // return Navigator(
-        //   key: dialogService.dialogNavigationKey,
-        //   onGenerateRoute: (settings) => MaterialPageRoute(
-        //       builder: (context) => DialogManager(child: child)),
-        // );
+        return Navigator(
+          key: dialogService.dialogNavigationKey,
+          onGenerateRoute: (settings) => MaterialPageRoute(
+              builder: (context) => DialogManager(child: child)),
+        );
       },
       theme: MyTheme().themeData,
       onGenerateRoute: AppRouter.generateRoute,
