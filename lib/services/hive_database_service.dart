@@ -13,11 +13,14 @@ class HiveDatabaseService {
 
   void openBoxes() async {
     _articleDownloads = await Hive.openBox<ArticleModel>('article_downloads');
-    print(_articleDownloads.length);
 
     // _articleDownloads.clear();
     // articleDownloads = await Hive.openBox<ContentModel>('video_downloads');
     // articleDownloads = await Hive.openBox<ContentModel>('audio_downloads');
+  }
+
+  deleteAllDB() {
+    _articleDownloads.clear();
   }
 
   void downloadArticle(ArticleModel article) {
@@ -41,6 +44,8 @@ class HiveDatabaseService {
 
   String getArticleDownloadedContent(String id) {
     // if (_articleDownloads == null) return false;
-    return _articleDownloads.get(id)==null?null:_articleDownloads.get(id).content;
+    return _articleDownloads.get(id) == null
+        ? null
+        : _articleDownloads.get(id).content;
   }
 }

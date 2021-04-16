@@ -11,6 +11,7 @@ import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/login_status.dart';
 import 'package:jals/models/user_model.dart';
 import 'package:jals/route_paths.dart';
+import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/services/navigationService.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
@@ -408,8 +409,10 @@ class AuthenticationService {
 
   Future logOut() async {
     try {
+      HiveDatabaseService _hiveDB = locator<HiveDatabaseService>();
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.clear();
+      _hiveDB.deleteAllDB();
       print("Done");
       await _navigationService.navigateToReplace(LoginViewRoute);
       print("Exit 0");
