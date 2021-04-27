@@ -69,21 +69,18 @@ class _SettingsViewState extends State<SettingsView> {
                                     ),
                                   ),
                                   // show loader to indicate that image is uploading
-                                  model.isSecondaryBusy
-                                      ? ClipOval(
-                                          child: Container(
-                                              width: 140,
-                                              height: 140,
-                                              color: Colors.black38,
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                valueColor:
-                                                    AlwaysStoppedAnimation(
-                                                        Colors.white),
-                                              ))),
-                                        )
-                                      : SizedBox(),
+                                  if (model.isSecondaryBusy)
+                                    ClipOval(
+                                      child: Container(
+                                          width: 140,
+                                          height: 140,
+                                          color: Colors.black38,
+                                          child: Center(
+                                              child: CircularProgressIndicator(
+                                            valueColor: AlwaysStoppedAnimation(
+                                                Colors.white),
+                                          ))),
+                                    )
                                 ],
                               ),
                             ),

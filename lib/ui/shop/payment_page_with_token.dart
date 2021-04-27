@@ -5,6 +5,9 @@ import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/button.dart';
 
 class PaymentPageWithTokenView extends StatelessWidget {
+  final double coins;
+
+  const PaymentPageWithTokenView({Key key, this.coins}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -13,7 +16,9 @@ class PaymentPageWithTokenView extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              TopBox(),
+              TopBox(
+                coins: coins,
+              ),
               SizedBox(
                 height: getProportionatefontSize(30),
               ),
@@ -122,8 +127,10 @@ class TokenPriceTile extends StatelessWidget {
 }
 
 class TopBox extends StatelessWidget {
+  final double coins;
   const TopBox({
     Key key,
+    this.coins,
   }) : super(key: key);
 
   @override
@@ -189,7 +196,7 @@ class TopBox extends StatelessWidget {
                 width: getProportionatefontSize(15),
               ),
               Text(
-                "200",
+                "$coins",
                 style: GoogleFonts.sourceSansPro(
                   fontSize: getProportionatefontSize(32),
                   fontWeight: FontWeight.w600,

@@ -24,6 +24,7 @@ import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
 import 'package:jals/ui/dynamic_link_entry_view.dart';
 import 'package:jals/ui/home/home_base.dart';
+import 'package:jals/ui/shop/payment_page_with_token.dart';
 import 'package:jals/ui/store/store_item_view.dart';
 import 'package:jals/ui/video/video_library_view.dart';
 import 'package:jals/ui/video/video_player.dart';
@@ -33,6 +34,15 @@ import '../ui/undefinedRoute.dart';
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case PaymentPageWithTokenViewRoute:
+        double coinBalance;
+        coinBalance = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => PaymentPageWithTokenView(
+            coins: coinBalance,
+          ),
+        );
+        break;
       case SplashScreenViewRoute:
         return MaterialPageRoute(builder: (context) => SplashScreenView());
         break;

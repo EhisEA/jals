@@ -69,7 +69,6 @@ class AuthenticationService {
     _preferences = await SharedPreferences.getInstance();
     String userJsonString = _preferences.getString("userData");
 
-    print(userJsonString);
     if (userJsonString != null) {
       await _populateCurrentUserFromPref(jsonDecode(userJsonString));
       if (_currentUser.isDetailsComplete()) {
@@ -85,11 +84,6 @@ class AuthenticationService {
     SharedPreferences _preferences;
     _preferences = await SharedPreferences.getInstance();
     // print(_currentUser.dateOfBirth);
-    print("===============");
-    print(_currentUser.fullName);
-    print(_currentUser.dateOfBirth);
-    print(_currentUser.key);
-    print(_currentUser.id);
 
     _preferences.setString("userData", jsonEncode(_currentUser.toJson()));
   }
@@ -312,10 +306,10 @@ class AuthenticationService {
         _updateCurrentUser(decodedData);
         return ApiResponse.Success;
       } else if (response.statusCode == 400) {
-        return ApiResponse.Success;
+        return ApiResponse.Error;
       } else {
         _networkConfig.isResponseSuccess(
-            response: decodedData, errorTitle: "Account Verification Error");
+            response: decodedData, errorTitle: "Account Update Error");
         return ApiResponse.Error;
       }
     } catch (e) {

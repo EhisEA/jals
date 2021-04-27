@@ -15,6 +15,7 @@ import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
 import 'package:jals/ui/audio/view_model/playlist_view_model.dart';
 import 'package:jals/ui/home/components/view_models/daily_read_view_model.dart';
 import 'package:jals/services/video_service.dart';
+import 'package:jals/ui/store/components/store_item_view_model.dart';
 import 'package:jals/ui/store/timeline_items_view.dart';
 import 'package:jals/ui/store/view_models/newest_items_view_model.dart';
 import 'package:jals/ui/video/view_models/video_all_view_model.dart';
@@ -47,7 +48,7 @@ void setupLocator() {
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());
 //! Factory
-  // locator.registerFactory(() => VideoDownloadViewModel());
+  locator.registerFactory(() => StoreItemViewModel());
   // locator.registerFactory(() => VideoAllViewModel());
   // locator.registerFactory(() => VideoPlayerViewViewModel());
   // locator.registerFactory(() => VideoWatchLaterViewModel());

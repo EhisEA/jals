@@ -71,6 +71,9 @@ class AppUrl {
   // =============================================================
   static const VideosList = "$ServerBaseUrl/v1/posts/videos/";
   static const VideosSearch = "$ServerBaseUrl/v1/posts/videos/search/";
+  static String videoPay(String id) {
+    return "$ServerBaseUrl/v1/posts/videos/$id/pay/";
+  }
 
   static const BookmarkedVideos =
       '$ServerBaseUrl/v1/posts/videos/get_bookmarks/';
@@ -89,6 +92,9 @@ class AppUrl {
   // =============================================================
   // =============================================================
   // =============================================================
+  static String buySermon(String id) {
+    return '$ServerBaseUrl/v1/posts/sermons/$id/pay/';
+  }
 
   static const ArticleList = "$ServerBaseUrl/v1/posts/articles/";
   static const TrendingList = "$ServerBaseUrl/v1/posts/articles/";
@@ -104,6 +110,10 @@ class AppUrl {
   // =============================================================
   // =============================================================
   // ===================================
+  static String buyAudio(String id) {
+    return '$ServerBaseUrl/v1/posts/audio/$id/pay/';
+  }
+
   static const AudioList = "$ServerBaseUrl/v1/posts/audio/";
   static const Playlist = "$ServerBaseUrl/v1/posts/playlists/";
   static String playlistWithId(String id) =>
@@ -141,5 +151,8 @@ class AppUrl {
 
   static const getPurchasedItemsList =
       "http://backendjals.herokuapp.com/v1/posts/store/purchased/";
+
+//=====================wallet apis==[==============
+  static const String WALLET_BALANCE = '$ServerBaseUrl/v1/wallet';
 }
 // 3b79df4433f5aad/10c8956e3bd0fb71e415790a7

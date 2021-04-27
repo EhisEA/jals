@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/ui/store/components/build_category_row.dart';
+import 'package:jals/ui/store/components/coin_balance.dart';
 import 'package:jals/ui/store/purchased_items_view.dart';
 import 'package:jals/ui/store/timeline_items_view.dart';
 import 'package:jals/ui/store/view_models/build_category_row_view_model.dart';
@@ -31,9 +32,7 @@ class _StoreViewState extends State<StoreView> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<StoreViewModel>.reactive(
-      onModelReady: (model) {
-        // model.getNewestItems();
-      },
+      onModelReady: (model) {},
       builder: (context, model, child) {
         return SafeArea(
           child: Scaffold(
@@ -44,7 +43,7 @@ class _StoreViewState extends State<StoreView> {
               actions: [
                 Padding(
                   padding: const EdgeInsets.all((10)),
-                  child: builRoundButton(),
+                  child: CoinBalance(),
                 ),
               ],
               title: TextHeader(
@@ -77,97 +76,10 @@ class _StoreViewState extends State<StoreView> {
                 )
               ],
             ),
-
-            //  Column(
-            //   children: [
-            //     SizedBox(height: 20),
-            //     BuildCategoryRow(),
-            //     // NewestItemsView(),
-            //     navigateThroughTabs(model.selectedIndex, model),
-            //   ],
-            // ),
           ),
         );
       },
       viewModelBuilder: () => StoreViewModel(),
-    );
-  }
-
-  Widget navigateThroughTabs(int index, StoreViewModel model) {
-    if (index == 0) {
-      print("The Index is ============$index");
-      return CircularProgressIndicator(
-        backgroundColor: Colors.red,
-      );
-    } else if (index == 1) {
-      print("The Index is ============$index");
-      return CircularProgressIndicator(
-        backgroundColor: Colors.blue,
-      );
-    } else if (index == 2) {
-      print("The Index is ============$index");
-      return CircularProgressIndicator(
-        backgroundColor: Colors.orange,
-      );
-    } else {
-      print("The Index is ============$index");
-      return CircularProgressIndicator(
-        backgroundColor: Colors.pink,
-      );
-    }
-    // switch (index) {
-    //   case 0:
-    //     return CircularProgressIndicator(
-    //       backgroundColor: Colors.red,
-    //     );
-    //   case 1:
-    //     return CircularProgressIndicator(
-    //       backgroundColor: Colors.blue,
-    //     );
-
-    //   case 2:
-    //     return PurchasedItemsView();
-    //     break;
-
-    //   default:
-    //     return CircularProgressIndicator(
-    //       backgroundColor: Colors.red,
-    //     );
-    // }
-  }
-
-  Widget builRoundButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        // vertical: getProportionatefontSize(5),
-        horizontal: getProportionatefontSize(20),
-      ),
-      decoration: BoxDecoration(
-        color: Color(0xffFCF7E4),
-        borderRadius: BorderRadius.all(
-          Radius.circular(30),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "10,000",
-            style: GoogleFonts.sourceSansPro(
-              fontSize: getProportionatefontSize(12.7),
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w600,
-              color: Color(0xffC16029),
-            ),
-          ),
-          SizedBox(width: 5),
-          Icon(
-            Icons.add_circle_outline,
-            color: Color(0xffC16029),
-          )
-        ],
-      ),
     );
   }
 }
