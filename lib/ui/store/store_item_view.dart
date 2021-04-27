@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:jals/enums/content_type.dart';
 import 'package:jals/models/content_model.dart';
 import 'package:jals/ui/store/components/store_item_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';

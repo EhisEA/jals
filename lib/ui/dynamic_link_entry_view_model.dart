@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jals/enums/content_type.dart';
 import 'package:jals/models/article_model.dart';
 import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/content_model.dart';

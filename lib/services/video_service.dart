@@ -52,6 +52,28 @@ class VideoService extends ChangeNotifier {
     }
   }
 
+  Future<List<VideoModel>> searchVideos(String query) async {
+    try {
+      Response response = await _client.get(
+        AppUrl.searchVideos(query),
+        headers: appHttpHeaders(),
+      );
+      final Map<String, dynamic> decodedData = jsonDecode(response.body);
+      print(decodedData);
+      if (decodedData["status"] == "successful") {
+        List videos = decodedData["data"]["results"];
+        return videos.map((e) => VideoModel.fromJson(e)).toList();
+      } else {
+        // Handle Error
+        print("Error Occured");
+        return null;
+      }
+    } catch (e) {
+      print("The Errror was $e");
+      return null;
+    }
+  }
+
   Future<List<VideoModel>> getBookmarkedVideoList() async {
     try {
       Response response = await _client.get(

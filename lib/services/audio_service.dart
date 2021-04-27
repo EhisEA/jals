@@ -49,6 +49,27 @@ class AudioService {
     }
   }
 
+  Future<List<AudioModel>> searchAudio(String query) async {
+    try {
+      List<AudioModel> audios;
+      String url = AppUrl.searchAudio(query);
+      http.Response response = await http.get(
+        url,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      print(result);
+      audios = result["data"]["results"]
+          .map<AudioModel>((element) => AudioModel.fromJson(element))
+          .toList();
+      return audios;
+    } catch (e) {
+      debugPrint("====error=====");
+      print(e);
+      return null;
+    }
+  }
+
   Future<bool> addAudioToBookmark(String id) async {
     try {
       String url = AppUrl.ArticleList + id + "/add_to_bookmarks/";

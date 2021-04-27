@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:jals/enums/content_type.dart';
+import 'package:jals/route_paths.dart';
+import 'package:jals/services/navigationService.dart';
 import 'package:jals/ui/audio/components/audio_download.dart';
 import 'package:jals/ui/audio/components/audio_playlist.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
@@ -41,8 +45,12 @@ class _AudioLibraryState extends State<AudioLibrary>
           actions: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                Icons.search,
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  locator<NavigationService>()
+                      .navigateTo(SearchViewRoute, argument: ContentType.Audio);
+                },
                 color: Colors.black,
               ),
             ),

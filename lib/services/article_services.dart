@@ -45,6 +45,27 @@ class ArticleService {
     }
   }
 
+  Future<List<ArticleModel>> searchArticles(String query) async {
+    try {
+      List<ArticleModel> articles;
+      String url = AppUrl.searchArticles(query);
+      http.Response response = await http.get(
+        url,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      print(result);
+      articles = result["data"]["results"]
+          .map<ArticleModel>((element) => ArticleModel.fromJson(element))
+          .toList();
+      return articles;
+    } catch (e) {
+      debugPrint("====error=====");
+      print(e);
+      return null;
+    }
+  }
+
   Future<List<ArticleModel>> getBookmakedArticles() async {
     try {
       List<ArticleModel> articles;

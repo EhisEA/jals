@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jals/enums/content_type.dart';
 import 'package:jals/enums/password_type.dart';
 import 'package:jals/enums/verification_type.dart';
 import 'package:jals/models/article_model.dart';
@@ -24,6 +25,7 @@ import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
 import 'package:jals/ui/dynamic_link_entry_view.dart';
 import 'package:jals/ui/home/home_base.dart';
+import 'package:jals/ui/search_view.dart';
 import 'package:jals/ui/shop/payment_page_with_token.dart';
 import 'package:jals/ui/store/store_item_view.dart';
 import 'package:jals/ui/video/video_library_view.dart';
@@ -124,6 +126,10 @@ class AppRouter {
         break;
       case AudioLibraryViewRoute:
         return MaterialPageRoute(builder: (context) => AudioLibrary());
+        break;
+      case SearchViewRoute:
+        ContentType contentType = settings.arguments;
+        return MaterialPageRoute(builder: (context) => SearchView(contentType));
         break;
       case StoreItemViewRoute:
         ContentModel content = settings.arguments;

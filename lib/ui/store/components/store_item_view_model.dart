@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:jals/enums/api_response.dart';
-import 'package:jals/models/content_model.dart';
+import 'package:jals/enums/content_type.dart';
 import 'package:jals/services/dialog_service.dart';
 import 'package:jals/services/store_service.dart';
 import 'package:jals/utils/base_view_model.dart';

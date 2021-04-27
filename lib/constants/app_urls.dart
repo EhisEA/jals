@@ -75,6 +75,10 @@ class AppUrl {
     return "$ServerBaseUrl/v1/posts/videos/$id/pay/";
   }
 
+  static String searchVideos(String query) {
+    return '$ServerBaseUrl/v1/posts/videos/search/?query=$query';
+  }
+
   static const BookmarkedVideos =
       '$ServerBaseUrl/v1/posts/videos/get_bookmarks/';
   static String addToBoomarks({String uid}) {
@@ -96,6 +100,10 @@ class AppUrl {
     return '$ServerBaseUrl/v1/posts/sermons/$id/pay/';
   }
 
+  static String searchArticles(String query) {
+    return '$ServerBaseUrl/v1/posts/articles/search/?query=$query';
+  }
+
   static const ArticleList = "$ServerBaseUrl/v1/posts/articles/";
   static const TrendingList = "$ServerBaseUrl/v1/posts/articles/";
   static const ArticleBookmarkList =
@@ -112,6 +120,10 @@ class AppUrl {
   // ===================================
   static String buyAudio(String id) {
     return '$ServerBaseUrl/v1/posts/audio/$id/pay/';
+  }
+
+  static String searchAudio(String query) {
+    return '$ServerBaseUrl/v1/posts/audio/search/?query=$query';
   }
 
   static const AudioList = "$ServerBaseUrl/v1/posts/audio/";

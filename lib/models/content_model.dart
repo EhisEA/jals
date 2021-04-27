@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:jals/enums/content_type.dart' as ct;
 import 'package:jals/models/article_model.dart';
 import 'package:jals/models/video_model.dart';
 import 'package:jals/services/hive_database_service.dart';
@@ -11,7 +12,6 @@ import 'package:jals/utils/locator.dart';
 
 import 'audio_model.dart';
 
-enum ContentType { Article, Video, News, Audio }
 ContentModel contentModelFromJson(String str) =>
     ContentModel().fromJson(json.decode(str));
 
@@ -36,7 +36,7 @@ class ContentModel {
   String author;
   DateTime createdAt;
   double price;
-  ContentType postType;
+  ct.ContentType postType;
   String dataUrl;
   String coverImage;
   String sermonId;
@@ -80,7 +80,7 @@ class ContentModel {
       id: id,
       price: price,
       postType: getContentTypeString(postType),
-      isNews: postType == ContentType.News,
+      isNews: postType == ct.ContentType.News,
       downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
       content: _hiveDatabaseService.getArticleDownloadedContent(id),
       isBookmarked: false,
@@ -118,34 +118,34 @@ class ContentModel {
     );
   }
 
-  ContentType getContentType(String postType) {
+  ct.ContentType getContentType(String postType) {
     switch (postType.toUpperCase()) {
       case "VI":
-        return ContentType.Video;
+        return ct.ContentType.Video;
       case "AU":
-        return ContentType.Audio;
+        return ct.ContentType.Audio;
 
       case "AR":
-        return ContentType.Article;
+        return ct.ContentType.Article;
 
       case "NE":
-        return ContentType.News;
+        return ct.ContentType.News;
       default:
         return null;
     }
   }
 
-  String getContentTypeString(ContentType contentType) {
+  String getContentTypeString(ct.ContentType contentType) {
     switch (contentType) {
-      case ContentType.Video:
+      case ct.ContentType.Video:
         return "VI";
-      case ContentType.Audio:
+      case ct.ContentType.Audio:
         return "AU";
 
-      case ContentType.Article:
+      case ct.ContentType.Article:
         return "AR";
 
-      case ContentType.News:
+      case ct.ContentType.News:
         return "NE";
       default:
         return null;

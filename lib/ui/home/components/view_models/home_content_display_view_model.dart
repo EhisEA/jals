@@ -1,3 +1,4 @@
+import 'package:jals/enums/content_type.dart';
 import 'package:jals/models/content_model.dart';
 import 'package:jals/services/navigationService.dart';
 import 'package:jals/services/user_services.dart';

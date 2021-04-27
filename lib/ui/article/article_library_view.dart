@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jals/enums/content_type.dart';
+import 'package:jals/route_paths.dart';
+import 'package:jals/services/navigationService.dart';
 import 'package:jals/ui/article/components/article_all.dart';
 import 'package:jals/ui/article/components/article_bookmark.dart';
 import 'package:jals/ui/article/components/article_download.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
@@ -40,8 +44,12 @@ class _ArticleLibraryState extends State<ArticleLibrary>
           actions: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                Icons.search,
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  locator<NavigationService>().navigateTo(SearchViewRoute,
+                      argument: ContentType.Article);
+                },
                 color: Colors.black,
               ),
             ),

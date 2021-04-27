@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:jals/enums/content_type.dart';
+import 'package:jals/services/navigationService.dart';
 import 'package:jals/ui/video/components/video_all.dart';
 import 'package:jals/ui/video/components/video_download.dart';
 import 'package:jals/ui/video/components/video_watch_later.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
+
+import '../../route_paths.dart';
 
 class VideoLibrary extends StatefulWidget {
   @override
@@ -31,14 +36,18 @@ class _VideoLibraryState extends State<VideoLibrary>
         appBar: AppBar(
           elevation: 1,
           backgroundColor: Colors.white,
-          leading:BackIcon(),
+          leading: BackIcon(),
           title: TextHeader(text: "Video Library"),
           centerTitle: true,
           actions: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Icon(
-                Icons.search,
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  locator<NavigationService>()
+                      .navigateTo(SearchViewRoute, argument: ContentType.Video);
+                },
                 color: Colors.black,
               ),
             ),

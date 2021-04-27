@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jals/constants/dummy_image.dart';
+import 'package:jals/enums/content_type.dart';
 import 'package:jals/models/article_model.dart';
 import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/content_model.dart';
@@ -93,10 +94,15 @@ class AudioTile extends StatelessWidget {
     SizeConfig().init(context);
     return InkWell(
       onTap: () {
-        _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
-          "audios": [audio],
-          "playlistName": null
-        });
+        if (audio.isPurchased == false && audio.price > 0) {
+          _navigationService.navigateTo(StoreItemViewRoute,
+              argument: audio.toContent());
+        } else {
+          _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
+            "audios": [audio],
+            "playlistName": null
+          });
+        }
       },
       child: Row(
         children: [
@@ -166,7 +172,7 @@ class VideoTile extends StatelessWidget {
     SizeConfig().init(context);
     return InkWell(
       onTap: () {
-        if (videoModel.price > 0) {
+        if (videoModel.price > 0 && !videoModel.isPurchased) {
           _navigationService.navigateTo(StoreItemViewRoute,
               argument: videoModel.toContent());
         } else {
@@ -237,7 +243,8 @@ class VideoTile extends StatelessWidget {
                   ),
                   Spacer(),
                   // Row to be disappear if item has been purchased
-                  videoModel.isPurchased
+                  //TODO: remove helper
+                  videoModel.isPurchased ?? true
                       ? Container()
                       : Row(
                           children: [
