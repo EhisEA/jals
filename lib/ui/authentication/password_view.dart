@@ -49,7 +49,9 @@ class PasswordView extends StatelessWidget {
                           title: "Password",
                           validator: (String value) {
                             if (value.isEmpty) {
-                              return "";
+                              return "Password cannot be empty";
+                            } else if (value.length < 8) {
+                              return "Password must be greater than 8 character";
                             } else {
                               return null;
                             }
@@ -58,7 +60,7 @@ class PasswordView extends StatelessWidget {
                           prefixIcon: JalsIcons.password,
                           controller: model.passwordController,
                           isPassword: true,
-                          hintText: "Password(8 Characters)",
+                          hintText: "Password(>7 Characters)",
                         ),
                         // Sized box
                         SizedBox(
