@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'article_model.dart';
+part of 'audio_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ArticleModelAdapter extends TypeAdapter<ArticleModel> {
+class AudioModelAdapter extends TypeAdapter<AudioModel> {
   @override
-  final int typeId = 2;
+  final int typeId = 4;
 
   @override
-  ArticleModel read(BinaryReader reader) {
+  AudioModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ArticleModel(
+    return AudioModel(
       id: fields[0] as String,
       title: fields[1] as String,
       author: fields[2] as String,
@@ -25,18 +25,17 @@ class ArticleModelAdapter extends TypeAdapter<ArticleModel> {
       postType: fields[5] as String,
       dataUrl: fields[6] as String,
       coverImage: fields[7] as String,
-      isBookmarked: fields[8] as bool,
-      content: fields[9] as String,
-      downloaded: fields[10] as bool,
-      downloadDate: fields[11] as DateTime,
-      isNews: fields[12] as bool,
+      downloaded: fields[8] as bool,
+      downloadDate: fields[9] as DateTime,
+      isBookmarked: fields[10] as bool,
+      isPurchased: fields[11] as bool,
     );
   }
 
   @override
-  void write(BinaryWriter writer, ArticleModel obj) {
+  void write(BinaryWriter writer, AudioModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -54,15 +53,13 @@ class ArticleModelAdapter extends TypeAdapter<ArticleModel> {
       ..writeByte(7)
       ..write(obj.coverImage)
       ..writeByte(8)
-      ..write(obj.isBookmarked)
-      ..writeByte(9)
-      ..write(obj.content)
-      ..writeByte(10)
       ..write(obj.downloaded)
-      ..writeByte(11)
+      ..writeByte(9)
       ..write(obj.downloadDate)
-      ..writeByte(12)
-      ..write(obj.isNews);
+      ..writeByte(10)
+      ..write(obj.isBookmarked)
+      ..writeByte(11)
+      ..write(obj.isPurchased);
   }
 
   @override
@@ -71,7 +68,7 @@ class ArticleModelAdapter extends TypeAdapter<ArticleModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ArticleModelAdapter &&
+      other is AudioModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

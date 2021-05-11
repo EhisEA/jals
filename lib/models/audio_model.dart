@@ -6,14 +6,14 @@ import 'dart:convert';
 
 import 'package:hive/hive.dart';
 import 'package:jals/models/content_model.dart';
-// part 'article_model.g.dart';
+part 'audio_model.g.dart';
 
 AudioModel videoModelFromJson(String str) =>
     AudioModel.fromJson(json.decode(str));
 
 String videoModelToJson(AudioModel data) => json.encode(data.toJson());
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 4)
 class AudioModel {
   AudioModel({
     this.id,

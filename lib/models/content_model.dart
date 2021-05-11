@@ -82,7 +82,7 @@ class ContentModel {
       postType: getContentTypeString(postType),
       isNews: postType == ct.ContentType.News,
       downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
-      content: _hiveDatabaseService.getArticleDownloadedContent(id),
+      content: _hiveDatabaseService.getSingleDownloadedArticleContent(id),
       isBookmarked: false,
     );
   }
