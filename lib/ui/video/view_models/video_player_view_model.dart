@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/enums/small_viewstate.dart';
 import 'package:jals/models/video_model.dart';
+import 'package:jals/services/download_sercvice.dart';
 import 'package:jals/services/dynamic_link_service.dart';
+import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/services/video_service.dart';
+import 'package:jals/ui/video/view_models/video_watch_late_view_model.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
@@ -13,7 +18,8 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerViewViewModel extends BaseViewModel {
   format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-
+  final HiveDatabaseService _hiveDatabaseService =
+      locator<HiveDatabaseService>();
   final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
   VideoPlayerController videoPlayerController;
   VideoModel video;
@@ -84,10 +90,17 @@ class VideoPlayerViewViewModel extends BaseViewModel {
   }
 
   void initializeVideo({VideoModel videoModel}) async {
+    setBusy(ViewState.Busy);
     this.video = videoModel;
     print('========INITIALIZING THE VIDEO LAYER');
-    setBusy(ViewState.Busy);
-    videoPlayerController = VideoPlayerController.network(videoModel.dataUrl)
+    await checkDownload();
+    if (video.downloaded) {
+      File downloadedVideoFile = getDownloadedVideoFile();
+      videoPlayerController = VideoPlayerController.file(downloadedVideoFile);
+    } else {
+      videoPlayerController = VideoPlayerController.network(videoModel.dataUrl);
+    }
+    videoPlayerController
       ..initialize().then(
         (value) async {
           if (videoPlayerController.value.initialized) {
@@ -96,6 +109,7 @@ class VideoPlayerViewViewModel extends BaseViewModel {
           } else {
             print("Not yet initialized");
           }
+
           if (videoModel != null)
             _dynamicLink = await _dynamicLinkService
                 .createEventLink(videoModel.toContent());
@@ -103,6 +117,16 @@ class VideoPlayerViewViewModel extends BaseViewModel {
           setBusy(ViewState.Idle);
         },
       );
+  }
+
+  checkDownload() async {
+    video.downloaded =
+        await _hiveDatabaseService.checkVideoDownloadStatus(video.id);
+  }
+
+  File getDownloadedVideoFile() {
+    VideoModel videoModel = _hiveDatabaseService.getSingleVideo(video.id);
+    return File(videoModel.dataUrl);
   }
 
   void addToBookmarks(String uid) async {
@@ -118,6 +142,7 @@ class VideoPlayerViewViewModel extends BaseViewModel {
       await Fluttertoast.showToast(
           msg: 'Added to watch later list.', fontSize: 16.0);
       video.isBookmarked = true;
+      locator<VideoWatchLaterViewModel>().getAllVideos();
       setBusy(ViewState.Idle);
     } else {
       await Fluttertoast.showToast(
