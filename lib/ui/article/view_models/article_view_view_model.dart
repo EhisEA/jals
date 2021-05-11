@@ -4,6 +4,7 @@ import 'package:jals/models/article_model.dart';
 import 'package:jals/services/article_services.dart';
 import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/services/hive_database_service.dart';
+import 'package:jals/ui/article/view_models/article_bookmarked_view_model.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
@@ -87,6 +88,8 @@ class ArticleViewViewModel extends BaseViewModel {
     );
     if (!isSuccess) {
       if (article.isBookmarked) article.isBookmarked = false;
+    } else {
+      locator<ArticleBookMarkedViewModel>().getArticles();
     }
     setSecondaryBusy(ViewState.Idle);
   }
@@ -102,6 +105,8 @@ class ArticleViewViewModel extends BaseViewModel {
     });
     if (!isSuccess) {
       if (!article.isBookmarked) article.isBookmarked = true;
+    } else {
+      locator<ArticleBookMarkedViewModel>().getArticles();
     }
     setSecondaryBusy(ViewState.Idle);
   }
