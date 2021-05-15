@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jals/enums/small_viewstate.dart';
-import 'package:jals/models/downloading_model.dart';
+import 'package:jals/models/video_downloading_model.dart';
 import 'package:jals/models/video_model.dart';
 import 'package:jals/ui/video/view_models/downloading_videos_view_model.dart';
 import 'package:jals/ui/video/view_models/video_player_view_model.dart';
@@ -199,7 +199,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                       ViewModelBuilder<DownloadingVideosViewModel>.reactive(
                           disposeViewModel: false,
                           builder: (context, playerModel, _) {
-                            DownloadingModel downloadingVideo =
+                            VideoDownloadingModel downloadingVideo =
                                 playerModel.downloadList.firstWhere(
                                     (element) => element.id == widget.video.id,
                                     orElse: () => null);

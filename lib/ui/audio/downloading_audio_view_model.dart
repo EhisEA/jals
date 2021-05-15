@@ -1,15 +1,16 @@
+import 'package:jals/models/audio_downloading_model.dart';
 import 'package:jals/models/video_downloading_model.dart';
-import 'package:jals/models/video_model.dart';
+import 'package:jals/models/audio_model.dart';
 import 'package:jals/services/download_sercvice.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 
-class DownloadingVideosViewModel extends BaseViewModel {
+class DownloadingAudiosViewModel extends BaseViewModel {
   final DownloadService _downloadService = locator<DownloadService>();
-  List<VideoDownloadingModel> downloadList = [];
+  List<AudioDownloadingModel> downloadList = [];
 
   downloadCallback(rcv, total, id) {
-    VideoDownloadingModel dow = downloadList
+    AudioDownloadingModel dow = downloadList
         .firstWhere((element) => element.id == id, orElse: () => null);
     dow.recieved = double.parse(rcv.toString());
     dow.progress = double.parse(((rcv / total) * 100).toStringAsFixed(0));
@@ -24,24 +25,24 @@ class DownloadingVideosViewModel extends BaseViewModel {
     // downloadList.contains({});
   }
 
-  download(VideoModel video) async {
-    downloadList.add(VideoDownloadingModel(
-      id: video.id,
+  download(AudioModel audio) async {
+    downloadList.add(AudioDownloadingModel(
+      id: audio.id,
       progress: 0,
       recieved: 0,
       total: 0,
       downloading: true,
-      video: video,
+      audio: audio,
     ));
     print(downloadList.length);
-    bool cal = await _downloadService.downloadVideoFile(
-      video,
+    bool cal = await _downloadService.downloadAudioFile(
+      audio,
       (rcv, tol) {
         print(((rcv / tol) * 100).toStringAsFixed(0));
-        downloadCallback(rcv, tol, video.id);
+        downloadCallback(rcv, tol, audio.id);
       },
     );
-    int index = downloadList.indexWhere((element) => element.id == video.id);
+    int index = downloadList.indexWhere((element) => element.id == audio.id);
     downloadList.removeAt(index);
     print("cal=======$cal");
     print(downloadList.length);

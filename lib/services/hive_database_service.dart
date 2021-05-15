@@ -2,22 +2,24 @@ import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:jals/models/article_model.dart';
-import 'package:jals/models/content_model.dart';
+import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/video_model.dart';
 
 class HiveDatabaseService {
   Box<ArticleModel> _articleDownloads;
   Box<VideoModel> _videoDownloads;
-  Box<ContentModel> audioDownloads;
+  Box<AudioModel> _audioDownloads;
 
   HiveDatabaseService() {
     Hive.registerAdapter(ArticleModelAdapter());
     Hive.registerAdapter(VideoModelAdapter());
+    Hive.registerAdapter(AudioModelAdapter());
   }
 
   void openBoxes() async {
     _articleDownloads = await Hive.openBox<ArticleModel>('article_downloads');
     _videoDownloads = await Hive.openBox<VideoModel>('video_downloads');
+    _audioDownloads = await Hive.openBox<AudioModel>('audio_downloads');
 
     // _articleDownloads.clear();
     // articleDownloads = await Hive.openBox<ContentModel>('video_downloads');
@@ -27,6 +29,7 @@ class HiveDatabaseService {
   deleteAllDB() {
     _articleDownloads.clear();
     _videoDownloads.clear();
+    _audioDownloads.clear();
   }
 
   //]]]]]]]]]=============================
@@ -103,5 +106,44 @@ class HiveDatabaseService {
 
   VideoModel getSingleVideo(String id) {
     return _videoDownloads.get(id);
+  }
+
+  //]]]]]]]]]=============================
+  //]]]]]]]]]=============================
+  //                Audio section
+  //]]]]]]]]]=============================
+  //]]]]]]]]]=============================
+  void downloadAudio(AudioModel audio) {
+    audio.downloaded = true;
+    audio.downloadDate = DateTime.now();
+    _audioDownloads.put(audio.id, audio);
+  }
+
+  void deleteAudio(AudioModel audio) {
+    _audioDownloads.delete(audio.id);
+  }
+
+  List<AudioModel> getDownloadedAudios() {
+    return _audioDownloads.values.toList();
+  }
+
+  Future<bool> checkAudioDownloadStatus(String id) async {
+    if (_audioDownloads.containsKey(id)) {
+      AudioModel audio = getSingleAudio(id);
+      if (await File(audio.dataUrl).exists()) {
+        //if video is downloaded and file exist
+        return true;
+      } else {
+        //if video is downloaded and file does not exist
+
+        _audioDownloads.delete(audio.id);
+        return false;
+      }
+    }
+    return false;
+  }
+
+  AudioModel getSingleAudio(String id) {
+    return _audioDownloads.get(id);
   }
 }

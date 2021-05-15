@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jals/models/audio_downloading_model.dart';
 import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/ui/audio/view_model/audio_player_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
-import 'package:jals/widgets/comment_widget.dart';
-import 'package:jals/widgets/extended_text_field.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:stacked/stacked.dart';
+
+import 'downloading_audio_view_model.dart';
 
 format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
@@ -21,7 +23,7 @@ class AudioPlayerView extends StatefulWidget {
   final List<AudioModel> audios;
   final String playlistName;
 
-  AudioPlayerView({Key key, this.audios, this.playlistName}) {}
+  AudioPlayerView({Key key, this.audios, this.playlistName});
 
   @override
   _AudioPlayerViewState createState() => _AudioPlayerViewState();
@@ -164,34 +166,81 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                   ),
                   ControlButtons(model.audioPlayer),
                   SizedBox(height: 50),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      buildIcon(JalsIcons.favorite, "Listen Later", () {}),
-                      buildIcon(JalsIcons.download, "Download", () {}),
-                      buildIcon(
-                        JalsIcons.comment,
-                        "Comment",
-                        () {
-                          if (model.audioPlayer.currentIndex != null)
-                            model.commentWidgetViewModels[
-                                    model.audioPlayer.currentIndex]
-                                .writeComment(context);
-                        },
-                      ),
-                      pop(JalsIcons.more, "more", (value) {
-                        switch (value.toLowerCase()) {
-                          case "playlist":
-                            displayPlayListOption(context, model);
-                            break;
-                          case "share":
-                            model.share();
-                            break;
-                          default:
-                        }
-                      }),
-                    ],
-                  ),
+                  if (!model.isBusy)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        buildIcon(JalsIcons.favorite, "Listen Later", () {}),
+                        ViewModelBuilder<DownloadingAudiosViewModel>.reactive(
+                            disposeViewModel: false,
+                            builder: (context, playerModel, _) {
+                              AudioDownloadingModel downloadingAudio =
+                                  playerModel.downloadList.firstWhere(
+                                      (element) =>
+                                          element.id ==
+                                          model.currentlyPlaying.id,
+                                      orElse: () => null);
+
+                              // if(videoDownloaded){
+
+                              // }
+                              //downloading
+
+                              if (downloadingAudio != null) {
+                                return buildDownloadProgress(
+                                  downloadingAudio.progress / 100,
+                                );
+                              }
+                              //not downloaded and downloaded
+
+                              // if (model.video.downloaded) {
+                              return buildIcon(
+                                  model.currentlyPlaying.downloaded
+                                      ? Icons.download_done_rounded
+                                      : JalsIcons.download,
+                                  "Download", () {
+                                if (!model.currentlyPlaying.downloaded)
+                                  playerModel.download(model.currentlyPlaying);
+                              },
+                                  color: model.currentlyPlaying.downloaded
+                                      ? kPrimaryColor
+                                      : null);
+                              // }
+                              // playerModel.downloadList
+                              //     .firstWhere((element) => false);
+                              // return InkWell(
+                              //   onTap: () {
+                              //     playerModel.download(widget.video);
+                              //     print("download");
+                              //   },
+                              //   child: Text("ssss"),
+                              // );
+                            },
+                            viewModelBuilder: () =>
+                                locator<DownloadingAudiosViewModel>()),
+                        buildIcon(
+                          JalsIcons.comment,
+                          "Comment",
+                          () {
+                            if (model.audioPlayer.currentIndex != null)
+                              model.commentWidgetViewModels[
+                                      model.audioPlayer.currentIndex]
+                                  .writeComment(context);
+                          },
+                        ),
+                        pop(JalsIcons.more, "more", (value) {
+                          switch (value.toLowerCase()) {
+                            case "playlist":
+                              displayPlayListOption(context, model);
+                              break;
+                            case "share":
+                              model.share();
+                              break;
+                            default:
+                          }
+                        }),
+                      ],
+                    ),
                   SizedBox(height: 20),
                   Divider(),
                   if (model.playinIndex >= 0 &&
@@ -205,14 +254,14 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
   }
 }
 
-Widget buildIcon(icon, text, Function action) {
+Widget buildIcon(icon, text, Function action, {Color color}) {
   return InkWell(
     onTap: action,
     child: Column(
       children: [
         Icon(
           icon,
-          color: Color(0xff979797),
+          color: color ?? Color(0xff979797),
         ),
         Text(
           text,
@@ -224,6 +273,30 @@ Widget buildIcon(icon, text, Function action) {
         )
       ],
     ),
+  );
+}
+
+Widget buildDownloadProgress(value) {
+  return Column(
+    children: [
+      Container(
+        height: 22,
+        width: 22,
+        child: CircularProgressIndicator(
+          value: value,
+          backgroundColor: kPrimaryColor.shade100,
+        ),
+      ),
+      SizedBox(height: 2),
+      Text(
+        "Downloading",
+        style: TextStyle(
+          fontSize: getProportionatefontSize(12),
+          fontWeight: FontWeight.w400,
+          color: Color(0xff999CAD),
+        ),
+      )
+    ],
   );
 }
 

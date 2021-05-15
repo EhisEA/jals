@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/enums/small_viewstate.dart';
 import 'package:jals/models/video_model.dart';
-import 'package:jals/services/download_sercvice.dart';
 import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/services/video_service.dart';

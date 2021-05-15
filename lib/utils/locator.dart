@@ -10,7 +10,9 @@ import 'package:jals/ui/article/view_models/article_all_view_model.dart';
 import 'package:jals/ui/article/view_models/article_bookmarked_view_model.dart';
 import 'package:jals/ui/article/view_models/article_download_view_model.dart';
 import 'package:jals/ui/article/view_models/article_news_view_model.dart';
+import 'package:jals/ui/audio/downloading_audio_view_model.dart';
 import 'package:jals/ui/audio/view_model/audio_all_view_model.dart';
+import 'package:jals/ui/audio/view_model/audio_download.dart';
 import 'package:jals/ui/audio/view_model/audio_player_view_model.dart';
 import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
 import 'package:jals/ui/video/view_models/downloading_videos_view_model.dart';
@@ -44,6 +46,8 @@ void setupLocator() {
   locator.registerLazySingleton(() => ArticleBookMarkedViewModel());
   locator.registerLazySingleton(() => DownloadingVideosViewModel());
   locator.registerLazySingleton(() => VideoDownloadViewModel());
+  locator.registerLazySingleton(() => DownloadingAudiosViewModel());
+  locator.registerLazySingleton(() => AudioDownloadViewModel());
 
   // locator.registerLazySingleton(() => DynamicLinkService());
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());

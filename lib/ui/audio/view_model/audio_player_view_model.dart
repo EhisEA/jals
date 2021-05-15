@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
@@ -5,6 +7,7 @@ import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/services/audio_service.dart';
 import 'package:jals/services/dynamic_link_service.dart';
+import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/widgets/comment_widget.dart';
@@ -16,6 +19,8 @@ import 'package:share/share.dart';
 
 class AudioPlayerViewModel extends BaseViewModel {
   final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
+  final HiveDatabaseService _hiveDatabaseService =
+      locator<HiveDatabaseService>();
   CommentWidgetViewModel commentWidgetViewModel;
   AudioPlayer audioPlayer = AudioPlayer();
   AudioService _audioService = AudioService();
@@ -45,7 +50,17 @@ class AudioPlayerViewModel extends BaseViewModel {
     super.dispose();
   }
 
+  checkDownload(int index) async {
+    audios[index].downloaded =
+        await _hiveDatabaseService.checkAudioDownloadStatus(audios[index].id);
+    if (audios[index].downloaded) {
+      audios[index].dataUrl =
+          _hiveDatabaseService.getSingleAudio(audios[index].id).dataUrl;
+    }
+  }
+
   initiliseAudio(List<AudioModel> audios, {String playlistName}) async {
+    this.audios = audios;
     commentWidgetViewModels = audios.map<CommentWidgetViewModel>((audio) {
       return CommentWidgetViewModel(audio.id);
     }).toList();
@@ -53,13 +68,17 @@ class AudioPlayerViewModel extends BaseViewModel {
         .map<CommentWidget>(
             (commentVM) => CommentWidget(commentWidgetViewModel: commentVM))
         .toList();
-
-    _songs = ConcatenatingAudioSource(
-      children: List.generate(
+    setBusy(ViewState.Busy);
+    for (int i = 0; i < audios.length; i++) {
+      print("i==$i ${audios.length}");
+      await checkDownload(i);
+    }
+    setBusy(ViewState.Idle);
+    _songs = ConcatenatingAudioSource(children: [
+      ...List.generate(
         audios.length,
         (index) => AudioSource.uri(
           Uri.parse(audios[index].dataUrl),
-          // "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
           tag: audios[index],
 
           // AudioMetadata(
@@ -70,9 +89,9 @@ class AudioPlayerViewModel extends BaseViewModel {
           // ),
         ),
       ),
-    );
+      // AudioSource
+    ]);
 
-    this.audios = audios;
     // this.currentlyPlayingIndex = 0;
     // this.currentlyPlaying = audios[currentlyPlayingIndex];
     this.playlistName = playlistName;
