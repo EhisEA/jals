@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:jals/constants/app_urls.dart';
-import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/content_model.dart';
 
 class StoreService {
@@ -146,11 +145,11 @@ class StoreService {
         print(decodedData['data']['coins']);
         return decodedData['data']['coins'];
       } else {
-        return 0.00;
+        return null;
       }
     } catch (e) {
       print(e);
-      return 0.00;
+      return null;
     }
   }
 }

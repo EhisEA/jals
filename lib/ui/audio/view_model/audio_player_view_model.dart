@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
@@ -214,10 +212,6 @@ class AudioPlayerViewModel extends BaseViewModel {
   seek(double milliseconds) {
     audioPlayer.seek(Duration(milliseconds: milliseconds.toInt()));
     setBusy(ViewState.Idle);
-  }
-
-  play_pause() {
-    canPlay ? play() : pause();
   }
 
   play() {

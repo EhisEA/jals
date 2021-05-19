@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/video/view_models/video_download_view_model.dart';
 import 'package:jals/utils/locator.dart';
-import 'package:jals/widgets/article_tile.dart';
+import 'package:jals/widgets/downloaded_video_tile.dart';
+import 'package:jals/widgets/downloading_video_tile.dart';
 import 'package:jals/widgets/empty.dart';
 import 'package:jals/widgets/retry.dart';
 import 'package:stacked/stacked.dart';
@@ -90,6 +91,5 @@ class _VideoDownloadState extends State<VideoDownload>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

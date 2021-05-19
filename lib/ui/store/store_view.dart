@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/ui/store/components/build_category_row.dart';
 import 'package:jals/ui/store/components/coin_balance.dart';
 import 'package:jals/ui/store/purchased_items_view.dart';

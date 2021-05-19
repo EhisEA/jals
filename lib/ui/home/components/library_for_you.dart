@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jals/models/content_model.dart';
 import 'package:jals/ui/home/components/view_models/home_content_display_view_model.dart';
-import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
-import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/image_loader.dart';
+import 'package:jals/widgets/library_for-you_tile.dart';
 import 'package:jals/widgets/retry.dart';
 import 'package:stacked/stacked.dart';
 

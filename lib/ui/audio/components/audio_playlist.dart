@@ -208,6 +208,5 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

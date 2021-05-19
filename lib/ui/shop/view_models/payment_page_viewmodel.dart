@@ -1,4 +1,3 @@
-import 'package:jals/enums/api_response.dart';
 import 'package:jals/services/store_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
@@ -18,7 +17,7 @@ class PaymentPageViewModel extends BaseViewModel {
   void getWalletBallenceOnNetwork() async {
     try {
       var response = await _storeService.getWalletBalance();
-      if (response == ApiResponse.Success) {
+      if (response != null) {
         print("==============Successfully got the wallet balance=============");
       } else {
         print("==============Error Occurred.=============");

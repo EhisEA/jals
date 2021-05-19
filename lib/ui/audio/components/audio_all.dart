@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jals/ui/audio/view_model/audio_all_view_model.dart';
 import 'package:jals/utils/locator.dart';
-import 'package:jals/widgets/article_tile.dart';
+import 'package:jals/widgets/audio_tile.dart';
 import 'package:jals/widgets/retry.dart';
 import 'package:stacked/stacked.dart';
 
@@ -51,6 +51,5 @@ class _AudioAllState extends State<AudioAll>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

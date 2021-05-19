@@ -5,7 +5,9 @@ import 'package:jals/ui/search_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/article_tile.dart';
+import 'package:jals/widgets/audio_tile.dart';
 import 'package:jals/widgets/back_icon.dart';
+import 'package:jals/widgets/video_tile.dart';
 import 'package:stacked/stacked.dart';
 
 import 'authentication/components/auth_textfield.dart';

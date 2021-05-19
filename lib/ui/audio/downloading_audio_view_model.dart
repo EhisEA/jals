@@ -1,5 +1,4 @@
 import 'package:jals/models/audio_downloading_model.dart';
-import 'package:jals/models/video_downloading_model.dart';
 import 'package:jals/models/audio_model.dart';
 import 'package:jals/services/download_sercvice.dart';
 import 'package:jals/utils/base_view_model.dart';

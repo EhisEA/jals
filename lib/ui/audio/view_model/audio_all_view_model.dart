@@ -3,11 +3,9 @@ import 'package:jals/services/audio_service.dart';
 import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
-import 'package:jals/utils/network_utils.dart';
 import 'package:share/share.dart';
 
 class AudioAllViewModel extends BaseViewModel {
-  NetworkConfig _networkConfig = NetworkConfig();
   AudioService _audioService = AudioService();
   DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
   List<AudioModel> audioList;

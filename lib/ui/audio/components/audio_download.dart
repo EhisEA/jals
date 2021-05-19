@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jals/ui/audio/view_model/audio_download.dart';
 import 'package:jals/utils/locator.dart';
-import 'package:jals/widgets/article_tile.dart';
+import 'package:jals/widgets/downloaded_audio_tile.dart';
+import 'package:jals/widgets/downloading_audio_tile.dart';
 import 'package:stacked/stacked.dart';
 
 import '../downloading_audio_view_model.dart';
@@ -32,7 +33,7 @@ class AudioDownload extends StatelessWidget {
                                   (index) => Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10.0),
-                                    child: DownloadinAudioTile(
+                                    child: DownloadingAudioTile(
                                       audio: model.downloadList[index].audio,
                                       progress:
                                           model.downloadList[index].progress,

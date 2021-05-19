@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jals/ui/store/view_models/coin_balance_viewmodel.dart';
-import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:stacked/stacked.dart';
 

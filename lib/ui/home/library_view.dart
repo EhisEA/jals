@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/navigationService.dart';
 import 'package:jals/utils/colors_utils.dart';

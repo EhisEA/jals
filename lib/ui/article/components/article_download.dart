@@ -15,6 +15,7 @@ class _ArticleDownloadState extends State<ArticleDownload>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ViewModelBuilder<ArticleDownloadViewModel>.reactive(
       viewModelBuilder: () => locator<ArticleDownloadViewModel>(),
       disposeViewModel: false,
@@ -44,6 +45,5 @@ class _ArticleDownloadState extends State<ArticleDownload>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

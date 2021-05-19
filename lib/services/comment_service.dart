@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jals/constants/app_urls.dart';
 import 'package:jals/models/article_model.dart';
-import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/comment_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/utils/network_utils.dart';
@@ -36,16 +35,11 @@ class CommentService {
     try {
       String url = AppUrl.postComment(id);
       print(url);
-      http.Response response = await http.post(
-        url,
-        headers: appHttpHeaders(),
-        body: {
-          "comment":comment
-        }
-      );
+      http.Response response = await http
+          .post(url, headers: appHttpHeaders(), body: {"comment": comment});
       var result = json.decode(response.body);
       print(result);
-     
+
       return _networkConfig.isResponseSuccessBool(response: result);
     } catch (e) {
       debugPrint("====error=====");

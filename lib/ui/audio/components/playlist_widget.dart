@@ -3,7 +3,6 @@ import 'package:jals/models/playlist_model.dart';
 import 'package:jals/services/navigationService.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/locator.dart';
-import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 
 import '../../../route_paths.dart';

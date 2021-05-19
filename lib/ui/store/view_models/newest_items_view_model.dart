@@ -2,11 +2,9 @@ import 'package:jals/models/content_model.dart';
 import 'package:jals/services/store_service.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
-import 'package:jals/utils/network_utils.dart';
 
 class NewestItemsViewModel extends BaseViewModel {
   bool isLoading = false;
-  NetworkConfig _networkConfig = new NetworkConfig();
   StoreService _storeService = locator<StoreService>();
   List<ContentModel> newestItemList = [];
   Future<void> getNewestItems() async {

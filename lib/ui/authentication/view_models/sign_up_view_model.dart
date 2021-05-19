@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/enums/verification_type.dart';
 import 'package:jals/services/authentication_service.dart';

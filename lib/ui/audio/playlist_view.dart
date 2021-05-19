@@ -6,7 +6,7 @@ import 'package:jals/ui/audio/view_model/playlist_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
-import 'package:jals/widgets/article_tile.dart';
+import 'package:jals/widgets/audio_tile.dart';
 import 'package:jals/widgets/back_icon.dart';
 import 'package:stacked/stacked.dart';
 

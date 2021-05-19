@@ -1,4 +1,3 @@
-import 'package:jals/enums/api_response.dart';
 import 'package:jals/services/navigationService.dart';
 import 'package:jals/services/store_service.dart';
 import 'package:jals/utils/base_view_model.dart';

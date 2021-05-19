@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:jals/models/content_model.dart';
 import 'package:jals/services/navigationService.dart';
 import 'package:jals/services/store_service.dart';

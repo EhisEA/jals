@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jals/ui/store/components/build_bottom_row.dart';
 import 'package:jals/ui/store/view_models/build_category_row_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
