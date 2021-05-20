@@ -29,6 +29,7 @@ class AudioPlaylistSectionViewModel extends BaseViewModel {
   }
 
   changeMoodColorIndex(int index) {
+    print(moodColorIndex);
     moodColorIndex = index;
     setBusy(ViewState.Idle);
   }
@@ -46,6 +47,11 @@ class AudioPlaylistSectionViewModel extends BaseViewModel {
   createPlaylist() async {
     await _networkConfig
         .onNetworkAvailabilityDialog(_createPlaylistNetworkCall);
+  }
+
+  updatePlaylist(String id) async {
+    await _networkConfig
+        .onNetworkAvailabilityDialog(() => _updatePlaylistNetworkCall(id));
   }
 
   addAudio(String playlistId, AudioModel audio) {
@@ -68,11 +74,31 @@ class AudioPlaylistSectionViewModel extends BaseViewModel {
     }).toList();
   }
 
+  _updatePlaylistNetworkCall(String id) async {
+    if (playlistNameController.text.length >= 1) {
+      setSecondaryBusy(ViewState.Busy);
+      bool response = await _audioService.updatePlaylist(
+          id, playlistNameController.text,
+          color: moodColorIndex == null ? null : "scheme${moodColorIndex + 1}");
+
+      if (response) {
+        Fluttertoast.showToast(msg: "Playlist Created");
+        playlistNameController.clear();
+        getPlaylist();
+      } else {
+        Fluttertoast.showToast(
+            msg: "Could not create playlist: please try again");
+      }
+      setSecondaryBusy(ViewState.Idle);
+    }
+  }
+
   _createPlaylistNetworkCall() async {
     if (playlistNameController.text.length >= 1) {
       setSecondaryBusy(ViewState.Busy);
-      bool response =
-          await _audioService.createPlaylist(playlistNameController.text);
+      bool response = await _audioService.createPlaylist(
+          playlistNameController.text,
+          color: moodColorIndex == null ? null : "scheme${moodColorIndex + 1}");
 
       if (response) {
         Fluttertoast.showToast(msg: "Playlist Created");

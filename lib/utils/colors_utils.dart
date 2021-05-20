@@ -31,20 +31,35 @@ Map<int, Color> color2 = {
   900: Color(0xFF3C8AF0),
 };
 
-List<Color> playlistColors = [
-  scheme1,
-  scheme2,
-  scheme3,
-  scheme4,
-  scheme5,
-  scheme6,
-  scheme7,
-  scheme8,
-  scheme9,
-  scheme10,
-  scheme11,
-  scheme12,
-];
+// List<Color> playlistColors = [
+//   scheme1,
+//   scheme2,
+//   scheme3,
+//   scheme4,
+//   scheme5,
+//   scheme6,
+//   scheme7,
+//   scheme8,
+//   scheme9,
+//   scheme10,
+//   scheme11,
+//   scheme12,
+// ];
+
+Map<String, Color> playlistColors = {
+  "scheme1": scheme1,
+  "scheme2": scheme2,
+  "scheme3": scheme3,
+  "scheme4": scheme4,
+  "scheme5": scheme5,
+  "scheme6": scheme6,
+  "scheme7": scheme7,
+  "scheme8": scheme8,
+  "scheme9": scheme9,
+  "scheme10": scheme10,
+  "scheme11": scheme11,
+  "scheme12": scheme12,
+};
 
 const scheme1 = Color(0xff6FCF97);
 const scheme2 = Color(0xffF1AB9F);

@@ -77,6 +77,14 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
                                       (index) => PlayListWidget(
                                         model.playList[index],
                                         onDelete: () => model.onDelete(index),
+                                        onEdit: () => showBottomSheet(
+                                          context,
+                                          model,
+                                          playlistName:
+                                              model.playList[index].title,
+                                          id: model.playList[index].id,
+                                          color: model.playList[index].color,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -88,7 +96,12 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
   }
 
   showBottomSheet(
-      BuildContext context, AudioPlaylistSectionViewModel viewModel) {
+    BuildContext context,
+    AudioPlaylistSectionViewModel viewModel, {
+    String playlistName,
+    String color,
+    String id,
+  }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -103,8 +116,19 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
         padding: EdgeInsets.all(20.0),
         child: ViewModelBuilder<AudioPlaylistSectionViewModel>.reactive(
             viewModelBuilder: () => viewModel,
+            onModelReady: (model) {
+              if (color != null) {
+                color = color.replaceRange(0, 5, "");
+                model.moodColorIndex = int.parse(color);
+              } else {
+                model.moodColorIndex = null;
+              }
+            },
             disposeViewModel: false,
             builder: (context, model, _) {
+              model.playlistNameController.text = playlistName ?? "";
+              // model.moodColorIndex=
+
               return model.isSecondaryBusy
                   ? Center(child: CircularProgressIndicator())
                   : SingleChildScrollView(
@@ -161,7 +185,8 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
                               (index) => InkWell(
                                 onTap: () => model.changeMoodColorIndex(index),
                                 child: CircleAvatar(
-                                  backgroundColor: playlistColors[index],
+                                  backgroundColor:
+                                      playlistColors["scheme${index + 1}"],
                                   child: AnimatedSwitcher(
                                     duration: Duration(milliseconds: 400),
                                     child: model.moodColorIndex == null ||
@@ -181,7 +206,11 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
                           SizedBox(height: 30),
                           InkWell(
                             onTap: () {
-                              model.createPlaylist();
+                              if (id != null) {
+                                model.updatePlaylist(id);
+                              } else {
+                                model.createPlaylist();
+                              }
                             },
                             child: Center(
                               child: Container(
@@ -194,7 +223,9 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
                                   vertical: 10,
                                 ),
                                 child: TextCaptionWhite(
-                                  text: "Create Playlist",
+                                  text: id != null
+                                      ? "Update Playlist"
+                                      : "Create Playlist",
                                 ),
                               ),
                             ),

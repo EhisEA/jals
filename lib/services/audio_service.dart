@@ -91,12 +91,36 @@ class AudioService {
     }
   }
 
-  Future<bool> createPlaylist(String playlistName) async {
+  Future<bool> createPlaylist(String playlistName, {String color}) async {
     try {
       String url = AppUrl.Playlist;
       print(url);
-      http.Response response = await http
-          .post(url, headers: appHttpHeaders(), body: {"title": playlistName});
+      http.Response response =
+          await http.post(url, headers: appHttpHeaders(), body: {
+        "title": playlistName,
+        "color": color,
+      });
+      var result = json.decode(response.body);
+      print(result);
+
+      return _networkConfig.isResponseSuccessBool(response: result);
+    } catch (e) {
+      debugPrint("====error=====");
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updatePlaylist(String id, String playlistName,
+      {String color}) async {
+    try {
+      String url = AppUrl.Playlist + "$id/";
+      print(url);
+      http.Response response =
+          await http.put(url, headers: appHttpHeaders(), body: {
+        "title": playlistName,
+        "color": color,
+      });
       var result = json.decode(response.body);
       print(result);
 

@@ -10,9 +10,10 @@ import '../../../route_paths.dart';
 class PlayListWidget extends StatelessWidget {
   final PlayListModel playList;
   final NavigationService _navigationService = locator<NavigationService>();
-  final Function onDelete;
+  final Function onDelete, onEdit;
   final _navigationSrevice = locator<NavigationService>();
-  PlayListWidget(this.playList, {Key key, this.onDelete}) : super(key: key);
+  PlayListWidget(this.playList, {Key key, this.onDelete, this.onEdit})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -21,7 +22,9 @@ class PlayListWidget extends StatelessWidget {
             argument: playList);
       },
       child: Container(
-        color: kPrimaryColor,
+        color: playList.color != null
+            ? playlistColors[playList.color]
+            : kPrimaryColor,
         padding: const EdgeInsets.fromLTRB(20.0, 20, 0, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,6 +53,9 @@ class PlayListWidget extends StatelessWidget {
                       case "delete":
                         onDelete();
                         break;
+                      case "edit":
+                        onEdit();
+                        break;
                       case "play":
                         _navigationService.navigateTo(AudioPlayerViewRoute,
                             argument: {
@@ -67,6 +73,10 @@ class PlayListWidget extends StatelessWidget {
                         value: "Play",
                         child: Text("Play"),
                       ),
+                    const PopupMenuItem(
+                      value: "Edit",
+                      child: Text("Edit Playlist"),
+                    ),
                     const PopupMenuItem(
                       value: "Delete",
                       child: Text("Delete Playlist"),
