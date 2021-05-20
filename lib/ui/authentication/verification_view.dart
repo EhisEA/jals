@@ -15,7 +15,8 @@ import 'components/pin_theme.dart';
 
 class VerificationView extends StatelessWidget {
   final VerificationType verificationType;
-  VerificationView({@required this.verificationType});
+  final String email;
+  VerificationView({@required this.verificationType, @required this.email});
   @override
   Widget build(BuildContext context) {
     verificationType == VerificationType.ForgotPassword
@@ -36,8 +37,7 @@ class VerificationView extends StatelessWidget {
                     child: Column(
                       children: [
                         AuthAppBar(
-                          subtitle:
-                              "Please enter code sent to Johndoe@gmail.com",
+                          subtitle: "Please enter code sent to $email",
                           title: verificationType ==
                                   VerificationType.ForgotPassword
                               ? "Enter Verification Code"

@@ -59,10 +59,14 @@ class AppRouter {
         break;
       case VerificationViewRoute:
         VerificationType verificationType;
-        verificationType = settings.arguments as VerificationType;
+        String email;
+        Map arguments = settings.arguments;
+        verificationType = arguments["verificationType"] as VerificationType;
+        email = arguments["email"];
         return MaterialPageRoute(
             builder: (context) => VerificationView(
                   verificationType: verificationType,
+                  email: email,
                 ));
         break;
       case SignUpViewRoute:

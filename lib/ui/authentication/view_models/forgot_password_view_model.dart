@@ -22,7 +22,7 @@ class ForgotPasswordViewModel extends BaseViewModel {
   verifyEmail() async {
     if (formKey.currentState.validate()) {
       setBusy(ViewState.Busy);
-      await _networkConfig.onNetworkAvailabilityDialog(onNetworkCall);
+      await onNetworkCall(); // _networkConfig.onNetworkAvailabilityDialog(onNetworkCall);
       setBusy(ViewState.Busy);
     } else {
       return null;

@@ -40,8 +40,13 @@ class SignUpViewModel extends BaseViewModel {
 
       if (respone == ApiResponse.Success) {
         VerificationType verificationType = VerificationType.NewUser;
-        _navigationService.navigateTo(VerificationViewRoute,
-            argument: verificationType);
+        _navigationService.navigateTo(
+          VerificationViewRoute,
+          argument: {
+            "verificationType": verificationType,
+            "email": emailController.text
+          },
+        );
       }
     } catch (e) {
       print(e);
