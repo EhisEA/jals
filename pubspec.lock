@@ -576,6 +576,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7"
+  miniplayer:
+    dependency: "direct main"
+    description:
+      name: miniplayer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+2"
   nested:
     dependency: transitive
     description:
@@ -702,6 +709,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.0"
+  pip_view:
+    dependency: "direct main"
+    description:
+      name: pip_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.5"
   platform:
     dependency: transitive
     description:
@@ -1100,5 +1114,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.12.0-0.0 <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.24.0-10.1.pre"

@@ -86,12 +86,12 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                       height: 180,
                                       width: 180,
                                       child: ShowNetworkImage(
-                                        imageUrl: mediaItem.artUri,
+                                        imageUrl: mediaItem?.artUri,
                                       ),
                                     ),
                                   ),
                                 SizedBox(height: 20),
-                                if (mediaItem.album != null)
+                                if (mediaItem?.album != null)
                                   Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 10),
@@ -108,7 +108,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                       color: kGreen,
                                     ),
                                     child: TextCaptionWhite(
-                                      text: "${mediaItem.album ?? ''}",
+                                      text: "${mediaItem?.album ?? ''}",
                                       centered: true,
                                       maxLine: 3,
                                     ),
@@ -376,13 +376,14 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                               JalsIcons.comment,
                                               "Comment",
                                               () {
-                                                // if (model.audioPlayer
-                                                //         .currentIndex !=
-                                                //     null)
-                                                //   model.commentWidgetViewModels[
-                                                //           model.audioPlayer
-                                                //               .currentIndex]
-                                                //       .writeComment(context);
+                                                
+                                                if (model.audioPlayer
+                                                        .currentIndex !=
+                                                    null)
+                                                  model.commentWidgetViewModels[
+                                                          model.audioPlayer
+                                                              .currentIndex]
+                                                      .writeComment(context);
                                               },
                                             ),
                                             pop(JalsIcons.more, "more",
@@ -412,7 +413,9 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                               ],
                             ),
                           )
-                        : Center(child: Text('Hello'));
+                        : Center(
+                            child: Text('Processing'),
+                          );
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),

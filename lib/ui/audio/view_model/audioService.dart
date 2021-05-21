@@ -62,7 +62,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     _propogateEventsFromAudioPlayerToAudioServiceClients();
     _performSpecialProcessingForStateTransistions();
     _loadQueue();
-    onSkipToNext();
+    // onSkipToNext();
   }
 
   @override
@@ -77,6 +77,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onPause() async {
     _playing = false;
     _audioPlayer.pause();
+    // _audioPlayer.dispose();
   }
 
   @override
@@ -86,40 +87,40 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onRewind() => _seekRelative(-rewindInterval);
 
 
-  // @override
-  // Future<void> onSkipToNext() async {
-  //   onSkipToQueueItem();
-  // }
+  @override
+  Future<void> onSkipToNext() async {
+    skip(1);
+  }
 
-  // @override
-  // Future<void> onSkipToPrevious() async {
-  //   skip(-1);
-  // }
+  @override
+  Future<void> onSkipToPrevious() async {
+    skip(-1);
+  }
 
-  // void skip(int offset) async {
-  //   int newPos = _queueIndex + offset;
-  //   if (!(newPos >= 0 && newPos < _queue.length)) {
-  //     return;
-  //   }
-  //   if (null == _playing) {
-  //     _playing = true;
-  //   } else if (_playing) {
-  //     await _audioPlayer.stop();
-  //   }
-  //   _queueIndex = newPos;
-  //   _skipState = offset > 0
-  //       ? AudioProcessingState.skippingToNext
-  //       : AudioProcessingState.skippingToPrevious;
-  //   AudioServiceBackground.setMediaItem(mediaItem);
-  //   await _audioPlayer.setUrl(mediaItem.id);
-  //   print(mediaItem.id);
-  //   _skipState = null;
-  //   if (_playing) {
-  //     onPlay();
-  //   } else {
-  //     _setState(processingState: AudioProcessingState.ready);
-  //   }
-  // }
+  void skip(int offset) async {
+    int newPos = _queueIndex + offset;
+    if (!(newPos >= 0 && newPos < _queue.length)) {
+      return;
+    }
+    if (null == _playing) {
+      _playing = true;
+    } else if (_playing) {
+      await _audioPlayer.stop();
+    }
+    _queueIndex = newPos;
+    _skipState = offset > 0
+        ? AudioProcessingState.skippingToNext
+        : AudioProcessingState.skippingToPrevious;
+    AudioServiceBackground.setMediaItem(mediaItem);
+    await _audioPlayer.setUrl(mediaItem.id);
+    print(mediaItem.id);
+    _skipState = null;
+    if (_playing) {
+      onPlay();
+    } else {
+      _setState(processingState: AudioProcessingState.ready);
+    }
+  }
 
   @override
   Future<void> onStop() async {
