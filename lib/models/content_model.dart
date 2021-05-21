@@ -29,8 +29,12 @@ class ContentModel {
     this.coverImage,
     this.isPurchased,
     this.sermonId,
+    this.artUri,
+    this.artist,
+    this.realId
   });
 
+  String artUri;
   String id;
   String title;
   String author;
@@ -41,6 +45,8 @@ class ContentModel {
   String coverImage;
   String sermonId;
   bool isPurchased;
+  String artist;
+  String realId;
 
   fromJson(Map json) {
     return ContentModel(
@@ -54,6 +60,9 @@ class ContentModel {
       coverImage: json["cover_image"],
       isPurchased: json["is_purchased"],
       sermonId: json["sermon_id"],
+      artUri: json['cover_image'],
+      artist: json['author'],
+      realId: json['id']
     );
   }
 
@@ -68,6 +77,8 @@ class ContentModel {
         "cover_image": coverImage,
         "is_purchased": isPurchased,
         "sermon_id": sermonId,
+        "artUri": coverImage,
+        "artist": author
       };
 
   toArticle() {
@@ -90,8 +101,9 @@ class ContentModel {
   AudioModel toAudio() {
     // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
     return AudioModel(
+      artist: author,
       author: author,
-      coverImage: coverImage,
+      artUri: coverImage,
       createdAt: createdAt,
       title: title,
       id: id,
@@ -99,6 +111,8 @@ class ContentModel {
       postType: getContentTypeString(postType),
       // downloaded: _hiveDatabaseService.checkArticleDownloadStatus(id),
       dataUrl: dataUrl,
+      realId: realId
+
     );
   }
 

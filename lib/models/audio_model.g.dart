@@ -24,7 +24,7 @@ class AudioModelAdapter extends TypeAdapter<AudioModel> {
       price: fields[4] as double,
       postType: fields[5] as String,
       dataUrl: fields[6] as String,
-      coverImage: fields[7] as String,
+      artUri: fields[7] as String,
       downloaded: fields[8] as bool,
       downloadDate: fields[9] as DateTime,
       isBookmarked: fields[10] as bool,
@@ -51,7 +51,7 @@ class AudioModelAdapter extends TypeAdapter<AudioModel> {
       ..writeByte(6)
       ..write(obj.dataUrl)
       ..writeByte(7)
-      ..write(obj.coverImage)
+      ..write(obj.artUri)
       ..writeByte(8)
       ..write(obj.downloaded)
       ..writeByte(9)

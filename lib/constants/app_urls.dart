@@ -1,7 +1,7 @@
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/utils/locator.dart';
 
-const String ServerBaseUrl = "http://backendjals.herokuapp.com";
+const String ServerBaseUrl = "https://backendjals.herokuapp.com";
 
 Map<String, String> appHttpHeaders() {
   // locator<AuthenticationService>();

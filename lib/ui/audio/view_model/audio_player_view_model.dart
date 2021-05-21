@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart' as audio;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
@@ -14,6 +15,13 @@ import 'package:just_audio/just_audio.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:share/share.dart';
+
+import 'audioService.dart';
+
+void audioPlayerTaskEntrypoint() async {
+  print('initializing');
+  audio.AudioServiceBackground.run(() => AudioPlayerTask());
+}
 
 class AudioPlayerViewModel extends BaseViewModel {
   final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
@@ -55,6 +63,50 @@ class AudioPlayerViewModel extends BaseViewModel {
       audios[index].dataUrl =
           _hiveDatabaseService.getSingleAudio(audios[index].id).dataUrl;
     }
+  }
+
+  startAudioPlayerBtn(List<AudioModel> audios, {String playlistName}) async {
+    // await audio.AudioService.connect().catchError((e){
+    //   print(e.toString());
+    // });
+    print('running');
+
+    this.audios = audios;
+    commentWidgetViewModels = audios.map<CommentWidgetViewModel>((audio) {
+      return CommentWidgetViewModel(audio.realId);
+    }).toList();
+    commentWidgets = commentWidgetViewModels
+        .map<CommentWidget>(
+            (commentVM) => CommentWidget(commentWidgetViewModel: commentVM))
+        .toList();
+    setBusy(ViewState.Busy);
+    for (int i = 0; i < audios.length; i++) {
+      print("i==$i ${audios.length}");
+      await checkDownload(i);
+    }
+
+    List<dynamic> list = [];
+    for (int i = 0; i < audios.length; i++) {
+      var m = audios[i].toJson();
+      list.add(m);
+    }
+    print(list);
+    var params = {"data": list};
+    print(list.length);
+    print('This is the list' + list.length.toString());
+    print(list);
+    await audio.AudioService.start(
+      backgroundTaskEntrypoint: audioPlayerTaskEntrypoint,
+      androidNotificationChannelName: 'Audio Player',
+      androidNotificationColor: 0xFF2196f3,
+      androidNotificationIcon: 'mipmap/ic_launcher',
+      params: params,
+    ).whenComplete(() => print('Completed')) .catchError((e) {
+      print('Failed');
+      print(e.toString());
+    });
+
+    setBusy(ViewState.Idle);
   }
 
   initiliseAudio(List<AudioModel> audios, {String playlistName}) async {

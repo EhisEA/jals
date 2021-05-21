@@ -40,7 +40,7 @@ class DownloadedAudioTile extends StatelessWidget {
             width: getProportionatefontSize(60),
             child: AspectRatio(
               aspectRatio: 1,
-              child: ShowNetworkImage(imageUrl: audio.coverImage),
+              child: ShowNetworkImage(imageUrl: audio.artUri),
             ),
           ),
           Expanded(

@@ -23,11 +23,14 @@ class AudioModel {
     this.price,
     this.postType,
     this.dataUrl,
-    this.coverImage,
+    this.artUri,
     this.downloaded,
     this.downloadDate,
     this.isBookmarked,
     this.isPurchased,
+    this.coverImage,
+    this.artist,
+    this.realId
   });
 
   @HiveField(0)
@@ -52,7 +55,7 @@ class AudioModel {
   String dataUrl;
 
   @HiveField(7)
-  String coverImage;
+  String artUri;
 
   @HiveField(8)
   bool downloaded;
@@ -66,41 +69,58 @@ class AudioModel {
   @HiveField(11)
   bool isPurchased;
 
+  @HiveField(12)
+  String coverImage;
+
+  @HiveField(13)
+  String artist;
+
+  @HiveField(14)
+  String realId;
+
   factory AudioModel.fromJson(Map<String, dynamic> json) => AudioModel(
-        id: json["id"],
+        id: json["data_url"],
+        realId: json['id'],
         title: json["title"],
         author: json["author"],
         createdAt: DateTime.parse(json["created_at"]),
         price: json["price"].toDouble(),
         postType: json["post_type"],
         dataUrl: json["data_url"],
-        coverImage: json["cover_image"],
+        artUri: json["cover_image"],
         downloaded: json["downloaded"] ?? false,
         downloadDate: null,
         isBookmarked: json["is_bookmarked"],
         isPurchased: json["is_purchased"],
+        coverImage: json['cover_image'],
+        artist: json['author']
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
-        "author": author,
+        "artist": author,
         "created_at": createdAt.toIso8601String(),
         "price": price,
         "post_type": postType,
         "data_url": dataUrl,
-        "cover_image": coverImage,
+        "artUri": artUri,
         "downloaded": downloaded,
         "downloadDate": downloadDate,
         "is_purchased": isPurchased,
         "is_bookmarked": isBookmarked,
+        "cover_image": coverImage,
+        "author": author,
+        "realId": realId
       };
 
   toContent() {
     // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
     return ContentModel(
       author: author,
+      artist:author,
       coverImage: coverImage,
+      artUri: coverImage,
       createdAt: createdAt,
       title: title,
       id: id,
