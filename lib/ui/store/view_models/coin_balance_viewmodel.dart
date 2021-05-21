@@ -8,7 +8,7 @@ import '../../../route_paths.dart';
 
 class CoinBalanceViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
-  double coins = 0;
+  int coins = 0;
   navigateToWalletView() async {
     await _navigationService.navigateTo(
       PaymentPageWithTokenViewRoute,
@@ -28,7 +28,7 @@ class CoinBalanceViewModel extends BaseViewModel {
 
   void getWalletBallenceOnNetwork() async {
     try {
-      double response = await _storeService.getWalletBalance();
+      int response = await _storeService.getWalletBalance();
       coins = response;
       notifyListeners();
     } catch (e) {

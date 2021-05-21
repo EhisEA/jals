@@ -37,7 +37,7 @@ class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case PaymentPageWithTokenViewRoute:
-        double coinBalance;
+        int coinBalance;
         coinBalance = settings.arguments;
         return MaterialPageRoute(
           builder: (context) => PaymentPageWithTokenView(

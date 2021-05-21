@@ -133,7 +133,7 @@ class StoreService {
     }
   }
 
-  Future<double> getWalletBalance() async {
+  Future<int> getWalletBalance() async {
     try {
       Response response = await _client.get(
         AppUrl.WALLET_BALANCE,
@@ -143,7 +143,7 @@ class StoreService {
 
       if (decodedData['status'] == 'Successful') {
         print(decodedData['data']['coins']);
-        return decodedData['data']['coins'];
+        return int.parse(decodedData['data']['coins'].toString());
       } else {
         return null;
       }

@@ -104,6 +104,7 @@ class MyApp extends StatelessWidget {
               // preloading SVGs
               loadSvg(context, "assets/svgs/d1.svg"),
               loadSvg(context, "assets/svgs/n1.svg"),
+              loadSvg(context, "assets/svgs/empty.svg"),
               // loadSvg(context, "svg_2.svg"),
             ]);
             return DialogManager(child: child);

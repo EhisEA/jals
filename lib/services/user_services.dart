@@ -15,6 +15,7 @@ class UserServices {
       List<ContentModel> contents = [];
       Response response = await _client.get(AppUrl.Explore);
       var result = json.decode(response.body);
+      print(result);
       if (await _networkConfig.isResponseSuccessBool(
         response: result,
       )) {

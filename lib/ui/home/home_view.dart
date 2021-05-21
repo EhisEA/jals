@@ -51,19 +51,17 @@ class HomeView extends StatelessWidget {
               onTap: () => showDailyRead(context),
               child: buildReadMore(),
             ),
-            Container(
-              height: getProportionatefontSize(260),
-              child: HomeContentDisplay(
-                svgimage: "assets/svgs/hearts.svg",
-                listTitle: "For You",
-              ),
+            // Container(
+            //   height: getProportionatefontSize(260),
+            //   child:
+            // ),
+            HomeContentDisplay(
+              svgimage: "assets/svgs/hearts.svg",
+              listTitle: "For You",
             ),
-            Container(
-              height: getProportionatefontSize(260),
-              child: HomeContentDisplay(
-                svgimage: "assets/svgs/badge_new.svg",
-                listTitle: "Explore",
-              ),
+            HomeContentDisplay(
+              svgimage: "assets/svgs/badge_new.svg",
+              listTitle: "Explore",
             ),
             SizedBox(height: 40)
           ],
