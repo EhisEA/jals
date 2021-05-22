@@ -64,7 +64,7 @@ class AudioPlayerViewModel extends BaseViewModel {
         audios.map<bg.MediaItem>((e) => e.toMedia()).toList();
     bg.AudioService.start(
         backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
-        androidNotificationChannelName: 'Jasl',
+        androidNotificationChannelName: 'Jals',
         // Enable this if you want the Android service to exit the foreground state on pause.
         androidStopForegroundOnPause: true,
         androidNotificationColor: 0xFF2196f3,
