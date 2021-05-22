@@ -62,7 +62,9 @@ class AudioPlayerViewModel extends BaseViewModel {
   initiliseAudio(List<AudioModel> audios, {String playlistName}) async {
     List<bg.MediaItem> mediaList =
         audios.map<bg.MediaItem>((e) => e.toMedia()).toList();
-    bg.AudioService.start(
+
+    print(mediaList.length);
+    await bg.AudioService.start(
         backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
         androidNotificationChannelName: 'Jals',
         // Enable this if you want the Android service to exit the foreground state on pause.
@@ -72,7 +74,13 @@ class AudioPlayerViewModel extends BaseViewModel {
         androidEnableQueue: true,
         params: {
           "queue": mediaList,
-        });
+        }).whenComplete(() {
+      print("00000");
+      print('Completed');
+    }).catchError((e) {
+      print('Failed');
+      print(e.toString());
+    });
 
     this.audios = audios;
     commentWidgetViewModels = audios.map<CommentWidgetViewModel>((audio) {

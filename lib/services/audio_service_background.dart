@@ -9,28 +9,34 @@ class AudioPlayerTask extends BackgroundAudioTask {
   AudioPlayer _player = new AudioPlayer();
   AudioProcessingState _skipState;
   Seeker _seeker;
+  List<MediaItem> _queue = [];
   StreamSubscription<PlaybackEvent> _eventSubscription;
 
-  List<MediaItem> get queue => [
-        MediaItem(
-          id: "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
-          album: "Science Friday",
-          title: "A Salute To Head-Scratching Science",
-          artist: "Science Friday and WNYC Studios",
-          duration: Duration(milliseconds: 5739820),
-          artUri:
-              "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
-        ),
-        MediaItem(
-          id: "https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3",
-          album: "Science Friday",
-          title: "From Cat Rheology To Operatic Incompetence",
-          artist: "Science Friday and WNYC Studios",
-          duration: Duration(milliseconds: 2856950),
-          artUri:
-              "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
-        ),
-      ];
+  int _queueIndex = -1;
+  bool get hasNext => _queueIndex + 1 < _queue.length;
+  bool get hasPrevious => _queueIndex > 0;
+
+  List<MediaItem> get queue => _queue;
+  // [
+  //       MediaItem(
+  //         id: "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
+  //         album: "Science Friday",
+  //         title: "A Salute To Head-Scratching Science",
+  //         artist: "Science Friday and WNYC Studios",
+  //         duration: Duration(milliseconds: 5739820),
+  //         artUri:
+  //             "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+  //       ),
+  //       MediaItem(
+  //         id: "https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3",
+  //         album: "Science Friday",
+  //         title: "From Cat Rheology To Operatic Incompetence",
+  //         artist: "Science Friday and WNYC Studios",
+  //         duration: Duration(milliseconds: 2856950),
+  //         artUri:
+  //             "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+  //       ),
+  //     ];
   //]_mediaLibrary.items;
   int get index => _player.currentIndex;
   MediaItem get mediaItem => index == null ? null : queue[index];
@@ -38,50 +44,80 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
     print("this is the que length");
-    print(params['queue'].length);
-    // We configure the audio session for speech since we're playing a podcast.
-    // You can also put this in your app's initialisation if your app doesn't
-    // switch between two types of audio as this example does.
-    // final session = await AudioSession.instance;
-    // await session.configure(AudioSessionConfiguration.music());
-    // Broadcast media item changes.
-    _player.currentIndexStream.listen((index) {
-      if (index != null) AudioServiceBackground.setMediaItem(queue[index]);
-    });
-    // Propagate all events from the audio player to AudioService clients.
-    _eventSubscription = _player.playbackEventStream.listen((event) {
-      _broadcastState();
-    });
-    // Special processing for state transitions.
-    _player.processingStateStream.listen((state) {
-      switch (state) {
-        case ProcessingState.completed:
-          // In this example, the service stops when reaching the end.
-          onStop();
-          break;
-        case ProcessingState.ready:
-          // If we just came from skipping between tracks, clear the skip
-          // state now that we're ready to play.
-          _skipState = null;
-          break;
-        default:
-          break;
-      }
-    });
+    // print(params['queue'].length);
+    // // We configure the audio session for speech since we're playing a podcast.
+    // // You can also put this in your app's initialisation if your app doesn't
+    // // switch between two types of audio as this example does.
+    // // final session = await AudioSession.instance;
+    // // await session.configure(AudioSessionConfiguration.music());
+    // // Broadcast media item changes.
+    // _propogateEventsFromAudioPlayerToAudioServiceClients();
+    // _performSpecialProcessingForStateTransistions();
+    // // _loadQueue();
+    // // _player.currentIndexStream.listen((index) {
+    // //   if (index != null) AudioServiceBackground.setMediaItem(queue[index]);
+    // // });
 
-    // Load and broadcast the queue
-    AudioServiceBackground.setQueue(params['queue']);
-    try {
-      await _player.setAudioSource(ConcatenatingAudioSource(
-        children:
-            queue.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),
-      ));
-      // In this example, we automatically start playing on start.
-      onPlay();
-    } catch (e) {
-      print("Error: $e");
+    // // Propagate all events from the audio player to AudioService clients.
+
+    // // Special processing for state transitions.
+    // // _player.processingStateStream.listen((state) {
+    // //   switch (state) {
+    // //     case ProcessingState.completed:
+    // //       // In this example, the service stops when reaching the end.
+    // //       onStop();
+    // //       break;
+    // //     case ProcessingState.ready:
+    // //       // If we just came from skipping between tracks, clear the skip
+    // //       // state now that we're ready to play.
+    // //       _skipState = null;
+    // //       break;
+    // //     default:
+    // //       break;
+    // //   }
+    // // });
+    // _queue = params['queue'] ?? [];
+    // // Load and broadcast the queue
+    // AudioServiceBackground.setQueue(queue);
+    // try {
+    //   await _player.setAudioSource(ConcatenatingAudioSource(
+    //     children:
+    //         queue.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),
+    //   ));
+    //   _player.durationStream.listen((duration) {
+    //     _updateQueueWithCurrentDuration(duration);
+    //   });
+    //   // In this example, we automatically start playing on start.
+    //   onPlay();
+    // } catch (e) {
+    //   print("Error: $e");
+    //   onStop();
+    // }
+  }
+
+  void _updateQueueWithCurrentDuration(Duration duration) {
+    final songIndex = _player.playbackEvent.currentIndex;
+    print('current index: $songIndex, duration: $duration');
+    final modifiedMediaItem = mediaItem.copyWith(duration: duration);
+    _queue[songIndex] = modifiedMediaItem;
+    AudioServiceBackground.setMediaItem(_queue[songIndex]);
+    AudioServiceBackground.setQueue(_queue);
+  }
+
+  _handlePlaybackCompleted() {
+    if (hasNext) {
+      onSkipToNext();
+    } else {
       onStop();
     }
+  }
+
+  void _performSpecialProcessingForStateTransistions() {
+    _player.processingStateStream
+        .where((state) => state == ProcessingState.completed)
+        .listen((state) {
+      _handlePlaybackCompleted();
+    });
   }
 
   @override
@@ -153,6 +189,28 @@ class AudioPlayerTask extends BackgroundAudioTask {
     await _player.seek(newPosition);
   }
 
+  void _propogateEventsFromAudioPlayerToAudioServiceClients() {
+    _eventSubscription = _player.playbackEventStream.listen((event) {
+      _broadcastState();
+    });
+  }
+
+  Future<void> _broadcastState() async {
+    await AudioServiceBackground.setState(
+      controls: [
+        MediaControl.skipToPrevious,
+        if (_player.playing) MediaControl.pause else MediaControl.play,
+        MediaControl.skipToNext,
+      ],
+      androidCompactActions: [0, 1, 2],
+      processingState: _getProcessingState(),
+      playing: _player.playing,
+      position: _player.position,
+      bufferedPosition: _player.bufferedPosition,
+      speed: _player.speed,
+    );
+  }
+
   /// Begins or stops a continuous seek in [direction]. After it begins it will
   /// continue seeking forward or backward by 10 seconds within the audio, at
   /// intervals of 1 second in app time.
@@ -166,27 +224,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
   // }
 
   /// Broadcasts the current state to all clients.
-  Future<void> _broadcastState() async {
-    await AudioServiceBackground.setState(
-      controls: [
-        MediaControl.skipToPrevious,
-        if (_player.playing) MediaControl.pause else MediaControl.play,
-        MediaControl.stop,
-        MediaControl.skipToNext,
-      ],
-      systemActions: [
-        MediaAction.seekTo,
-        MediaAction.seekForward,
-        MediaAction.seekBackward,
-      ],
-      androidCompactActions: [0, 1, 3],
-      processingState: _getProcessingState(),
-      playing: _player.playing,
-      position: _player.position,
-      bufferedPosition: _player.bufferedPosition,
-      speed: _player.speed,
-    );
-  }
 
   /// Maps just_audio's processing state into into audio_service's playing
   /// state. If we are in the middle of a skip, we use [_skipState] instead.

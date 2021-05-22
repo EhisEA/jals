@@ -119,7 +119,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme().themeData,
       onGenerateRoute: AppRouter.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
-      home: AudioServiceWidget(child: SplashScreenView()),
+      home: SplashScreenView(),
     );
 
     // home: VideoPlayer());
