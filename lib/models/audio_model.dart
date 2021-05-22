@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:hive/hive.dart';
 import 'package:jals/models/content_model.dart';
 part 'audio_model.g.dart';
@@ -95,8 +96,19 @@ class AudioModel {
         "is_purchased": isPurchased,
         "is_bookmarked": isBookmarked,
       };
+  MediaItem toMedia() {
+    return MediaItem(
+        id: dataUrl,
+        title: title,
+        artist: author,
+        album: "Jals",
+        artUri: coverImage,
+        extras: {
+          "id": id,
+        });
+  }
 
-  toContent() {
+  ContentModel toContent() {
     // HiveDatabaseService _hiveDatabaseService= locator<HiveDatabaseService>();
     return ContentModel(
       author: author,

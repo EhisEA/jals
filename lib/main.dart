@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:audio_service/audio_service.dart';
+
 /// A store of consumable items.
 ///
 /// This is a development prototype tha stores consumables in the shared
@@ -50,6 +54,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/utils/theme.dart';
+import 'package:just_audio/just_audio.dart';
 import 'utils/locator.dart';
 import 'managers/dialog_manager.dart';
 import 'utils/router.dart';
@@ -114,7 +119,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme().themeData,
       onGenerateRoute: AppRouter.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
-      home: SplashScreenView(),
+      home: AudioServiceWidget(child: SplashScreenView()),
     );
 
     // home: VideoPlayer());
@@ -125,4 +130,20 @@ class MyApp extends StatelessWidget {
     await precachePicture(picture.pictureProvider, context);
     return picture;
   }
+
+  // e() {
+  //   AudioService.start(
+  //     backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
+  //     androidNotificationChannelName: 'Jasl',
+  //     // Enable this if you want the Android service to exit the foreground state on pause.
+  //     androidStopForegroundOnPause: true,
+  //     androidNotificationColor: 0xFF2196f3,
+  //     androidNotificationIcon: 'mipmap/launcher_icon',
+  //     androidEnableQueue: true,
+  //   );
+  // }
+
+  // void _audioPlayerTaskEntrypoint() async {
+  //   AudioServiceBackground.run(() => AudioPlayerTask());
+  // }
 }

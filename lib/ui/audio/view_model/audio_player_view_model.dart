@@ -4,6 +4,7 @@ import 'package:jals/enums/api_response.dart';
 import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/services/audio_service.dart';
+import 'package:jals/services/audio_service_background.dart';
 import 'package:jals/services/dynamic_link_service.dart';
 import 'package:jals/services/hive_database_service.dart';
 import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
@@ -14,6 +15,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:share/share.dart';
+import 'package:audio_service/audio_service.dart' as bg;
 
 class AudioPlayerViewModel extends BaseViewModel {
   final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
@@ -58,6 +60,20 @@ class AudioPlayerViewModel extends BaseViewModel {
   }
 
   initiliseAudio(List<AudioModel> audios, {String playlistName}) async {
+    List<bg.MediaItem> mediaList =
+        audios.map<bg.MediaItem>((e) => e.toMedia()).toList();
+    bg.AudioService.start(
+        backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
+        androidNotificationChannelName: 'Jasl',
+        // Enable this if you want the Android service to exit the foreground state on pause.
+        androidStopForegroundOnPause: true,
+        androidNotificationColor: 0xFF2196f3,
+        androidNotificationIcon: 'mipmap/launcher_icon',
+        androidEnableQueue: true,
+        params: {
+          "queue": mediaList,
+        });
+
     this.audios = audios;
     commentWidgetViewModels = audios.map<CommentWidgetViewModel>((audio) {
       return CommentWidgetViewModel(audio.id);
@@ -301,4 +317,8 @@ class AudioPlayerViewModel extends BaseViewModel {
     }
     Share.share(_dynamicLink);
   }
+}
+
+void _audioPlayerTaskEntrypoint() async {
+  bg.AudioServiceBackground.run(() => AudioPlayerTask());
 }
