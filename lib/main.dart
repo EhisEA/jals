@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 
+import 'package:audio_service/audio_service.dart';
 /// A store of consumable items.
 ///
 /// This is a development prototype tha stores consumables in the shared
@@ -52,6 +53,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:jals/services/hive_database_service.dart';
+import 'package:jals/ui/audio/view_model/demo.dart';
 import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/utils/theme.dart';
 import 'package:just_audio/just_audio.dart';
@@ -120,6 +122,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: AppRouter.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
       home: SplashScreenView(),
+      // home: SplashScreenView(),
     );
 
     // home: VideoPlayer());

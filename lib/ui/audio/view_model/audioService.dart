@@ -1,9 +1,6 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/material.dart';
-import 'package:jals/models/audio_model.dart';
-import 'package:jals/utils/base_view_model.dart';
 import 'package:just_audio/just_audio.dart';
 
 MediaControl playControl = MediaControl(
@@ -228,7 +225,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     _queue.clear();
     final List mediaItems = params['data'];
     for (var item in mediaItems) {
-      final mediaItem = MediaItem.fromJson(item);
+      final mediaItem = item;
       _queue.add(mediaItem);
     }
     print('printing queue');

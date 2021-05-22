@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jals/enums/content_type.dart';
@@ -114,9 +115,11 @@ class AppRouter {
         String playlistName = arguments["playlistName"];
 
         return MaterialPageRoute(
-          builder: (context) => AudioPlayerView(
-            audios: audios,
-            playlistName: playlistName,
+          builder: (context) => AudioServiceWidget(
+            child: AudioPlayerView(
+              audios: audios,
+              playlistName: playlistName,
+            ),
           ),
         );
         break;

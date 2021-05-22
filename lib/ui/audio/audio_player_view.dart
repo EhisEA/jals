@@ -1,19 +1,14 @@
-//
-
 import 'dart:math';
 
-// import 'package:audio_service/audio_service.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jals/models/audio_downloading_model.dart';
 import 'package:jals/models/audio_model.dart';
 import 'package:jals/models/playlist_model.dart';
 import 'package:jals/ui/audio/view_model/audioService.dart';
 import 'package:jals/ui/audio/view_model/audio_player_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
-import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
@@ -22,8 +17,6 @@ import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:stacked/stacked.dart';
 import 'package:rxdart/rxdart.dart';
-
-import 'downloading_audio_view_model.dart';
 
 format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
 
@@ -455,10 +448,10 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                 ),
                                 SizedBox(height: 20),
                                 Divider(),
-                                if (model.playinIndex >= 0 &&
-                                    model.playinIndex <=
-                                        model.commentWidgets.length)
-                                  model.commentWidgets[model.playinIndex],
+                                // if (model.playinIndex >= 0 &&
+                                //     model.playinIndex <=
+                                //         model.commentWidgets.length)
+                                //   model.commentWidgets[model.playinIndex],
                               ],
                             ),
                           )
