@@ -56,6 +56,10 @@ class AudioPlayerTask extends BackgroundAudioTask {
   bool get hasPrevious => _queueIndex > 0;
 
   @override
+  Future<void> onUpdateQueue(List<MediaItem> queue) {
+    // return super.onUpdateQueue(queue);
+  }
+  @override
   Future<void> onStart(Map<String, dynamic> params) async {
     _loadMediaItemsIntoQueue(params);
 
@@ -85,7 +89,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onRewind() => _seekRelative(-rewindInterval);
 
-
   // @override
   // Future<void> onSkipToNext() async {
   //   skip(1);
@@ -97,7 +100,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   // }
 
   // void skip(int offset) async {
-  
+
   //   int newPos = _queueIndex + offset;
   //   if ((newPos >= 0 && newPos < _queue.length)) {
   //     print('$newPos true');
@@ -145,7 +148,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future<void> onSkipToQueueItem(String mediaId) async {
-    
     final newIndex = queue.indexWhere((item) => item.id == mediaId);
     print('This is the new Index: ' + newIndex.toString());
     print('This is the old Index: ' + index.toString());
@@ -323,9 +325,6 @@ class AudioState2 {
   const AudioState2.initial() : this(Duration.zero, Duration.zero);
 }
 
-
-
 void audioPlayerTaskEntrypoint() async {
   AudioServiceBackground.run(() => AudioPlayerTask());
 }
-

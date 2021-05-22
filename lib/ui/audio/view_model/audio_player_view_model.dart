@@ -69,6 +69,7 @@ class AudioPlayerViewModel extends BaseViewModel {
     // await audio.AudioService.connect().catchError((e){
     //   print(e.toString());
     // });
+    print('Starting');
     print('running');
 
     this.audios = audios;
@@ -102,7 +103,10 @@ class AudioPlayerViewModel extends BaseViewModel {
       androidNotificationColor: 0xFF2196f3,
       androidNotificationIcon: 'mipmap/ic_launcher',
       params: params,
-    ).whenComplete(() => print('Completed')) .catchError((e) {
+    ).whenComplete(() {
+      print("00000");
+      print('Completed');
+    }).catchError((e) {
       print('Failed');
       print(e.toString());
     });

@@ -64,25 +64,32 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                 stream: _audioStateStream,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    final audioState = snapshot.data;
-                    final queue = audioState?.queue;
-                    final mediaItem = audioState?.mediaItem;
-                    final playbackState = audioState?.playbackState;
-                    final processingState = playbackState?.processingState ??
-                        AudioProcessingState.none;
-                    final playing = playbackState?.playing ?? false;
+                    final AudioState audioState = snapshot.data;
+                    final List<MediaItem> queue = audioState?.queue;
+                    final MediaItem mediaItem = audioState?.mediaItem;
+                    final PlaybackState playbackState =
+                        audioState?.playbackState;
+                    final AudioProcessingState processingState =
+                        playbackState?.processingState ??
+                            AudioProcessingState.none;
+                    final bool playing = playbackState?.playing ?? false;
+                    final bool completed = playbackState?.processingState ==
+                        AudioProcessingState.completed;
+
+                    print(playbackState?.processingState.toString());
                     print(playbackState?.processingState.toString());
 
                     print('This is the number of mediaitem' +
                         snapshot.data.mediaItem.toString());
                     print('This is the number of list ' +
                         queue.length.toString());
+
                     return processingState != AudioProcessingState.none
                         ? SingleChildScrollView(
                             child: Column(
                               children: [
                                 SizedBox(height: 30),
-                                if (playing)
+                                if (playing || !completed)
                                   ClipOval(
                                     child: Container(
                                       height: 180,
@@ -136,6 +143,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                     center: true,
                                   ),
                                 SizedBox(height: 15),
+                                if (completed) CircleAvatar(),
                                 Container(
                                   width: double.infinity,
                                   height: 80,
@@ -255,7 +263,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    !playing
+                                    !playing || completed
                                         ? IconButton(
                                             icon: Icon(Icons.play_arrow),
                                             iconSize: 64.0,
