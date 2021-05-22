@@ -786,13 +786,3 @@ Stream<AudioState> get _audioStateStream {
     ),
   );
 }
-
-// Stream<AudioState2> get mediaStateStream =>
-//     Rx.combineLatest2<Duration, MediaItem, AudioState2>(
-//         AudioService.positionStream,
-//         AudioService.currentMediaItemStream,
-//         (position, mediaItem) => AudioState2(position, mediaItem.duration));
-
-void _audioPlayerTaskEntrypoint() async {
-  AudioServiceBackground.run(() => AudioPlayerTask());
-}
