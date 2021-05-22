@@ -47,7 +47,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   MediaItem get mediaItem => index == null ? null : queue[index];
   //
 
-  int _queueIndex = -1;
+  int _queueIndex = 0;
 
   bool _playing;
 
@@ -98,8 +98,10 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   void skip(int offset) async {
+  
     int newPos = _queueIndex + offset;
-    if (!(newPos >= 0 && newPos < _queue.length)) {
+    if ((newPos >= 0 && newPos < _queue.length)) {
+      print('$newPos true');
       return;
     }
     if (null == _playing) {
@@ -111,8 +113,11 @@ class AudioPlayerTask extends BackgroundAudioTask {
     _skipState = offset > 0
         ? AudioProcessingState.skippingToNext
         : AudioProcessingState.skippingToPrevious;
+        print('Skippingggggggggggggg to ' + mediaItem.id);
     AudioServiceBackground.setMediaItem(mediaItem);
+    print('Skippingggggggggggggg to ' + mediaItem.id);
     await _audioPlayer.setUrl(mediaItem.id);
+    print('Skippingggggggggggggg to ' + mediaItem.id);
     print(mediaItem.id);
     _skipState = null;
     if (_playing) {
@@ -154,7 +159,10 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future<void> onSkipToQueueItem(String mediaId) async {
+    
     final newIndex = queue.indexWhere((item) => item.id == mediaId);
+    print('This is the new Index: ' + newIndex.toString());
+    print('This is the old Index: ' + index.toString());
     if (newIndex == -1) return;
     _skipState = newIndex > index
         ? AudioProcessingState.skippingToNext

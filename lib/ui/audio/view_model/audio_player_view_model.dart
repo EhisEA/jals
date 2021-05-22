@@ -96,6 +96,7 @@ class AudioPlayerViewModel extends BaseViewModel {
     print('This is the list' + list.length.toString());
     print(list);
     await audio.AudioService.start(
+      androidEnableQueue: true,
       backgroundTaskEntrypoint: audioPlayerTaskEntrypoint,
       androidNotificationChannelName: 'Audio Player',
       androidNotificationColor: 0xFF2196f3,

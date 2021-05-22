@@ -75,6 +75,8 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
 
                     print('This is the number of mediaitem' +
                         snapshot.data.mediaItem.toString());
+                    print('This is the number of list ' +
+                        queue.length.toString());
                     return processingState != AudioProcessingState.none
                         ? SingleChildScrollView(
                             child: Column(
@@ -280,7 +282,15 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                             if (mediaItem == queue.first) {
                                               return;
                                             }
-                                            AudioService.skipToPrevious();
+
+                                            for (MediaItem item in queue) {
+                                              if (item.id == mediaItem.id) {
+                                                print(queue.indexOf(item));
+                                                int pos = queue.indexOf(item);
+                                                AudioService.skipToQueueItem(
+                                                    queue[pos - 1].id);
+                                              }
+                                            }
                                           },
                                         ),
                                         IconButton(
@@ -290,7 +300,17 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                             if (mediaItem == queue.last) {
                                               return;
                                             }
-                                            AudioService.skipToNext();
+
+                                            // int pos = 0;
+                                            for (MediaItem item in queue) {
+                                              if (item.id == mediaItem.id) {
+                                                print(queue.indexOf(item));
+                                                int pos = queue.indexOf(item);
+
+                                                AudioService.skipToQueueItem(
+                                                    queue[pos + 1].id);
+                                              }
+                                            }
                                           },
                                         )
                                       ],
@@ -376,14 +396,32 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                               JalsIcons.comment,
                                               "Comment",
                                               () {
-                                                
-                                                if (model.audioPlayer
+                                                if (mediaItem.id != null) {
+                                                  for (MediaItem item
+                                                      in queue) {
+                                                    if (item.id ==
+                                                        mediaItem.id) {
+                                                      print(
+                                                          queue.indexOf(item));
+                                                      int pos =
+                                                          queue.indexOf(item);
+                                                      model
+                                                          .commentWidgetViewModels[
+                                                              pos]
+                                                          .writeComment(
+                                                              context);
+                                                    }
+                                                  }
+                                                }
+
+                                                //previous code
+                                                /*if (model.audioPlayer
                                                         .currentIndex !=
                                                     null)
                                                   model.commentWidgetViewModels[
                                                           model.audioPlayer
                                                               .currentIndex]
-                                                      .writeComment(context);
+                                                      .writeComment(context);*/
                                               },
                                             ),
                                             pop(JalsIcons.more, "more",
