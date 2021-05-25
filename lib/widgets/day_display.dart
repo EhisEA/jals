@@ -22,7 +22,7 @@ class _DayDisplayState extends State<DayDisplay> {
   String greeting() {
     setState(() {
       var hour = DateTime.now().hour;
-      if (hour < 6) {
+      if (hour < 7) {
         day = false;
         return 'Morning';
       }

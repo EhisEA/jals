@@ -73,7 +73,13 @@ class AudioPlayerViewModel extends BaseViewModel {
     // });
     print('Starting');
     print('running');
-
+    // print(audio.AudioService.running);
+    // print(audio.AudioService.connected);
+    // print(audio.AudioService.currentMediaItem);
+    // print(audio.AudioService.queue.length);
+    // print(audio.AudioService.playbackState);
+    // return;
+    if (audios == null) return;
     this.audios = audios;
     // commentWidgetViewModels = audios.map<CommentWidgetViewModel>((audio) {
     //   return CommentWidgetViewModel(audio.realId);
@@ -88,31 +94,42 @@ class AudioPlayerViewModel extends BaseViewModel {
     //   await checkDownload(i);
     // }
 
-    List<audio.MediaItem> list = [];
-    for (int i = 0; i < audios.length; i++) {
-      var m = audios[i].toMedia();
-      list.add(m);
+    if (audio.AudioService.currentMediaItem != null) {
+      print(audio.AudioService.currentMediaItem.extras);
+      print('First');
+      List<audio.MediaItem> list2 = [];
+      for (int i = 0; i < audios.length; i++) {
+        audio.MediaItem m = audios[i].toMedia();
+        list2.add(m);
+      }
+      await audio.AudioService.updateQueue(list2);
+    } else {
+      print('Second');
+      List list = [];
+      for (int i = 0; i < audios.length; i++) {
+        var m = audios[i].toMedia();
+        list.add(m.toJson());
+      }
+      // print(list);
+      var params = {"data": list};
+      print(list.length);
+      print('This is the list' + list.length.toString());
+      // print(list);
+      await audio.AudioService.start(
+        androidEnableQueue: true,
+        backgroundTaskEntrypoint: audioPlayerTaskEntrypoint,
+        androidNotificationChannelName: 'Audio Player',
+        androidNotificationColor: 0xFF2196f3,
+        androidNotificationIcon: 'mipmap/ic_launcher',
+        params: params,
+      ).whenComplete(() {
+        print("00000");
+        print('Completed');
+      }).catchError((e) {
+        print('Failed');
+        print(e.toString());
+      });
     }
-    // print(list);
-    var params = {"data": list};
-    print(list.length);
-    print('This is the list' + list.length.toString());
-    // print(list);
-    await audio.AudioService.start(
-      androidEnableQueue: true,
-      backgroundTaskEntrypoint: audioPlayerTaskEntrypoint,
-      androidNotificationChannelName: 'Audio Player',
-      androidNotificationColor: 0xFF2196f3,
-      androidNotificationIcon: 'mipmap/ic_launcher',
-      params: params,
-    ).whenComplete(() {
-      print("00000");
-      print('Completed');
-    }).catchError((e) {
-      print('Failed');
-      print(e.toString());
-    });
-
     setBusy(ViewState.Idle);
   }
 

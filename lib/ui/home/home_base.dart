@@ -1,6 +1,9 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:jals/ui/audio/miniPlayer.dart';
+import 'package:jals/ui/audio/view_model/audioService.dart';
 import 'package:jals/ui/home/home_view.dart';
 import 'package:jals/ui/home/library_view.dart';
 import 'package:jals/ui/home/settings_view.dart';
@@ -10,6 +13,7 @@ import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:stacked/stacked.dart';
+import 'package:rxdart/rxdart.dart';
 
 class HomeBaseView extends StatefulWidget {
   @override
@@ -18,6 +22,7 @@ class HomeBaseView extends StatefulWidget {
 
 class _HomeBaseViewState extends State<HomeBaseView> {
   @override
+  final bool green = false;
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<HomeBaseViewModel>.reactive(
@@ -89,6 +94,10 @@ class _HomeBaseViewState extends State<HomeBaseView> {
                     navBarStyle: NavBarStyle
                         .custom // Choose the nav bar style with this property.
                     ),
+                Positioned(
+                  bottom: 70,
+                  child: AudioServiceWidget(child: MiniPlayerWidget()),
+                )
               ],
             ),
           );

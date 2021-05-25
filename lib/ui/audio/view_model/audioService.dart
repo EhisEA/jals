@@ -53,17 +53,19 @@ class AudioPlayerTask extends BackgroundAudioTask {
   bool get hasPrevious => _queueIndex > 0;
 
   @override
-  Future<void> onUpdateQueue(List<MediaItem> queue) {
-    // return super.onUpdateQueue(queue);
+  Future<void> onUpdateQueue(List<MediaItem> items) async {
+    _queue.clear();
+    _queue = items;
+    await _loadQueue();
   }
+
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
     _loadMediaItemsIntoQueue(params);
 
     _propogateEventsFromAudioPlayerToAudioServiceClients();
     _performSpecialProcessingForStateTransistions();
-    _loadQueue();
-    // onSkipToNext();
+    await _loadQueue();
   }
 
   @override
@@ -85,43 +87,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future<void> onRewind() => _seekRelative(-rewindInterval);
-
-  // @override
-  // Future<void> onSkipToNext() async {
-  //   skip(1);
-  // }
-
-  // @override
-  // Future<void> onSkipToPrevious() async {
-  //   skip(-1);
-  // }
-
-  // void skip(int offset) async {
-
-  //   int newPos = _queueIndex + offset;
-  //   if ((newPos >= 0 && newPos < _queue.length)) {
-  //     print('$newPos true');
-  //     return;
-  //   }
-  //   if (null == _playing) {
-  //     _playing = true;
-  //   } else if (_playing) {
-  //     await _audioPlayer.stop();
-  //   }
-  //   _queueIndex = newPos;
-  //   _skipState = offset > 0
-  //       ? AudioProcessingState.skippingToNext
-  //       : AudioProcessingState.skippingToPrevious;
-  //   AudioServiceBackground.setMediaItem(mediaItem);
-  //   await _audioPlayer.setUrl(mediaItem.id);
-  //   print(mediaItem.id);
-  //   _skipState = null;
-  //   if (_playing) {
-  //     onPlay();
-  //   } else {
-  //     _setState(processingState: AudioProcessingState.ready);
-  //   }
-  // }
 
   @override
   Future<void> onStop() async {
@@ -225,7 +190,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     _queue.clear();
     final List mediaItems = params['data'];
     for (var item in mediaItems) {
-      final mediaItem = item;
+      final mediaItem = MediaItem.fromJson(item);
       _queue.add(mediaItem);
     }
     print('printing queue');

@@ -88,7 +88,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => AccountInfoView());
         break;
       case HomeViewRoute:
-        return MaterialPageRoute(builder: (context) => HomeBaseView());
+        return MaterialPageRoute(
+            builder: (context) => AudioServiceWidget(child: HomeBaseView()));
         break;
       case ArticleLibraryViewRoute:
         return MaterialPageRoute(builder: (context) => ArticleLibrary());
@@ -111,7 +112,7 @@ class AppRouter {
         break;
       case AudioPlayerViewRoute:
         Map arguments = settings.arguments;
-        List<AudioModel> audios = arguments["audios"];
+        List<AudioModel> audios = arguments["audios"] ?? null;
         String playlistName = arguments["playlistName"];
 
         return MaterialPageRoute(

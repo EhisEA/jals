@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 
-import 'package:audio_service/audio_service.dart';
 /// A store of consumable items.
 ///
 /// This is a development prototype tha stores consumables in the shared
@@ -121,7 +120,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme().themeData,
       onGenerateRoute: AppRouter.generateRoute,
       navigatorKey: locator<NavigationService>().navigatorKey,
-      home: SplashScreenView(),
+      home: AudioServiceWidget(child: SplashScreenView()),
       // home: SplashScreenView(),
     );
 

@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:jals/models/login_status.dart';
 import 'package:jals/route_paths.dart';
 import 'package:jals/services/authentication_service.dart';
@@ -17,7 +18,18 @@ class SplashScreenViewModel extends BaseViewModel {
     // _authenticationService.logOut();
     _dynamicLinkService.handleDynamicLink();
     LoginStatus loginStatus = await _authenticationService.isUserLoggedIn();
+    AudioService.notificationClickEventStream.listen((event) {
+      print('notification');
+      print(event);
+      if (event)
 
+        // locator<NavigationService>().navigatorKey.currentState.
+        locator<NavigationService>()
+            .navigateTo(AudioPlayerViewRoute, argument: {
+          "audios": null,
+          "playlistName": null,
+        });
+    });
     switch (loginStatus) {
       case LoginStatus.NoUser:
         _navigationService.navigateToReplace(WelcomeViewRoute);
