@@ -10,6 +10,7 @@ import 'package:jals/ui/article/view_models/article_all_view_model.dart';
 import 'package:jals/ui/article/view_models/article_bookmarked_view_model.dart';
 import 'package:jals/ui/article/view_models/article_download_view_model.dart';
 import 'package:jals/ui/article/view_models/article_news_view_model.dart';
+import 'package:jals/ui/article/view_models/article_trending_view_model.dart';
 import 'package:jals/ui/audio/downloading_audio_view_model.dart';
 import 'package:jals/ui/audio/view_model/audio_all_view_model.dart';
 import 'package:jals/ui/audio/view_model/audio_download.dart';
@@ -42,6 +43,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => AudioAllViewModel());
   locator.registerLazySingleton(() => AudioPlaylistSectionViewModel());
   locator.registerLazySingleton(() => ArticleAllViewModel());
+  locator.registerLazySingleton(() => ArticleTrendingViewModel());
   locator.registerLazySingleton(() => ArticleNewsViewModel());
   locator.registerLazySingleton(() => ArticleBookMarkedViewModel());
   locator.registerLazySingleton(() => DownloadingVideosViewModel());

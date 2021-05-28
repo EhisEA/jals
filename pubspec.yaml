@@ -58,6 +58,7 @@ dependencies:
   path_provider:
   audioplayers: ^0.17.4
   jiffy: ^3.0.1
+  timeago: ^2.0.30
   just_audio: ^0.6.15+1
   audio_service: ^0.16.2+1
   share: ^0.6.5+4
