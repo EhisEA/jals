@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:jals/constants/app_urls.dart';
 import 'package:jals/models/content_model.dart';
 import 'package:jals/models/daily_scripture.dart';
+import 'package:jals/services/authentication_service.dart';
 import 'package:jals/utils/network_utils.dart';
 
 class UserServices {
@@ -34,18 +35,25 @@ class UserServices {
   Future<List<ContentModel>> getForYou() async {
     try {
       List<ContentModel> contents = [];
-      Response response = await _client.get(AppUrl.Explore);
+      Response response = await _client.get(
+        AppUrl.ForYou,
+        headers: appHttpHeaders(),
+      );
+      print(appHttpHeaders());
+      print(AppUrl.ForYou);
       var result = json.decode(response.body);
+      print(result);
       if (await _networkConfig.isResponseSuccessBool(
         response: result,
       )) {
-        result.forEach((event) {
+        result["data"].forEach((event) {
           contents.add(ContentModel().fromJson(event));
         });
         return contents;
       }
       return null;
     } catch (e) {
+      print(e);
       return null;
     }
   }

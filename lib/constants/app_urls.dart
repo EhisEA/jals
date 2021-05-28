@@ -51,9 +51,9 @@ class AppUrl {
   // =============================================================
   // =============================================================
   // =============================================================
-  static const String Explore = "$ServerBaseUrl/v1/posts/for_you/";
+  static const String Explore = "$ServerBaseUrl/v1/posts/explore/";
   static const String DailyRead = "$ServerBaseUrl/v1/posts/get_scripture/";
-  static const String ForYou = "$ServerBaseUrl/v1/posts/explore/";
+  static const String ForYou = "$ServerBaseUrl/v1/posts/for_you/";
   static const String CreateUserAccountInfo = "$ServerBaseUrl/v1/users/";
   static const String SendForgotPasswordEmail =
       "$ServerBaseUrl/v1/users/forgot_password/";

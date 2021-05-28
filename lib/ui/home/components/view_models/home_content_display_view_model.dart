@@ -12,7 +12,7 @@ class HomeContentDisplayViewModel extends BaseViewModel {
   final UserServices _userServices = UserServices();
   void getContents() async {
     setBusy(ViewState.Busy);
-    contents = await _userServices.getExplore();
+    contents = await _userServices.getForYou();
     setBusy(ViewState.Idle);
   }
 
