@@ -164,8 +164,9 @@ class TextHeader2 extends StatelessWidget {
   final String text;
 
   final bool center;
+  final Color color;
 
-  const TextHeader2({Key key, this.text, this.center = false})
+  const TextHeader2({Key key, this.text, this.center = false, this.color})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -175,7 +176,7 @@ class TextHeader2 extends StatelessWidget {
       textAlign: center ? TextAlign.center : TextAlign.left,
       style: TextStyle(
         fontWeight: FontWeight.w600,
-
+        color: color,
         fontSize: getProportionatefontSize(19.2),
         // letterSpacing: 0.1,
       ),
