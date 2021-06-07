@@ -26,13 +26,17 @@ class SettingsViewModel extends BaseViewModel with ImageSelect {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
-
+  bool emailNotificationToggle = false;
   String get avatar => _authenticationService.currentUser.avatar;
   String get email => _authenticationService.currentUser.email;
   String get fullname => _authenticationService.currentUser.fullName;
   String get phone => _authenticationService.currentUser.phoneNumber;
   DateTime get dateOfBirth => _authenticationService.currentUser.dateOfBirth;
 
+  SettingsViewModel() {
+    emailNotificationToggle =
+        _authenticationService.currentUser.emailNotificationStatus;
+  }
   update(BuildContext context, UserUpdateType updateType,
       SettingsViewModel model) {
     switch (updateType) {
@@ -628,5 +632,17 @@ class SettingsViewModel extends BaseViewModel with ImageSelect {
 
   void toFeedback() {
     _navigationService.navigateTo(FeedbackViewRoute);
+  }
+
+  void toggleEmailNotification(bool value) async {
+    setBusy(ViewState.Busy);
+    emailNotificationToggle = value;
+    setBusy(ViewState.Busy);
+
+    bool result = await _authenticationService.toggleEmaillNotification();
+    if (!result) {
+      emailNotificationToggle = !value;
+    }
+    setBusy(ViewState.Idle);
   }
 }

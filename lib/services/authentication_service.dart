@@ -414,5 +414,29 @@ class AuthenticationService {
       print(e);
     }
   }
+
+  Future toggleEmaillNotification() async {
+    try {
+      Response response = await _client.get(
+        AppUrl.EmailNotificationToggle,
+        headers: appHttpHeaders(),
+      );
+
+      var result = json.decode(response.body);
+      print(result);
+
+      if (await _networkConfig.isResponseSuccessToast(
+        response: result,
+      )) {
+        _currentUser.emailNotificationStatus =
+            !_currentUser.emailNotificationStatus;
+        _saveUserLocally();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 // 3b79df4433f5aad10c8956e3bd0fb71e415790a7

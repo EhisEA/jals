@@ -8,6 +8,7 @@ class UserModel {
     this.avatar,
     this.email,
     this.key,
+    this.emailNotificationStatus,
   });
 
   String id;
@@ -16,6 +17,7 @@ class UserModel {
   DateTime dateOfBirth;
   // String dateOfBirth;
   bool verified;
+  bool emailNotificationStatus;
   String key;
   String avatar;
   String email;
@@ -32,6 +34,7 @@ class UserModel {
       verified: mapData["verified"],
       avatar: mapData["avatar"],
       email: mapData["email"],
+      emailNotificationStatus: mapData["should_receive_notifications"] ?? false,
     );
   }
 
@@ -49,6 +52,8 @@ class UserModel {
             : DateTime.parse(json["data"]["user"]["date_of_birth"]),
         verified: json["data"]["user"]["verified"],
         avatar: json["data"]["user"]["avatar"],
+        emailNotificationStatus: json["data"]["user"]
+            ["should_receive_notifications"],
       );
     } catch (e) {
       print("====error======");
@@ -70,6 +75,7 @@ class UserModel {
             : DateTime.parse(json["date_of_birth"]),
         verified: json["verified"],
         avatar: json["avatar"],
+        emailNotificationStatus: json["should_receive_notifications"],
       );
     } catch (e) {
       print("====error======");
@@ -84,9 +90,9 @@ class UserModel {
         "phone_number": phoneNumber,
         "email": email,
         "date_of_birth": dateOfBirth == null ? null : dateOfBirth.toString(),
-        // "${dateOfBirth.year.toString().padLeft(4, '0')}-${dateOfBirth.month.toString().padLeft(2, '0')}-${dateOfBirth.day.toString().padLeft(2, '0')}",
         "verified": verified,
         "avatar": avatar,
+        "should_receive_notifications": emailNotificationStatus,
       };
 
   bool isDetailsComplete() {

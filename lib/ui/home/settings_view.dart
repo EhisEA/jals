@@ -158,14 +158,16 @@ class _SettingsViewState extends State<SettingsView> {
                         buildNotificationInfo(
                           "Push Notification",
                           "Receive push notification on daily reads and Scriptures JALS.",
+                          true,
+                          (e) {
+                            print(e);
+                          },
                         ),
                         buildNotificationInfo(
                           "Email Notification",
                           "Receive email notification update on daily reads and artices you like.",
-                        ),
-                        buildNotificationInfo(
-                          "SMS Notification",
-                          "Receive daily reads in your SMS box.",
+                          model.emailNotificationToggle,
+                          model.toggleEmailNotification,
                         ),
                       ],
                     ),
@@ -253,7 +255,8 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  buildNotificationInfo(String title, String subtitle) {
+  buildNotificationInfo(
+      String title, String subtitle, bool value, Function onSwitchChange) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -268,8 +271,8 @@ class _SettingsViewState extends State<SettingsView> {
             Spacer(),
             CupertinoSwitch(
               trackColor: Colors.grey,
-              value: false,
-              onChanged: (value) {},
+              value: value,
+              onChanged: (value) => onSwitchChange(value),
             ).scale75()
           ],
         ),
