@@ -6,17 +6,28 @@ import 'package:jals/models/content_model.dart';
 
 class StoreService {
   Client _client = new Client();
-  Future<List<ContentModel>> getNewestStoreItems() async {
+  Future<List<ContentModel>> getNewestStoreItems(
+      {DateTime th, DateTime tl}) async {
     try {
+      String url;
+      if (th != null && th != null) {
+        int thInt = th.millisecondsSinceEpoch;
+        int tlInt = tl.millisecondsSinceEpoch;
+
+        url = AppUrl.fetchNewestStoreItems + "?th=$thInt&tl=$tlInt";
+      } else {
+        url = AppUrl.fetchNewestStoreItems;
+      }
+
+      print(url);
+
       Response response = await _client.get(
-        AppUrl.fetchNewestStoreItems,
+        url,
         headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData);
       if (decodedData["status"] == "successful") {
-        print(
-            "======================Success Fetching the list of Newest shop data.===========");
         List<ContentModel> listOfItems = [];
 
         decodedData["data"]["results"].forEach((e) {
@@ -24,7 +35,6 @@ class StoreService {
         });
         return listOfItems;
       } else {
-        print("Will return null");
         return null;
       }
     } catch (e) {

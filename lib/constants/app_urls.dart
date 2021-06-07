@@ -61,6 +61,9 @@ class AppUrl {
       "$ServerBaseUrl/v1/users/forgot_password/";
   static const String ChangePassword =
       "$ServerBaseUrl/v1/users/change_password/";
+  static const String Feedback = "$ServerBaseUrl/v1/utils/feedback/add/";
+  static const String EmailNotificationToggle =
+      "$ServerBaseUrl/v1/utils/toggle_notifications/";
 
   // =============================================================
   // =============================================================

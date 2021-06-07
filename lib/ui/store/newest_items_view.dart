@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/store/view_models/newest_items_view_model.dart';
+import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/empty.dart';
 import 'package:jals/widgets/retry.dart';
 import 'package:jals/widgets/store_tile.dart';
@@ -37,11 +38,25 @@ class _NewestItemsViewState extends State<NewestItemsView>
                       )
                     : RefreshIndicator(
                         onRefresh: model.getNewestItems,
-                        child: ListView.builder(
-                          itemCount: model.newestItemList.length,
-                          itemBuilder: (context, index) => StoreTile(
-                            content: model.newestItemList[index],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              child: TextHeader2(text: "Newest Collections"),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: model.newestItemList.length,
+                                itemBuilder: (context, index) => StoreTile(
+                                  content: model.newestItemList[index],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
       },

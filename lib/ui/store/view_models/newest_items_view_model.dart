@@ -30,4 +30,18 @@ class NewestItemsViewModel extends BaseViewModel {
       newestItemList = null;
     }
   }
+
+  changeTimeline(DateTime th, DateTime tl) async {
+    try {
+      print(th);
+      print(tl);
+
+      setBusy(ViewState.Busy);
+      newestItemList = await _storeService.getNewestStoreItems(th: th, tl: tl);
+    } catch (e) {
+      print(e);
+      newestItemList = null;
+    }
+    setBusy(ViewState.Idle);
+  }
 }
