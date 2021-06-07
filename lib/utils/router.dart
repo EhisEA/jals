@@ -24,6 +24,7 @@ import 'package:jals/ui/authentication/splashscreen_view.dart';
 import 'package:jals/ui/authentication/verification_view.dart';
 import 'package:jals/ui/authentication/welcome_view.dart';
 import 'package:jals/ui/dynamic_link_entry_view.dart';
+import 'package:jals/ui/feedback_view.dart';
 import 'package:jals/ui/home/home_base.dart';
 import 'package:jals/ui/search_view.dart';
 import 'package:jals/ui/shop/payment_page_with_token.dart';
@@ -153,10 +154,9 @@ class AppRouter {
           ),
         );
         break;
-      // case RoutePaths.createSignUpPasswordView:
-      //   return MaterialPageRoute(
-      //       builder: (context) => CreateSignUpPasswordView());
-      //   break;
+      case FeedbackViewRoute:
+        return MaterialPageRoute(builder: (context) => FeedbackView());
+        break;
       // case RoutePaths.splashScreen:
       //   return MaterialPageRoute(builder: (context) => SplashScreenView());
       //   break;

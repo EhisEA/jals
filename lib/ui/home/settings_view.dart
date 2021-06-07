@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jals/ui/home/view_models/settings_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/widgets/image.dart';
 import 'package:stacked/stacked.dart';
@@ -170,36 +171,39 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     buildCard(
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.info,
-                              color: Colors.blue,
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              "Submit Feedback",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
+                        InkWell(
+                          onTap: model.toFeedback,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.info,
+                                color: Colors.blue,
                               ),
-                            ),
-                            Spacer(),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.blue,
-                            ),
-                          ],
-                        ).py20(),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Text(
+                                "Submit Feedback",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.blue,
+                              ),
+                            ],
+                          ).py20(),
+                        ),
                         InkWell(
                           onTap: model.logOut,
                           child: Row(
                             children: [
-                              // Icon(
-                              //   Icons.login,
-                              //   color: Colors.blue,
-                              // ),
+                              Icon(
+                                JalsIcons.logout,
+                                color: Colors.blue,
+                              ),
                               SizedBox(
                                 width: 15,
                               ),

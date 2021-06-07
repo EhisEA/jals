@@ -85,3 +85,40 @@ class DefaultButtonBorderedIcon extends StatelessWidget {
     );
   }
 }
+
+class DefaultButtonBordered extends StatelessWidget {
+  const DefaultButtonBordered({Key key, this.text, this.press, this.color})
+      : super(key: key);
+  final String text;
+  final Function press;
+  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: getProportionateScreenHeight(62),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+          color: color ?? kPrimaryColor,
+        )),
+        child: FlatButton(
+          onPressed: press,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 7, right: 7),
+            child: Center(
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 18, //getProportionateScreenHeight(20),
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

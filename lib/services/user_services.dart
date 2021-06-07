@@ -4,7 +4,6 @@ import 'package:http/http.dart';
 import 'package:jals/constants/app_urls.dart';
 import 'package:jals/models/content_model.dart';
 import 'package:jals/models/daily_scripture.dart';
-import 'package:jals/services/authentication_service.dart';
 import 'package:jals/utils/network_utils.dart';
 
 class UserServices {
@@ -72,6 +71,37 @@ class UserServices {
       return null;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<bool> sendFeedback(String content) async {
+    try {
+      Response response = await _client.post(
+        AppUrl.Feedback,
+        body: {"content": content},
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      return await _networkConfig.isResponseSuccessToast(
+        response: result,
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> emailNotificationToggle(String content) async {
+    try {
+      Response response = await _client.get(
+        AppUrl.EmailNotificationToggle,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      return await _networkConfig.isResponseSuccessToast(
+        response: result,
+      );
+    } catch (e) {
+      return false;
     }
   }
 }

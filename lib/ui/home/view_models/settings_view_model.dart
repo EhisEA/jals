@@ -5,7 +5,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:jals/enums/api_response.dart';
+import 'package:jals/route_paths.dart';
 import 'package:jals/services/authentication_service.dart';
+import 'package:jals/services/navigationService.dart';
 import 'package:jals/ui/home/components/edit_text_field.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
@@ -23,6 +25,7 @@ class SettingsViewModel extends BaseViewModel with ImageSelect {
   FocusNode _focusDateField = FocusNode();
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
 
   String get avatar => _authenticationService.currentUser.avatar;
   String get email => _authenticationService.currentUser.email;
@@ -621,5 +624,9 @@ class SettingsViewModel extends BaseViewModel with ImageSelect {
 
   void logOut() {
     _authenticationService.logOut();
+  }
+
+  void toFeedback() {
+    _navigationService.navigateTo(FeedbackViewRoute);
   }
 }

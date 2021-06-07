@@ -21,3 +21,4 @@ const String VideoPlayerViewRoute = "VideoPlayerViewRoute";
 const String StoreItemViewRoute = "StoreItemViewRoute";
 const String DynamicLinkEntryViewRoute = "DynamicLinkEntryViewRoute";
 const String SearchViewRoute = "SearchViewRoute";
+const String FeedbackViewRoute = "FeedbackViewRoute";
