@@ -23,7 +23,13 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
     return ViewModelBuilder<AudioPlaylistSectionViewModel>.reactive(
         disposeViewModel: false,
         viewModelBuilder: () => locator<AudioPlaylistSectionViewModel>(),
-        // onModelReady: (model) => model.getPlaylist(),
+        onModelReady: (model) {
+          if (!model.isBusy && model.playList == null) {
+            model.getPlaylist();
+          } else if (!model.isBusy && model.playList.isEmpty) {
+            model.getPlaylist();
+          }
+        },
         builder: (context, model, _) {
           return model.isBusy
               ? Center(child: CircularProgressIndicator())

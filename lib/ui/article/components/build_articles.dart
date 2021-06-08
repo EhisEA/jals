@@ -19,7 +19,13 @@ class _BuildArticleState extends State<BuildArticle>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<ArticleAllViewModel>.reactive(
-      // onModelReady: (model) => model.getArticles(),
+      onModelReady: (model) {
+        if (!model.isBusy && model.articles == null) {
+          model.getArticles();
+        } else if (!model.isBusy && model.articles.isEmpty) {
+          model.getArticles();
+        }
+      },
       viewModelBuilder: () => widget.articleAllViewModel,
       disposeViewModel: false,
       builder: (context, model, _) {

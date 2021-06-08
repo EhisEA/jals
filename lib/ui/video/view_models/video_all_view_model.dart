@@ -21,6 +21,10 @@ class VideoAllViewModel extends BaseViewModel {
     setBusy(ViewState.Idle);
   }
 
+  clear() {
+    _allVideoList = null;
+  }
+
   onNetwork() async {
     try {
       _allVideoList = await _videoService.getVideoList();

@@ -6,7 +6,7 @@ import 'package:jals/utils/locator.dart';
 class VideoDownloadViewModel extends BaseViewModel {
   final _hiveDatabaseService = locator<HiveDatabaseService>();
 
-  List<VideoModel> videos;
+  List<VideoModel> videos = [];
   getVideos() async {
     setBusy(ViewState.Busy);
     try {

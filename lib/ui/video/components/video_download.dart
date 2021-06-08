@@ -28,62 +28,71 @@ class _VideoDownloadState extends State<VideoDownload>
             ViewModelBuilder<DownloadingVideosViewModel>.reactive(
               viewModelBuilder: () => locator<DownloadingVideosViewModel>(),
               disposeViewModel: false,
-              builder: (context, model, _) {
-                return model.downloadList == null
-                    ? SizedBox()
-                    : model.downloadList.isEmpty
-                        ? SizedBox()
+              builder: (context, downloadModel, _) {
+                return downloadModel.downloadList == null &&
+                        model.videos == null
+                    ? Column(
+                        children: [
+                          SizedBox(height: 100),
+                          Retry(
+                            onRetry: model.getVideos,
+                          ),
+                        ],
+                      )
+                    //when only down
+
+                    : downloadModel.downloadList.isEmpty && model.videos.isEmpty
+                        ? Column(
+                            children: [
+                              SizedBox(height: 100),
+                              Empty(
+                                title: "No Downloaded Video yet",
+                              ),
+                            ],
+                          )
                         : Column(
                             children: [
                               ...List.generate(
-                                model.downloadList.length,
+                                downloadModel.downloadList.length,
                                 (index) => Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0),
                                   child: DownloadingVideoTile(
-                                    videoModel: model.downloadList[index].video,
-                                    progress:
-                                        model.downloadList[index].progress,
+                                    videoModel:
+                                        downloadModel.downloadList[index].video,
+                                    progress: downloadModel
+                                        .downloadList[index].progress,
                                   ),
                                 ),
                               ),
-                              Divider(
-                                thickness: 2,
-                              ),
+                              if (downloadModel.downloadList.isNotEmpty)
+                                Divider(
+                                  thickness: 2,
+                                ),
                             ],
                           );
               },
             ),
-            ViewModelBuilder<VideoDownloadViewModel>.reactive(
-              viewModelBuilder: () => locator<VideoDownloadViewModel>(),
-              onModelReady: (model) => model.getVideos(),
-              builder: (context, model, _) {
-                return model.isBusy
-                    ? Center(child: CircularProgressIndicator())
-                    : model.videos == null
-                        ? Retry(
-                            onRetry: model.getVideos,
-                          )
-                        : model.videos.isEmpty
-                            ? Empty(
-                                title: "No Downloaded Video yet",
-                              )
-                            : Column(
-                                children: List.generate(
-                                  model.videos.length,
-                                  (index) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0),
-                                    child: DownloadedVideoTile(
-                                      videoModel: model.videos[index],
-                                      popOption: ["Delete"],
-                                      onOptionSelect: (value) {},
-                                    ),
-                                  ),
+            model.isBusy
+                ? Center(child: CircularProgressIndicator())
+                : model.videos == null
+                    ? SizedBox()
+                    : model.videos.isEmpty
+                        ? SizedBox()
+                        : Column(
+                            children: List.generate(
+                              model.videos.length,
+                              (index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
+                                child: DownloadedVideoTile(
+                                  videoModel: model.videos[index],
+                                  popOption: ["Delete"],
+                                  onOptionSelect: (value) {},
                                 ),
-                              );
-              },
-            )
+                              ),
+                            ),
+                          ),
           ],
         );
       },

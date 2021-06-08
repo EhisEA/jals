@@ -13,7 +13,12 @@ class UserServices {
   Future<List<ContentModel>> getExplore() async {
     try {
       List<ContentModel> contents = [];
-      Response response = await _client.get(AppUrl.Explore);
+      Response response = await _client.get(
+        AppUrl.Explore,
+        headers: appHttpHeaders(),
+      );
+      print(AppUrl.Explore);
+      print(appHttpHeaders());
       var result = json.decode(response.body);
       print(result);
       if (await _networkConfig.isResponseSuccessBool(
@@ -38,8 +43,6 @@ class UserServices {
         AppUrl.ForYou,
         headers: appHttpHeaders(),
       );
-      print(appHttpHeaders());
-      print(AppUrl.ForYou);
       var result = json.decode(response.body);
       print(result);
       if (await _networkConfig.isResponseSuccessBool(

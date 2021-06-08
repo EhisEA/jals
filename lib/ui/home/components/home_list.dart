@@ -24,7 +24,8 @@ class HomeContentDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeContentDisplayViewModel>.reactive(
       viewModelBuilder: () => HomeContentDisplayViewModel(),
-      onModelReady: (model) => model.getContents(),
+      onModelReady: (model) => model.getContents(
+          explore: listTitle.trim().toLowerCase() == "explore"),
       builder: (context, model, _) {
         return Column(
           children: [
@@ -46,7 +47,8 @@ class HomeContentDisplay extends StatelessWidget {
                   Spacer(),
 
                   InkWell(
-                    onTap: model.getContents,
+                    onTap: () => model.getContents(
+                        explore: listTitle.trim().toLowerCase() == "explore"),
                     child: Text(
                       "Refresh",
                       style: TextStyle(
@@ -122,6 +124,56 @@ class HomeContentDisplay extends StatelessWidget {
   }
 
   showContent(HomeContentDisplayViewModel model) {
+    List<ContentModel> contents = model.contents;
+    return ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: contents.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: InkWell(
+            onTap: () => model.openContent(index),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: getProportionatefontSize(150),
+                  width: getProportionatefontSize(150),
+                  child: ShowNetworkImage(
+                    imageUrl: "${contents[index].coverImage}",
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3.0),
+                  child: Text(
+                    "${contents[index].title}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: getProportionatefontSize(14),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  DateFormat("dd MMM yyyy").format(contents[index].createdAt),
+                  // "22nd Dec 2021",
+                  style: TextStyle(
+                    fontSize: getProportionatefontSize(12),
+                    fontWeight: FontWeight.w400,
+                    color: kTextColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  showForContent(HomeContentDisplayViewModel model) {
     List<ContentModel> contents = model.contents;
     return ListView.builder(
       shrinkWrap: true,

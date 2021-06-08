@@ -14,7 +14,10 @@ class Empty extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset("assets/svgs/empty.svg"),
-            TextHeader3(color: Colors.grey.shade600, text: "$title"),
+            Text(
+              "$title",
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jals/ui/article/view_models/article_all_view_model.dart';
 import 'package:jals/ui/article/view_models/article_trending_view_model.dart';
 import 'package:jals/widgets/article_tile.dart';
 import 'package:jals/widgets/button.dart';
@@ -20,7 +19,13 @@ class _BuildTrendingArticleState extends State<BuildTrendingArticle>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<ArticleTrendingViewModel>.reactive(
-      // onModelReady: (model) => model.getArticles(),
+      onModelReady: (model) {
+        if (!model.isBusy && model.articles == null) {
+          model.getArticles();
+        } else if (!model.isBusy && model.articles.isEmpty) {
+          model.getArticles();
+        }
+      },
       viewModelBuilder: () => widget.articleTrendingViewModel,
       disposeViewModel: false,
       builder: (context, model, _) {

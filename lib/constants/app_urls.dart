@@ -108,6 +108,8 @@ class AppUrl {
   }
 
   static const ArticleList = "$ServerBaseUrl/v1/posts/articles/";
+  static const ArticleListRandom = "$ServerBaseUrl/v1/posts/articles/random/";
+
   static const TrendingList = "$ServerBaseUrl/v1/posts/articles/trending/";
   static const ArticleBookmarkList =
       "$ServerBaseUrl/v1/posts/articles/get_bookmarks/";

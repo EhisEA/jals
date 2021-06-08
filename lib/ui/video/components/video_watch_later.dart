@@ -17,7 +17,13 @@ class _VideoWatchLaterState extends State<VideoWatchLater>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<VideoWatchLaterViewModel>.reactive(
-      // onModelReady: (model) => model.getAllVideos(),
+      onModelReady: (model) {
+        if (!model.isBusy && model.videoWatchLaterList == null) {
+          model.getAllVideos();
+        } else if (!model.isBusy && model.videoWatchLaterList.isEmpty) {
+          model.getAllVideos();
+        }
+      },
       disposeViewModel: false,
       viewModelBuilder: () => locator<VideoWatchLaterViewModel>(),
       builder: (context, model, child) {

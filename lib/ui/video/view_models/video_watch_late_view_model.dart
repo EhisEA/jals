@@ -28,6 +28,10 @@ class VideoWatchLaterViewModel extends BaseViewModel {
     }
   }
 
+  clear() {
+    _videoWatchLaterList = null;
+  }
+
   onOptionSelect(value, VideoModel audio) async {
     final String link =
         await _dynamicLinkService.createEventLink(audio.toContent());

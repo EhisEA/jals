@@ -17,7 +17,13 @@ class _AudioAllState extends State<AudioAll>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<AudioAllViewModel>.reactive(
-      // onModelReady: (model) => model.getAudio(),
+      onModelReady: (model) {
+        if (!model.isBusy && model.audioList == null) {
+          model.getAudio();
+        } else if (!model.isBusy && model.audioList.isEmpty) {
+          model.getAudio();
+        }
+      },
       viewModelBuilder: () => locator<AudioAllViewModel>(),
       disposeViewModel: false,
       builder: (context, model, _) {

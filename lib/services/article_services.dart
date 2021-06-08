@@ -27,6 +27,27 @@ class ArticleService {
   Future<List<ArticleModel>> getArticles() async {
     try {
       List<ArticleModel> articles;
+      String url = AppUrl.ArticleListRandom;
+      http.Response response = await http.get(
+        url,
+        headers: appHttpHeaders(),
+      );
+      var result = json.decode(response.body);
+      print(result);
+      articles = result["data"]
+          .map<ArticleModel>((element) => ArticleModel.fromJson(element))
+          .toList();
+      return articles;
+    } catch (e) {
+      debugPrint("====error=====222");
+      print(e);
+      return null;
+    }
+  }
+
+  Future<List<ArticleModel>> getArticlesList() async {
+    try {
+      List<ArticleModel> articles;
       String url = AppUrl.ArticleList;
       http.Response response = await http.get(
         url,
@@ -34,12 +55,12 @@ class ArticleService {
       );
       var result = json.decode(response.body);
       print(result);
-      articles = result["data"]["results"]
+      articles = result["data"]
           .map<ArticleModel>((element) => ArticleModel.fromJson(element))
           .toList();
       return articles;
     } catch (e) {
-      debugPrint("====error=====");
+      debugPrint("====error=====222");
       print(e);
       return null;
     }

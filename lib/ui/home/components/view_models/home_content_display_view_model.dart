@@ -10,9 +10,11 @@ import '../../../../route_paths.dart';
 class HomeContentDisplayViewModel extends BaseViewModel {
   List<ContentModel> contents;
   final UserServices _userServices = UserServices();
-  void getContents() async {
+  void getContents({explore: false}) async {
     setBusy(ViewState.Busy);
-    contents = await _userServices.getForYou();
+    contents = explore
+        ? await _userServices.getExplore()
+        : await _userServices.getForYou();
     setBusy(ViewState.Idle);
   }
 
@@ -31,7 +33,8 @@ class HomeContentDisplayViewModel extends BaseViewModel {
         break;
       case ContentType.Audio:
         //check if content is free or purchased
-        //if not send to store
+        //if not send to stores
+        print(_content.toJson());
         if (_content.isPurchased == false && _content.price > 0) {
           _navigationService.navigateTo(StoreItemViewRoute, argument: _content);
           return;

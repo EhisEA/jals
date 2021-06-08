@@ -32,7 +32,11 @@ class _ArticleAllState extends State<ArticleAll> {
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     return RefreshIndicator(
-      onRefresh: () async {},
+      onRefresh: () async {
+        locator<ArticleNewsViewModel>().getNews();
+        locator<ArticleTrendingViewModel>().getArticles();
+        locator<ArticleAllViewModel>().getArticles();
+      },
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(

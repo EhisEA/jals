@@ -17,7 +17,13 @@ class _ArticleBookmarkState extends State<ArticleBookmark>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<ArticleBookMarkedViewModel>.reactive(
-      onModelReady: (model) => model.getArticles(),
+      onModelReady: (model) {
+        if (!model.isBusy && model.articles == null) {
+          model.getArticles();
+        } else if (!model.isBusy && model.articles.isEmpty) {
+          model.getArticles();
+        }
+      },
       builder: (context, model, _) {
         return model.isBusy
             ? Center(child: CircularProgressIndicator())

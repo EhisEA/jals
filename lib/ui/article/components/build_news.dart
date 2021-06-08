@@ -19,7 +19,13 @@ class _BuildNewsState extends State<BuildNews>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<ArticleNewsViewModel>.reactive(
-      // onModelReady: (model) => model.getArticles(),
+      onModelReady: (model) {
+        if (!model.isBusy && model.news == null) {
+          model.getNews();
+        } else if (!model.isBusy && model.news.isEmpty) {
+          model.getNews();
+        }
+      },
       viewModelBuilder: () => widget.articleNewsViewModel,
       disposeViewModel: false,
       builder: (context, model, _) {

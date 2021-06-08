@@ -14,7 +14,7 @@ class ArticleAllViewModel extends BaseViewModel {
   Future<void> getArticles() async {
     setBusy(ViewState.Busy);
     if (await _networkConfig.onNetworkAvailabilityBool())
-      getArticlesNewtworkCall();
+      await getArticlesNewtworkCall();
     setBusy(ViewState.Idle);
   }
 

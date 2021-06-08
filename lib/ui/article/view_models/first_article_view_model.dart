@@ -11,8 +11,10 @@ class FirstArticlViewModel extends BaseViewModel {
   ArticleModel article;
 
   getArticle() async {
-    List<ArticleModel> articles = await _articleService.getArticles();
-    article = articles[0];
+    List<ArticleModel> articles = await _articleService.getArticlesList();
+    if (articles != null) {
+      if (articles.isNotEmpty) article = articles[0];
+    }
     setBusy(ViewState.Idle);
   }
 

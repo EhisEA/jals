@@ -19,7 +19,7 @@ class DownloadService {
 
     Directory dir = await getApplicationDocumentsDirectory();
 
-    path = '${dir.path}/$uniqueFileName.mp4';
+    path = '${dir.path}/videos/$uniqueFileName.mp4';
 
     return path;
   }
@@ -29,9 +29,21 @@ class DownloadService {
 
     Directory dir = await getApplicationDocumentsDirectory();
 
-    path = '${dir.path}/$uniqueFileName.mp3';
+    path = '${dir.path}/audios/$uniqueFileName.mp3';
 
     return path;
+  }
+
+  deleteAllDownloads() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    String audioPath = '${dir.path}/audios';
+    String videoPath = '${dir.path}/videos';
+    final Directory audioDirectory = Directory(audioPath);
+    final Directory videoDirectory = Directory(videoPath);
+    if (await audioDirectory.exists())
+      audioDirectory.deleteSync(recursive: true);
+    if (await videoDirectory.exists())
+      videoDirectory.deleteSync(recursive: true);
   }
   // downloading logic is handled by this method
 
