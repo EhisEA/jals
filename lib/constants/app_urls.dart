@@ -172,5 +172,6 @@ class AppUrl {
 
 //=====================wallet apis==[==============
   static const String WALLET_BALANCE = '$ServerBaseUrl/v1/wallet';
+  static const String CREDIT_WALLET = '$ServerBaseUrl/v1/wallet/credit';
 }
 // 3b79df4433f5aad/10c8956e3bd0fb71e415790a7

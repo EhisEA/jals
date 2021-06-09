@@ -167,4 +167,27 @@ class StoreService {
       return null;
     }
   }
+
+  Future<bool> creditWallet(int coins) async {
+    try {
+      Response response = await _client.post(
+        AppUrl.CREDIT_WALLET,
+        headers: appHttpHeaders(),
+        body: {
+          "credit": coins.toString(),
+        },
+      );
+      Map<String, dynamic> decodedData = jsonDecode(response.body);
+
+      print(decodedData);
+      if (decodedData['status'] == 'successful') {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

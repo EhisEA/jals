@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:jals/services/store_service.dart';
+import 'package:jals/ui/store/view_models/coin_balance_viewmodel.dart';
 import 'package:jals/utils/base_view_model.dart';
 import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
@@ -100,7 +101,38 @@ class PaymentPageViewModel extends BaseViewModel {
         _inAppPurchaseConnection.completePurchase(purchase).then((value) {
           print("completed purchased for");
           print(purchase.productID);
+          informServerOfPurchase(purchase);
         });
+      }
+    }
+  }
+
+  informServerOfPurchase(PurchaseDetails purchase) async {
+    ProductDetails p = products.firstWhere(
+        (element) => element.id == purchase.productID,
+        orElse: () => null);
+    if (p != null) {
+      // getting the coin total from the title
+      String amount = p.title
+          .replaceRange(
+            p.title.length - 19,
+            p.title.length,
+            "",
+          )
+          .toLowerCase()
+          .replaceAll("jals token", "")
+          .trim();
+      try {
+        int coins = int.parse(amount);
+        bool isSuccess = await _storeService.creditWallet(coins);
+        if (isSuccess) {
+          locator<CoinBalanceViewModel>().getWalletBalance();
+        } else {
+          informServerOfPurchase(purchase);
+        }
+      } catch (e) {
+        print("======error==== in app purchase completion");
+        print(e);
       }
     }
   }
