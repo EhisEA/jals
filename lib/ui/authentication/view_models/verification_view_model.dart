@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jals/enums/api_response.dart';
 import 'package:jals/enums/password_type.dart';
 import 'package:jals/enums/verification_type.dart';
@@ -49,12 +50,12 @@ class VerificationViewModel extends BaseViewModel {
     if (response == ApiResponse.Success) {
       PasswordType newPassword = PasswordType.NewPassword;
       PasswordType forgotPassword = PasswordType.ForgotPassword;
-        _navigationService.navigateToReplace(
-          PasswordViewRoute,
-          argument: _verificationType == VerificationType.NewUser
-              ? newPassword
-              : forgotPassword,
-        );
+      _navigationService.navigateToReplace(
+        PasswordViewRoute,
+        argument: _verificationType == VerificationType.NewUser
+            ? newPassword
+            : forgotPassword,
+      );
     } else {
       verificationController.clear();
       await _dialogService.showDialog(
@@ -73,7 +74,25 @@ class VerificationViewModel extends BaseViewModel {
 
   resendCode() async {
     setBusy(ViewState.Busy);
-    print("sending code to email");
+    ApiResponse result;
+    if (_verificationType == VerificationType.ForgotPassword) {
+      result = await _authenticationService.resendForgotPasswordEmailCode();
+    } else {
+      result = await _authenticationService.resendVerifyEmailCode();
+    }
+    if (result == ApiResponse.Success) {
+      Fluttertoast.showToast(
+        msg: "Verification code has been resent",
+        textColor: Colors.white,
+        backgroundColor: Colors.green,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "Verification code not sent",
+        textColor: Colors.white,
+        backgroundColor: Colors.red,
+      );
+    }
     setBusy(ViewState.Idle);
   }
 }

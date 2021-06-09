@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
@@ -26,6 +27,8 @@ import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/network_utils.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dialog_service.dart';
 
 class AuthenticationService {
   final Client _client = Client();
@@ -142,6 +145,35 @@ class AuthenticationService {
     }
   }
 
+  Future<ApiResponse> resendVerifyEmailCode() async {
+    try {
+      print("Generating OTP Code....");
+      _otpCode = generateOtp();
+      Response response = await _client.post(
+        "${AppUrl.VerifyEmail}",
+        body: {
+          "email": _userSignUpEmail,
+          "code": _otpCode.toString(),
+        },
+      );
+      var result = json.decode(response.body);
+      print(result);
+      print(response.statusCode);
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        print("There was Success...");
+        return ApiResponse.Success;
+      } else {
+        print("An Error Occured");
+        _networkConfig.isResponseSuccess(
+            response: result, errorTitle: "Sign Up Failure");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
   Future<ApiResponse> validateOtpCode({@required String code}) async {
     if (code == _otpCode.toString()) {
       return ApiResponse.Success;
@@ -207,6 +239,7 @@ class AuthenticationService {
   }
 
   Future<ApiResponse> loginWithGoogle() async {
+    DialogService _dialogService = locator<DialogService>();
     try {
       GoogleSignIn _googleSignIn = GoogleSignIn(
         // Optional clientId
@@ -229,10 +262,55 @@ class AuthenticationService {
 
         return ApiResponse.Success;
       } else {
+        _networkConfig.isResponseSuccess(
+          response: decodedData,
+          errorTitle: "Login Error",
+        );
         return ApiResponse.Error;
       }
     } catch (e) {
       debugPrint(" The error was $e");
+
+      await _dialogService.showDialog(
+          buttonTitle: "OK",
+          description: "Something Went Wrong, try again",
+          title: "Login Error");
+      return ApiResponse.Error;
+    }
+  }
+
+  Future<ApiResponse> loginWithFacebook() async {
+    DialogService _dialogService = locator<DialogService>();
+    try {
+      AccessToken _accessToken = await FacebookAuth.instance.login();
+      print(_accessToken.toJson());
+      if (_accessToken == null) return ApiResponse.Error;
+      Response response = await _client.post(
+        "${AppUrl.FacebookLogin}",
+        body: {
+          "access_token": _accessToken.token,
+        },
+      );
+      final Map<String, dynamic> decodedData = jsonDecode(response.body);
+      print(decodedData);
+      FacebookAuth.instance.logOut();
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        _populateCurrentUser(decodedData);
+
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+          response: decodedData,
+          errorTitle: "Login Error",
+        );
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      debugPrint(" The error was $e");
+      await _dialogService.showDialog(
+          buttonTitle: "OK",
+          description: "Something Went Wrong, try again",
+          title: "Login Error");
       return ApiResponse.Error;
     }
   }
@@ -360,14 +438,17 @@ class AuthenticationService {
       print("Generating the Otp code...");
       _otpCode = generateOtp();
       print(_otpCode);
+      print({AppUrl.SendForgotPasswordEmail});
+      print(email);
       _userSignUpEmail = email;
+
       Response response = await _client.post(
         "${AppUrl.SendForgotPasswordEmail}",
-        headers: appHttpHeaders(),
-        body: {
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
           "code": _otpCode,
           "email": email,
-        },
+        }),
       );
       final decodedData = jsonDecode(response.body);
       print(decodedData);
@@ -385,15 +466,45 @@ class AuthenticationService {
     }
   }
 
+  Future<ApiResponse> resendForgotPasswordEmailCode() async {
+    try {
+      print("Generating the Otp code...");
+      _otpCode = generateOtp();
+      print(_otpCode);
+      print({AppUrl.SendForgotPasswordEmail});
+
+      Response response = await _client.post(
+        "${AppUrl.SendForgotPasswordEmail}",
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "code": _otpCode,
+          "email": _userSignUpEmail,
+        }),
+      );
+      final decodedData = jsonDecode(response.body);
+
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        print("Success");
+        return ApiResponse.Success;
+      } else {
+        _networkConfig.isResponseSuccess(
+            response: decodedData, errorTitle: "Forgot Password Error");
+        return ApiResponse.Error;
+      }
+    } catch (e) {
+      print(e);
+      return ApiResponse.Error;
+    }
+  }
+
   Future<ApiResponse> sendForgotPassword(String password) async {
     try {
       Response response = await _client.post(
-        "${AppUrl.SendForgotPassword}",
+        "${AppUrl.ResetPassword}",
         body: {
           "email": _userSignUpEmail,
           "new_password": password,
         },
-        headers: appHttpHeaders(),
       );
       final decodedData = jsonDecode(response.body);
       print(decodedData);

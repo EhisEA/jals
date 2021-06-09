@@ -27,12 +27,6 @@ class LoginViewModel extends BaseViewModel {
         } else {
           await _navigationService.navigateToReplace(AccountInfoViewRoute);
         }
-      } else {
-        // ! show handle error.
-        await _dialogService.showDialog(
-            buttonTitle: "OK",
-            description: "Invalid Credentials",
-            title: "Login Error");
       }
     } catch (e) {
       await _dialogService.showDialog(
@@ -43,7 +37,27 @@ class LoginViewModel extends BaseViewModel {
     setBusy(ViewState.Idle);
   }
 
-  facebookSignIn() async {}
+  facebookSignIn() async {
+    setBusy(ViewState.Busy);
+    try {
+      ApiResponse apiResponse =
+          await _authenticationService.loginWithFacebook();
+      if (isDisposed) return;
+      if (apiResponse == ApiResponse.Success) {
+        if (_authenticationService.currentUser.isDetailsComplete()) {
+          await _navigationService.navigateToReplace(HomeViewRoute);
+        } else {
+          await _navigationService.navigateToReplace(AccountInfoViewRoute);
+        }
+      }
+    } catch (e) {
+      await _dialogService.showDialog(
+          buttonTitle: "OK",
+          description: "Check your internet connection",
+          title: "Login Error");
+    }
+    setBusy(ViewState.Idle);
+  }
 
   toSignUp() async {
     _navigationService.navigateToReplace(SignUpViewRoute);

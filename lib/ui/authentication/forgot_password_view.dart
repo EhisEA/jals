@@ -42,7 +42,7 @@ class ForgotPasswordView extends StatelessWidget {
                             AuthTextField(
                               fieldColor: Colors.transparent,
                               controller: model.emailController,
-                              hintText: "Johndoe@gmail.com",
+                              hintText: "emmanueldoe@gmail.com",
                               keyboardType: TextInputType.emailAddress,
                               prefixIcon: JalsIcons.envelope,
                               title: "Email",

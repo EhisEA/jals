@@ -64,8 +64,17 @@ class WelcomeView extends StatelessWidget {
                           onPressed: model.googleSignUp,
                           title: "Sign up with Google",
                         ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        SocialButton(
+                          color: Color(0xff3F51B5),
+                          icon: JalsIcons.facebook,
+                          onPressed: model.facebookSignUp,
+                          title: "Log in with Facebook",
+                        ),
                         // Spacer(),
-                        SizedBox(height: SizeConfig.screenHeight / 4),
+                        SizedBox(height: SizeConfig.screenHeight / 9.5),
                         bottomWidgets(context, model),
                       ],
                     ),

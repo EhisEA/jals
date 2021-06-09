@@ -17,15 +17,14 @@ class ForgotPasswordViewModel extends BaseViewModel {
   DialogService _dialogService = locator<DialogService>();
   AuthenticationService _authenticationService =
       locator<AuthenticationService>();
-  NetworkConfig _networkConfig = new NetworkConfig();
 
   verifyEmail() async {
     if (formKey.currentState.validate()) {
       setBusy(ViewState.Busy);
       await onNetworkCall(); // _networkConfig.onNetworkAvailabilityDialog(onNetworkCall);
-      setBusy(ViewState.Busy);
+      setBusy(ViewState.Idle);
     } else {
-      return null;
+      return;
     }
   }
 
@@ -35,9 +34,14 @@ class ForgotPasswordViewModel extends BaseViewModel {
           .sendForgotPasswordEmail(email: emailController.text);
       if (apiResponse == ApiResponse.Success) {
         print("Successful");
-        VerificationType verificationType = VerificationType.NewUser;
-        _navigationService.navigateToReplace(VerificationViewRoute,
-            argument: verificationType);
+        VerificationType verificationType = VerificationType.ForgotPassword;
+        _navigationService.navigateToReplace(
+          VerificationViewRoute,
+          argument: {
+            "verificationType": verificationType,
+            "email": emailController.text
+          },
+        );
       }
     } catch (e) {
       print(e);

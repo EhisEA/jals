@@ -22,6 +22,7 @@ class PasswordViewModel extends BaseViewModel {
   PasswordType get passowrdType => _passwordType;
   onModelReady(PasswordType type) {
     _passwordType = type;
+    print(_passwordType == PasswordType.NewPassword);
     notifyListeners();
   }
 
@@ -41,8 +42,11 @@ class PasswordViewModel extends BaseViewModel {
           : await _authenticationService
               .sendForgotPassword(passwordController.text);
       if (response == ApiResponse.Success) {
-        print("Password Updating was succesfull");
-        _navigationService.navigateToReplace(AccountInfoViewRoute);
+        if (_passwordType == PasswordType.NewPassword) {
+          _navigationService.navigateToReplace(AccountInfoViewRoute);
+        } else {
+          _navigationService.navigateToReplace(HomeViewRoute);
+        }
       }
     } catch (e) {
       await _dialogService.showDialog(

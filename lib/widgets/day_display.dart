@@ -63,15 +63,23 @@ class _DayDisplayState extends State<DayDisplay> {
               AnimatedSwitcher(
                 duration: Duration(seconds: 3),
                 child: day
-                    ? SvgPicture.asset(
-                        "assets/svgs/d1.svg",
-                        fit: BoxFit.cover,
-                        key: Key("1"),
+                    ? AspectRatio(
+                        key: Key("101"),
+                        aspectRatio: 375 / 241,
+                        child: SvgPicture.asset(
+                          "assets/svgs/d1.svg",
+                          fit: BoxFit.cover,
+                          key: Key("1"),
+                        ),
                       )
-                    : SvgPicture.asset(
-                        "assets/svgs/n1.svg",
-                        fit: BoxFit.cover,
-                        key: Key("2"),
+                    : AspectRatio(
+                        key: Key("202"),
+                        aspectRatio: 375 / 241,
+                        child: SvgPicture.asset(
+                          "assets/svgs/n1.svg",
+                          fit: BoxFit.cover,
+                          key: Key("2"),
+                        ),
                       ),
               ),
               Align(

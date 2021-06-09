@@ -60,9 +60,6 @@ class LoginView extends StatelessWidget {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            SizedBox(
-                              height: getProportionateScreenHeight(10),
-                            ),
                             Text(
                               "New to JALS?",
                               style: TextStyle(

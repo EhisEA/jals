@@ -38,6 +38,7 @@ class AppUrl {
   // =============================================================
   // =============================================================
   static const String GoogleLogin = "$ServerBaseUrl/v1/rest-auth/google/";
+  static const String FacebookLogin = "$ServerBaseUrl/v1/rest-auth/facebook/";
   static const String Login = "$ServerBaseUrl/v1/rest-auth/login/";
   static const String VerifyEmail = "$ServerBaseUrl/v1/users/check_email/";
   static const String RegisterUser =
@@ -59,6 +60,7 @@ class AppUrl {
       "$ServerBaseUrl/v1/users/forgot_password/";
   static const String SendForgotPassword =
       "$ServerBaseUrl/v1/users/forgot_password/";
+  static const String ResetPassword = "$ServerBaseUrl/v1/users/reset_password/";
   static const String ChangePassword =
       "$ServerBaseUrl/v1/users/change_password/";
   static const String Feedback = "$ServerBaseUrl/v1/utils/feedback/add/";
