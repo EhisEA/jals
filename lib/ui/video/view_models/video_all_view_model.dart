@@ -44,4 +44,9 @@ class VideoAllViewModel extends BaseViewModel {
       default:
     }
   }
+
+  purchaseAudio(index) {
+    _allVideoList[index].isPurchased = true;
+    setBusy(ViewState.Idle);
+  }
 }

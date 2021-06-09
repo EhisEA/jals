@@ -1,7 +1,7 @@
 import 'package:jals/services/authentication_service.dart';
 import 'package:jals/utils/locator.dart';
 
-const String ServerBaseUrl = "http://backendjals.herokuapp.com";
+const String ServerBaseUrl = "https://backendjals.herokuapp.com";
 
 Map<String, String> appHttpHeaders() {
   // locator<AuthenticationService>();
@@ -165,11 +165,10 @@ class AppUrl {
   // =============================================================
   // ===================================
 
-  static const String fetchNewestStoreItems =
-      "http://backendjals.herokuapp.com/v1/posts/store/";
+  static const String fetchNewestStoreItems = "$ServerBaseUrl/v1/posts/store/";
 
   static const getPurchasedItemsList =
-      "http://backendjals.herokuapp.com/v1/posts/store/purchased/";
+      "$ServerBaseUrl/v1/posts/store/purchased/";
 
 //=====================wallet apis==[==============
   static const String WALLET_BALANCE = '$ServerBaseUrl/v1/wallet';

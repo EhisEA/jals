@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jals/enums/content_type.dart';
 import 'package:jals/models/content_model.dart';
-import 'package:jals/ui/store/components/store_item_view_model.dart';
+import 'package:jals/ui/store/view_models/store_item_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
 import 'package:jals/utils/size_config.dart';
@@ -14,14 +14,19 @@ import 'package:stacked/stacked.dart';
 
 class StoreItemView extends StatelessWidget {
   final ContentModel content;
+  final Function callback;
 
-  const StoreItemView({Key key, this.content}) : super(key: key);
+  const StoreItemView({Key key, this.content, this.callback}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<StoreItemViewModel>.reactive(
         onModelReady: (model) {
-          content.getContentType(content.postType.toString());
+          content.getContentType(
+            content.postType.toString(),
+          );
+          model.callback = callback;
+          model.context = context;
         },
         builder: (context, model, child) {
           return Scaffold(

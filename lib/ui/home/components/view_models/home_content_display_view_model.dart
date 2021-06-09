@@ -36,7 +36,10 @@ class HomeContentDisplayViewModel extends BaseViewModel {
         //if not send to stores
         print(_content.toJson());
         if (_content.isPurchased == false && _content.price > 0) {
-          _navigationService.navigateTo(StoreItemViewRoute, argument: _content);
+          _navigationService.navigateTo(StoreItemViewRoute, argument: {
+            "content": _content,
+            "callback": () => chagedContentToBought(index),
+          });
           return;
         }
 
@@ -51,5 +54,11 @@ class HomeContentDisplayViewModel extends BaseViewModel {
         break;
       default:
     }
+  }
+
+  chagedContentToBought(int index) {
+    contents[index].isPurchased = true;
+    openContent(index);
+    setBusy(ViewState.Idle);
   }
 }

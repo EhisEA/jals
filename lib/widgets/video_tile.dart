@@ -14,6 +14,7 @@ import 'image.dart';
 class VideoTile extends StatelessWidget {
   final VideoModel videoModel;
   final bool showPrimaryButton, showSecondaryButton;
+  final Function callback;
   final List<String> popOption;
   final Function(dynamic) onOptionSelect;
   final _navigationService = locator<NavigationService>();
@@ -21,6 +22,7 @@ class VideoTile extends StatelessWidget {
   VideoTile({
     Key key,
     @required this.videoModel,
+    @required this.callback,
     this.showPrimaryButton = true,
     this.showSecondaryButton = true,
     this.popOption,
@@ -30,15 +32,7 @@ class VideoTile extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return InkWell(
-      onTap: () {
-        if (videoModel.price > 0 && !videoModel.isPurchased) {
-          _navigationService.navigateTo(StoreItemViewRoute,
-              argument: videoModel.toContent());
-        } else {
-          _navigationService.navigateTo(VideoPlayerViewRoute,
-              argument: videoModel);
-        }
-      },
+      onTap: openVideo,
       child: Row(
         children: [
           Container(
@@ -157,6 +151,20 @@ class VideoTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  openVideo() {
+    if (videoModel.price > 0 && !videoModel.isPurchased) {
+      _navigationService.navigateTo(StoreItemViewRoute, argument: {
+        "content": videoModel.toContent(),
+        "callback": () {
+          callback();
+          openVideo();
+        },
+      });
+    } else {
+      _navigationService.navigateTo(VideoPlayerViewRoute, argument: videoModel);
+    }
   }
 }
 

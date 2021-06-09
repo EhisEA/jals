@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/store/view_models/purchased_view_model.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/widgets/empty.dart';
 import 'package:jals/widgets/retry.dart';
 import 'package:jals/widgets/store_tile.dart';
@@ -19,6 +20,7 @@ class _PurchasedItemsViewState extends State<PurchasedItemsView>
       onModelReady: (model) {
         model.getNewestItems();
       },
+      disposeViewModel: false,
       builder: (context, model, child) {
         return model.isBusy
             ? Center(
@@ -36,13 +38,14 @@ class _PurchasedItemsViewState extends State<PurchasedItemsView>
                         onRefresh: model.getNewestItems,
                         child: ListView.builder(
                           itemCount: model.purchaseItemList.length,
-                          itemBuilder: (context, index) => StoreTile(
+                          itemBuilder: (context, index) => StoreTilePurchased(
                             content: model.purchaseItemList[index],
+                            // callback: () => model.getNewestItems(),
                           ),
                         ),
                       );
       },
-      viewModelBuilder: () => PurchasedItemsViewModel(),
+      viewModelBuilder: () => locator<PurchasedItemsViewModel>(),
     );
   }
 

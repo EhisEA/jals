@@ -50,6 +50,7 @@ class _VideoAllState extends State<VideoAll>
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: VideoTile(
                                 videoModel: model.allVideoList[index],
+                                callback: () => model.purchaseAudio(index),
                                 popOption: ["Share"],
                                 onOptionSelect: (value) => model.onOptionSelect(
                                   value,

@@ -10,28 +10,23 @@ import 'image.dart';
 
 class AudioTile extends StatelessWidget {
   final AudioModel audio;
+  final Function purchaseCallback;
   final List<String> popOption;
   final Function(dynamic) onOptionSelect;
   final _navigationService = locator<NavigationService>();
-  AudioTile(
-      {Key key, this.audio, this.popOption: const [], this.onOptionSelect})
-      : super(key: key);
+  AudioTile({
+    Key key,
+    this.audio,
+    this.popOption: const [],
+    this.onOptionSelect,
+    this.purchaseCallback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return InkWell(
-      onTap: () {
-        if (audio.isPurchased == false && audio.price > 0) {
-          _navigationService.navigateTo(StoreItemViewRoute,
-              argument: audio.toContent());
-        } else {
-          _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
-            "audios": [audio],
-            "playlistName": null
-          });
-        }
-      },
+      onTap: openAudio,
       child: Row(
         children: [
           Container(
@@ -77,5 +72,22 @@ class AudioTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  openAudio() {
+    if (audio.isPurchased == false && audio.price > 0) {
+      _navigationService.navigateTo(StoreItemViewRoute, argument: {
+        "content": audio.toContent(),
+        "callback": () {
+          purchaseCallback();
+          openAudio();
+        },
+      });
+    } else {
+      _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
+        "audios": [audio],
+        "playlistName": null
+      });
+    }
   }
 }

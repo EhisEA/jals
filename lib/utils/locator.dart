@@ -16,10 +16,13 @@ import 'package:jals/ui/audio/view_model/audio_all_view_model.dart';
 import 'package:jals/ui/audio/view_model/audio_download.dart';
 import 'package:jals/ui/audio/view_model/audio_player_view_model.dart';
 import 'package:jals/ui/audio/view_model/audio_playlist_view_model.dart';
+import 'package:jals/ui/store/view_models/coin_balance_viewmodel.dart';
+import 'package:jals/ui/store/view_models/newest_items_view_model.dart';
+import 'package:jals/ui/store/view_models/purchased_view_model.dart';
 import 'package:jals/ui/video/view_models/downloading_videos_view_model.dart';
 import 'package:jals/ui/home/components/view_models/daily_read_view_model.dart';
 import 'package:jals/services/video_service.dart';
-import 'package:jals/ui/store/components/store_item_view_model.dart';
+import 'package:jals/ui/store/view_models/store_item_view_model.dart';
 import 'package:jals/ui/video/view_models/video_all_view_model.dart';
 import 'package:jals/ui/video/view_models/video_download_view_model.dart';
 import 'package:jals/ui/video/view_models/video_watch_late_view_model.dart';
@@ -50,6 +53,10 @@ void setupLocator() {
   locator.registerLazySingleton(() => VideoDownloadViewModel());
   locator.registerLazySingleton(() => DownloadingAudiosViewModel());
   locator.registerLazySingleton(() => AudioDownloadViewModel());
+  locator.registerLazySingleton(() => PurchasedItemsViewModel());
+  locator.registerLazySingleton(() => NewestItemsViewModel());
+  locator.registerLazySingleton(() => StoreTimelineItemsViewModel());
+  locator.registerLazySingleton(() => CoinBalanceViewModel());
 
   // locator.registerLazySingleton(() => DynamicLinkService());
 // getIt.registerLazySingleton<Authentication>(() =>Authentication());

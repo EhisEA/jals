@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:jals/ui/shop/view_models/payment_page_viewmodel.dart';
+import 'package:jals/ui/store/view_models/coin_balance_viewmodel.dart';
 import 'package:jals/utils/colors_utils.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/ui_helper.dart';
 import 'package:jals/widgets/button.dart';
@@ -10,9 +12,6 @@ import 'package:jals/widgets/retry.dart';
 import 'package:stacked/stacked.dart';
 
 class PaymentPageWithTokenView extends StatelessWidget {
-  final int coins;
-
-  const PaymentPageWithTokenView({Key key, this.coins}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -27,9 +26,15 @@ class PaymentPageWithTokenView extends StatelessWidget {
               body: SingleChildScrollView(
                 child: Column(
                   children: [
-                    TopBox(
-                      coins: coins,
-                    ),
+                    ViewModelBuilder<CoinBalanceViewModel>.reactive(
+                        viewModelBuilder: () => locator<CoinBalanceViewModel>(),
+                        disposeViewModel: false,
+                        builder: (context, model, _) {
+                          return TopBox(
+                            coins: model.coins,
+                            isBusy: model.isBusy,
+                          );
+                        }),
                     SizedBox(
                       height: getProportionatefontSize(30),
                     ),
@@ -183,9 +188,11 @@ class TokenPriceTile extends StatelessWidget {
 
 class TopBox extends StatelessWidget {
   final int coins;
+  final bool isBusy;
   const TopBox({
     Key key,
-    this.coins,
+    @required this.coins,
+    @required this.isBusy,
   }) : super(key: key);
 
   @override
@@ -258,6 +265,16 @@ class TopBox extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
+              SizedBox(width: 5),
+              if (isBusy)
+                SizedBox(
+                  height: 10,
+                  width: 10,
+                  child: CircularProgressIndicator(
+                    valueColor:
+                        new AlwaysStoppedAnimation<Color>(Color(0xFFFFAC00)),
+                  ),
+                )
             ],
           ),
 

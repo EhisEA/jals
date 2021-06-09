@@ -45,7 +45,6 @@ class HomeContentDisplay extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-
                   InkWell(
                     onTap: () => model.getContents(
                         explore: listTitle.trim().toLowerCase() == "explore"),
@@ -58,10 +57,6 @@ class HomeContentDisplay extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Text(
-                  //   ">",
-                  //   style: TextStyle(color: Colors.grey),
-                  // ),
                 ],
               ),
             ),

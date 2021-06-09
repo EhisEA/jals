@@ -33,4 +33,9 @@ class AudioAllViewModel extends BaseViewModel {
       default:
     }
   }
+
+  purchaseAudio(index) {
+    audioList[index].isPurchased = true;
+    setBusy(ViewState.Idle);
+  }
 }

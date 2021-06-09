@@ -11,9 +11,11 @@ import 'image.dart';
 
 class LibraryForYouTile extends StatelessWidget {
   final ContentModel content;
+  final Function callback;
   final NavigationService _navigationService = locator<NavigationService>();
 
-  LibraryForYouTile({Key key, @required this.content}) : super(key: key);
+  LibraryForYouTile({Key key, @required this.content, @required this.callback})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -129,7 +131,10 @@ class LibraryForYouTile extends StatelessWidget {
         if (content.isPurchased == false && content.price > 0) {
           _navigationService.navigateTo(
             StoreItemViewRoute,
-            argument: content,
+            argument: {
+              "content": content,
+              "callback": callback,
+            },
           );
         } else {
           _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
@@ -142,7 +147,10 @@ class LibraryForYouTile extends StatelessWidget {
         if (content.isPurchased == false && content.price > 0) {
           _navigationService.navigateTo(
             StoreItemViewRoute,
-            argument: content,
+            argument: {
+              "content": content,
+              "callback": callback,
+            },
           );
         } else {
           _navigationService.navigateTo(

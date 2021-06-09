@@ -19,14 +19,12 @@ class StoreService {
         url = AppUrl.fetchNewestStoreItems;
       }
 
-      print(url);
-
       Response response = await _client.get(
         url,
         headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData);
+
       if (decodedData["status"] == "successful") {
         List<ContentModel> listOfItems = [];
 
@@ -53,7 +51,7 @@ class StoreService {
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
       if (decodedData["status"] == "successful") {
         List<ContentModel> listOfItems = [];
-        print(decodedData);
+
         decodedData["data"]["results"].forEach((e) {
           listOfItems.add(ContentModel().fromJson(e));
         });
@@ -74,6 +72,7 @@ class StoreService {
         AppUrl.videoPay(id),
         headers: appHttpHeaders(),
       );
+      print(AppUrl.videoPay(id));
       Map<String, dynamic> decodedData = jsonDecode(response.body);
       print(decodedData);
       if (decodedData['status'] == 'successful') {
@@ -88,7 +87,11 @@ class StoreService {
       }
     } catch (e) {
       print(e);
-      return {'response': 'Error', 'status': 'An Error Occured'};
+      return {
+        'response': 'Error',
+        'status': 'An error occured, could not purchase video.  '
+            "please try again"
+      };
     }
   }
 
@@ -98,8 +101,8 @@ class StoreService {
         AppUrl.buyAudio(id),
         headers: appHttpHeaders(),
       );
+      print(AppUrl.buyAudio(id));
       Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData['error']['message']);
       if (decodedData['status'] == 'successful') {
         print("Successfully Bought Item");
         return {'response': 'Success', 'status': 'Item Purchased Successfully'};
@@ -111,7 +114,8 @@ class StoreService {
       print(e);
       return {
         'response': 'Error',
-        'status': 'An Error Occured, can not purchase video'
+        'status': 'An error occured, could not purchase audio.  '
+            "please try again"
       };
     }
   }
@@ -151,7 +155,8 @@ class StoreService {
       );
       Map<String, dynamic> decodedData = jsonDecode(response.body);
 
-      if (decodedData['status'] == 'Successful') {
+      print(decodedData);
+      if (decodedData['status'] == 'successful') {
         print(decodedData['data']['coins']);
         return int.parse(decodedData['data']['coins'].toString());
       } else {

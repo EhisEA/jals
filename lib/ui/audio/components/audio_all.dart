@@ -42,6 +42,7 @@ class _AudioAllState extends State<AudioAll>
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: AudioTile(
                             audio: model.audioList[index],
+                            purchaseCallback: () => model.purchaseAudio(index),
                             popOption: ["Share"],
                             onOptionSelect: (value) => model.onOptionSelect(
                               value,

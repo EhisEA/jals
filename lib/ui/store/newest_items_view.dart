@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jals/ui/store/view_models/newest_items_view_model.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/empty.dart';
 import 'package:jals/widgets/retry.dart';
@@ -23,6 +24,7 @@ class _NewestItemsViewState extends State<NewestItemsView>
       onModelReady: (model) {
         model.getNewestItems();
       },
+      disposeViewModel: false,
       builder: (context, model, child) {
         return model.isBusy
             ? Center(
@@ -53,6 +55,8 @@ class _NewestItemsViewState extends State<NewestItemsView>
                                 itemCount: model.newestItemList.length,
                                 itemBuilder: (context, index) => StoreTile(
                                   content: model.newestItemList[index],
+                                  callback: () =>
+                                      model.addItemToPurchased(index),
                                 ),
                               ),
                             ),
@@ -60,7 +64,7 @@ class _NewestItemsViewState extends State<NewestItemsView>
                         ),
                       );
       },
-      viewModelBuilder: () => NewestItemsViewModel(),
+      viewModelBuilder: () => locator<NewestItemsViewModel>(),
     );
   }
 

@@ -79,7 +79,11 @@ class LibraryForYou extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           itemCount: contents.length,
           itemBuilder: (context, index) {
-            return LibraryForYouTile(content: contents[index]);
+            return LibraryForYouTile(
+                content: contents[index],
+                callback: () {
+                  model.chagedContentToBought(index);
+                });
           },
         ),
         SizedBox(

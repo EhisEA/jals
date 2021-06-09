@@ -13,8 +13,13 @@ import 'image.dart';
 
 class StoreTile extends StatelessWidget {
   final ContentModel content;
+  final Function callback;
 
-  const StoreTile({Key key, @required this.content}) : super(key: key);
+  const StoreTile({
+    Key key,
+    @required this.content,
+    @required this.callback,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -22,7 +27,10 @@ class StoreTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
       child: InkWell(
         onTap: () => locator<NavigationService>()
-            .navigateTo(StoreItemViewRoute, argument: content),
+            .navigateTo(StoreItemViewRoute, argument: {
+          "content": content,
+          "callback": callback,
+        }),
         child: Row(
           children: [
             Container(
@@ -102,6 +110,130 @@ class StoreTile extends StatelessWidget {
         return "Video";
       default:
         return "";
+    }
+  }
+}
+
+class StoreTilePurchased extends StatelessWidget {
+  final ContentModel content;
+  final NavigationService _navigationService = locator<NavigationService>();
+
+  StoreTilePurchased({Key key, @required this.content}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+      child: InkWell(
+        onTap: navigate,
+        child: Row(
+          children: [
+            Container(
+              height: getProportionatefontSize(80),
+              width: getProportionatefontSize(80),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: ShowNetworkImage(imageUrl: content.coverImage),
+              ),
+            ),
+            SizedBox(
+              width: getProportionatefontSize(20),
+            ),
+            Expanded(
+              child: Container(
+                height: getProportionatefontSize(80),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextCaption(
+                      text: Jiffy(content.createdAt).format('do MMMM, yyyy'),
+                    ),
+                    SizedBox(
+                      height: getProportionatefontSize(5),
+                    ),
+                    TextTitle(
+                      maxLines: 1,
+                      text: "${content.title}",
+                    ),
+                    SizedBox(
+                      height: getProportionatefontSize(5),
+                    ),
+                    Text.rich(
+                      TextSpan(
+                        text: getTypeString() + " . ",
+                        style: TextStyle(
+                          color: Color(0xff1F2230).withOpacity(0.8),
+                        ),
+                        children: [
+                          TextSpan(
+                            text: content.price <= 0
+                                ? "Free"
+                                : "${content.price} Credits",
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  String getTypeString() {
+    switch (content.postType) {
+      case ContentType.Audio:
+        return "Audio";
+      case ContentType.Article:
+        return "Article";
+      case ContentType.News:
+        return "News";
+      case ContentType.Video:
+        return "Video";
+      default:
+        return "";
+    }
+  }
+
+  navigate() {
+    switch (content.postType) {
+      case ContentType.Article:
+        _navigationService.navigateTo(
+          ArticleViewRoute,
+          argument: content.toArticle(),
+        );
+        break;
+      case ContentType.News:
+        _navigationService.navigateTo(
+          ArticleViewRoute,
+          argument: content.toArticle(),
+        );
+        break;
+      case ContentType.Audio:
+        _navigationService.navigateTo(AudioPlayerViewRoute, argument: {
+          "audios": [content.toAudio()],
+          "playlistName": null
+        });
+
+        break;
+      default:
+        _navigationService.navigateTo(
+          VideoPlayerViewRoute,
+          argument: content.tovideo(),
+        );
     }
   }
 }

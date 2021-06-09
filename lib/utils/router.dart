@@ -41,9 +41,7 @@ class AppRouter {
         int coinBalance;
         coinBalance = settings.arguments;
         return MaterialPageRoute(
-          builder: (context) => PaymentPageWithTokenView(
-            coins: coinBalance,
-          ),
+          builder: (context) => PaymentPageWithTokenView(),
         );
         break;
       case SplashScreenViewRoute:
@@ -137,11 +135,14 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => SearchView(contentType));
         break;
       case StoreItemViewRoute:
-        ContentModel content = settings.arguments;
+        Map arguments = settings.arguments;
+        ContentModel content = arguments["content"];
+        Function callback = arguments["callback"];
         assert(content != null);
         return CupertinoPageRoute(
           builder: (context) => StoreItemView(
             content: content,
+            callback: callback,
           ),
         );
         break;

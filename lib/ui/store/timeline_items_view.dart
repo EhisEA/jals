@@ -4,6 +4,7 @@ import 'package:jals/ui/store/view_models/newest_items_view_model.dart';
 import 'package:jals/utils/colors_utils.dart';
 import 'package:jals/utils/date_utilis.dart';
 import 'package:jals/utils/jals_icons_icons.dart';
+import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/text.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:jals/widgets/empty.dart';
@@ -22,10 +23,11 @@ class _TimeLineItemsViewState extends State<TimeLineItemsView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ViewModelBuilder<NewestItemsViewModel>.reactive(
+    return ViewModelBuilder<StoreTimelineItemsViewModel>.reactive(
       onModelReady: (model) {
         model.getNewestItems();
       },
+      disposeViewModel: false,
       builder: (context, model, child) {
         return model.isBusy
             ? Center(
@@ -110,6 +112,8 @@ class _TimeLineItemsViewState extends State<TimeLineItemsView>
                                 itemCount: model.newestItemList.length,
                                 itemBuilder: (context, index) => StoreTile(
                                   content: model.newestItemList[index],
+                                  callback: () =>
+                                      model.addItemToPurchased(index),
                                 ),
                               ),
                             ),
@@ -117,7 +121,7 @@ class _TimeLineItemsViewState extends State<TimeLineItemsView>
                         ),
                       );
       },
-      viewModelBuilder: () => NewestItemsViewModel(),
+      viewModelBuilder: () => locator<StoreTimelineItemsViewModel>(),
     );
   }
 
