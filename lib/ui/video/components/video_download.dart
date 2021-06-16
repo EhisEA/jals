@@ -20,7 +20,8 @@ class _VideoDownloadState extends State<VideoDownload>
   Widget build(BuildContext context) {
     super.build(context);
     return ViewModelBuilder<VideoDownloadViewModel>.reactive(
-      viewModelBuilder: () => VideoDownloadViewModel(),
+      onModelReady: (model) => model.getVideos(),
+      viewModelBuilder: () => locator<VideoDownloadViewModel>(),
       disposeViewModel: false,
       builder: (context, model, child) {
         return ListView(
