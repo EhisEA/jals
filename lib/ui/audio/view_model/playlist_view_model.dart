@@ -55,7 +55,7 @@ class PlaylistViewModel extends BaseViewModel {
         break;
       case ApiResponse.Error:
         Fluttertoast.showToast(
-          msg: "Failed to Remove From playlis",
+          msg: "Failed to Remove From playlist",
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 2,
           backgroundColor: Colors.black,
@@ -64,7 +64,7 @@ class PlaylistViewModel extends BaseViewModel {
         break;
       default:
         Fluttertoast.showToast(
-          msg: "Failed to Remove From playlis",
+          msg: "Failed to Remove From playlist",
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 2,
           backgroundColor: Colors.black,
