@@ -81,17 +81,21 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
                                     children: List.generate(
                                       model.playList.length,
                                       (index) => PlayListWidget(
-                                        model.playList[index],
-                                        onDelete: () => model.onDelete(index),
-                                        onEdit: () => showBottomSheet(
-                                          context,
-                                          model,
-                                          playlistName:
-                                              model.playList[index].title,
-                                          id: model.playList[index].id,
-                                          color: model.playList[index].color,
-                                        ),
-                                      ),
+                                          model.playList[index],
+                                          onDelete: () => model.onDelete(index),
+                                          onEdit: () {
+                                            model.playlistNameController.text =
+                                                model.playList[index].title;
+                                            showBottomSheet(
+                                              context,
+                                              model,
+                                              playlistName:
+                                                  model.playList[index].title,
+                                              id: model.playList[index].id,
+                                              color:
+                                                  model.playList[index].color,
+                                            );
+                                          }),
                                     ),
                                   ),
                                 ),
@@ -132,7 +136,7 @@ class _AudioPlaylistSectionState extends State<AudioPlaylistSection>
             },
             disposeViewModel: false,
             builder: (context, model, _) {
-              model.playlistNameController.text = playlistName ?? "";
+              // model.playlistNameController.text = playlistName ?? "";
               // model.moodColorIndex=
 
               return model.isSecondaryBusy
