@@ -58,6 +58,7 @@ class DownloadedVideoTile extends StatelessWidget {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Spacer(),
                   Row(
                     children: [
                       Expanded(
@@ -91,20 +92,16 @@ class DownloadedVideoTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: getProportionatefontSize(5),
-                  ),
+                  // Spacer(),
                   TextCaption(
                     text: "${videoModel.author}",
                   ),
-                  Spacer(),
+                  SizedBox(height: 10),
                   TextCaption(
                     text:
                         "Downloaded ${DateFormat(" dd/MM/yyyy").format(videoModel.downloadDate)}",
                   ),
-                  SizedBox(
-                    height: getProportionatefontSize(5),
-                  ),
+                  Spacer(),
                 ],
               ),
             ),
