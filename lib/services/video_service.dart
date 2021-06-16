@@ -20,7 +20,6 @@ class VideoService extends ChangeNotifier {
         headers: appHttpHeaders(),
       );
       var result = json.decode(response.body);
-      print(result);
 
       return VideoModel.fromJson(result["data"]);
     } catch (e) {
@@ -37,7 +36,6 @@ class VideoService extends ChangeNotifier {
         headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData);
       if (decodedData["status"] == "successful") {
         List videos = decodedData["data"]["results"];
         return videos.map((e) => VideoModel.fromJson(e)).toList();
@@ -59,7 +57,6 @@ class VideoService extends ChangeNotifier {
         headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData);
       if (decodedData["status"] == "successful") {
         List videos = decodedData["data"]["results"];
         return videos.map((e) => VideoModel.fromJson(e)).toList();
@@ -124,7 +121,6 @@ class VideoService extends ChangeNotifier {
         headers: appHttpHeaders(),
       );
       final Map<String, dynamic> decodedData = jsonDecode(response.body);
-      print(decodedData);
       if (decodedData["status"] == "successful") {
         return ApiResponse.Success;
       } else {
