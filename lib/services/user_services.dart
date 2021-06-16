@@ -17,10 +17,7 @@ class UserServices {
         AppUrl.Explore,
         headers: appHttpHeaders(),
       );
-      print(AppUrl.Explore);
-      print(appHttpHeaders());
       var result = json.decode(response.body);
-      print(result);
       if (await _networkConfig.isResponseSuccessBool(
         response: result,
       )) {
@@ -44,7 +41,6 @@ class UserServices {
         headers: appHttpHeaders(),
       );
       var result = json.decode(response.body);
-      print(result);
       if (await _networkConfig.isResponseSuccessBool(
         response: result,
       )) {
