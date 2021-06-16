@@ -118,19 +118,24 @@ class DownloadingVideoTile extends StatelessWidget {
                             width: 50,
                             child: Stack(
                               children: [
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircularProgressIndicator(
-                                    value: progress / 100,
-                                    semanticsLabel: "pp", //progress.toString(),
-                                    backgroundColor: kPrimaryColor.shade200,
+                                Positioned(
+                                  right: 0,
+                                  child: Container(
+                                    height: 20,
+                                    width: 30,
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: CircularProgressIndicator(
+                                      value: progress / 100,
+                                      semanticsLabel:
+                                          "pp", //progress.toString(),
+                                      backgroundColor: kPrimaryColor.shade200,
+                                    ),
                                   ),
                                 ),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Text("${progress.floor()} %"),
-                                ),
+                                // Align(
+                                //   alignment: Alignment.center,
+                                //   child: Text("${progress.floor()} %"),
+                                // ),
                               ],
                             ),
                           ),
