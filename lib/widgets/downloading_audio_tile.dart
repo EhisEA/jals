@@ -38,77 +38,86 @@ class DownloadingAudioTile extends StatelessWidget {
           });
         }
       },
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            height: getProportionatefontSize(60),
-            width: getProportionatefontSize(60),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: ShowNetworkImage(imageUrl: audio.coverImage),
-            ),
+          LinearProgressIndicator(
+            value: progress / 100,
+            semanticsLabel: "pp", //progress.toString(),
+            backgroundColor: kPrimaryColor.shade200,
           ),
-          Expanded(
-            child: ListTile(
-              title: TextTitle(
-                text: "${audio.title}",
-                maxLines: 2,
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 7.0),
-                child: TextCaption(
-                  text: "${audio.author}",
+          Row(
+            children: [
+              Container(
+                height: getProportionatefontSize(60),
+                width: getProportionatefontSize(60),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: ShowNetworkImage(imageUrl: audio.coverImage),
                 ),
               ),
-            ),
-          ),
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PopupMenuButton(
-                  padding: EdgeInsets.all(0),
-
-                  icon: Icon(
-                    Icons.more_vert,
-                    // color: Colors.,
+              Expanded(
+                child: ListTile(
+                  title: TextTitle(
+                    text: "${audio.title}",
+                    maxLines: 2,
                   ),
-                  // color: kScaffoldColor,
-                  onSelected: (value) => onOptionSelect(value),
-                  // onSelected: (value) => model.showReportDialog(context),
-                  itemBuilder: (BuildContext context) => List.generate(
-                    popOption.length,
-                    (index) => PopupMenuItem(
-                      value: "${popOption[index]}",
-                      child: Text("${popOption[index]}"),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 7.0),
+                    child: TextCaption(
+                      text: "${audio.author}",
                     ),
                   ),
                 ),
-                Container(
-                  height: 50,
-                  width: 50,
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
-                        child: CircularProgressIndicator(
-                          value: progress / 100,
-                          semanticsLabel: "pp", //progress.toString(),
-                          backgroundColor: kPrimaryColor.shade200,
+              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PopupMenuButton(
+                      padding: EdgeInsets.all(0),
+
+                      icon: Icon(
+                        Icons.more_vert,
+                        // color: Colors.,
+                      ),
+                      // color: kScaffoldColor,
+                      onSelected: (value) => onOptionSelect(value),
+                      // onSelected: (value) => model.showReportDialog(context),
+                      itemBuilder: (BuildContext context) => List.generate(
+                        popOption.length,
+                        (index) => PopupMenuItem(
+                          value: "${popOption[index]}",
+                          child: Text("${popOption[index]}"),
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text("${progress.floor()} %"),
-                      ),
-                    ],
-                  ),
+                    ),
+                    // Container(
+                    //   height: 50,
+                    //   width: 50,
+                    //   child: Stack(
+                    //     children: [
+                    //       Container(
+                    //         height: 50,
+                    //         width: 50,
+                    //         child: CircularProgressIndicator(
+                    //           value: progress / 100,
+                    //           semanticsLabel: "pp", //progress.toString(),
+                    //           backgroundColor: kPrimaryColor.shade200,
+                    //         ),
+                    //       ),
+                    //       Align(
+                    //         alignment: Alignment.center,
+                    //         child: Text("${progress.floor()} %"),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(width: 5),
+            ],
           ),
-          SizedBox(width: 5),
         ],
       ),
     );
