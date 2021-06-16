@@ -10,7 +10,9 @@ import 'package:jals/utils/locator.dart';
 import 'package:jals/utils/size_config.dart';
 import 'package:jals/utils/text.dart';
 import 'package:jals/widgets/back_icon.dart';
+import 'package:jals/widgets/empty.dart';
 import 'package:jals/widgets/image.dart';
+import 'package:jals/widgets/retry.dart';
 import 'package:jals/widgets/view_models/comment_widget_view_model.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:stacked/stacked.dart';
@@ -103,7 +105,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                   SizedBox(height: 15),
                   if (model.currentlyPlaying != null)
                     TextCaption2(
-                      text: "By ${model.currentlyPlaying..author}",
+                      text: "By ${model.currentlyPlaying.author}",
                       center: true,
                     ),
                   SizedBox(height: 15),
@@ -170,7 +172,10 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        buildIcon(JalsIcons.favorite, "Listen Later", () {}),
+                        buildIcon(Icons.playlist_add, "Playlist",
+                            () => displayPlayListOption(context, model)),
+
+                        // buildIcon(JalsIcons.favorite, "Listen Later", () {}),
                         ViewModelBuilder<DownloadingAudiosViewModel>.reactive(
                             disposeViewModel: false,
                             builder: (context, playerModel, _) {
@@ -228,17 +233,19 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                                   .writeComment(context);
                           },
                         ),
-                        pop(JalsIcons.more, "more", (value) {
-                          switch (value.toLowerCase()) {
-                            case "playlist":
-                              displayPlayListOption(context, model);
-                              break;
-                            case "share":
-                              model.share();
-                              break;
-                            default:
-                          }
-                        }),
+                        buildIcon(
+                            CupertinoIcons.share, "Share", () => model.share()),
+                        // pop(JalsIcons.more, "more", (value) {
+                        //   switch (value.toLowerCase()) {
+                        //     case "playlist":
+                        //       displayPlayListOption(context, model);
+                        //       break;
+                        //     case "share":
+                        //       model.share();
+                        //       break;
+                        //     default:
+                        //   }
+                        // }),
                       ],
                     ),
                   SizedBox(height: 20),
@@ -336,22 +343,31 @@ displayPlayListOption(BuildContext context, AudioPlayerViewModel viewModel) {
               Expanded(
                 child: model.isSecondaryBusy
                     ? Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        itemCount: model.playList.length,
-                        itemBuilder: (context, index) {
-                          PlayListModel playlist = model.playList[index];
-                          return ListTile(
-                            onTap: () => model.addToPlaylist(
-                                playlist.id, model.currentlyPlaying),
-                            title: Text(playlist.title),
-                            subtitle:
-                                Text(playlist.count.toString() + " Songs"),
-                            trailing: Icon(Icons.add),
+                    : model.playList == null
+                        ? Retry(
+                            onRetry: model.getPlaylist,
+                          )
+                        : model.playList.isEmpty
+                            ? Empty(
+                                title: "No playlist available",
+                              )
+                            : ListView.builder(
+                                itemCount: model.playList.length,
+                                itemBuilder: (context, index) {
+                                  PlayListModel playlist =
+                                      model.playList[index];
+                                  return ListTile(
+                                    onTap: () => model.addToPlaylist(
+                                        playlist.id, model.currentlyPlaying),
+                                    title: Text(playlist.title),
+                                    subtitle: Text(
+                                        playlist.count.toString() + " Songs"),
+                                    trailing: Icon(Icons.add),
 
-                            // subtitle: Text(),
-                          );
-                        },
-                      ),
+                                    // subtitle: Text(),
+                                  );
+                                },
+                              ),
               )
             ],
           );
